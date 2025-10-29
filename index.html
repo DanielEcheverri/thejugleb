@@ -591,7 +591,7 @@
 					}
 				}
 
-				const alpha = 0.3; // Adjust to control smoothing (0 = no change, 1 = instant change)
+				const alpha = 1; // Adjust to control smoothing (0 = no change, 1 = instant change)
 
 				function lowPassFilter(currentValue, newValue) {
 					return alpha * newValue + (1 - alpha) * currentValue;
