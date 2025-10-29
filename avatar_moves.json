@@ -1,0 +1,123 @@
+[
+	{
+		"condition": {
+			"leftForearmMoving": true
+		},
+		"partMoving": "left forearm",
+		"directionMoving": "right"
+	},
+	{
+		"condition": {
+			"leftForearmMoving": false
+		},
+		"partMoving": "left forearm",
+		"directionMoving": "left"
+	},
+	{
+		"condition": {
+			"leftShoulderMoving": true
+		},
+		"partMoving": "left shoulder",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"leftShoulderMoving": false
+		},
+		"partMoving": "left shoulder",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"headMoving": true
+		},
+		"partMoving": "head",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"headMoving": false
+		},
+		"partMoving": "head",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"rightShoulderMoving": true
+		},
+		"partMoving": "right shoulder",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"rightShoulderMoving": false
+		},
+		"partMoving": "right shoulder",
+		"directionMoving": "up"
+	},
+
+	{
+		"condition": {
+			"rightForearmMoving": true
+		},
+		"partMoving": "right forearm",
+		"directionMoving": "right"
+	},
+	{
+		"condition": {
+			"rightForearmMoving": false
+		},
+		"partMoving": "right forearm",
+		"directionMoving": "left"
+	},
+	{
+		"condition": {
+			"waistMoving": false,
+			"leftLegMoving": true,
+			"rightLegMoving": false
+		},
+		"partMoving": "waist",
+		"directionMoving": "left"
+	},
+	{
+		"condition": {
+			"waistMoving": true,
+			"leftLegMoving": false,
+			"rightLegMoving": true
+		},
+		"partMoving": "waist",
+		"directionMoving": "right"
+	},
+	{
+		"condition": {
+			"leftLegMoving": true,
+			"waistMoving": null
+		},
+		"partMoving": "left leg",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"leftLegMoving": false,
+			"waistMoving": null
+		},
+		"partMoving": "left leg",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"rightLegMoving": true,
+			"waistMoving": null
+		},
+		"partMoving": "right leg",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"rightLegMoving": false,
+			"waistMoving": null
+		},
+		"partMoving": "right leg",
+		"directionMoving": "up"
+	}
+]

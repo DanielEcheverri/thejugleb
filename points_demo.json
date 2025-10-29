@@ -1,0 +1,70 @@
+[
+	{
+		"hachi_checkpoints": {
+			"checkpoint_1": [
+				{
+					"latitude": 55.659246,
+					"longitude": 12.590717,
+					"text": "hachi_statue"
+				}
+			],
+			"checkpoint_2": [
+				{
+					"latitude": 55.65981,
+					"longitude": 12.591078,
+					"text": "hachi_tram"
+				},
+				{
+					"latitude": 55.659614,
+					"longitude": 12.591166,
+					"text": "hachi_fountain"
+				}
+			],
+			"checkpoint_3": [
+				{
+					"latitude": 55.65981,
+					"longitude": 12.591078,
+					"text": "hachi_tram"
+				},
+				{
+					"latitude": 55.659614,
+					"longitude": 12.591166,
+					"text": "hachi_fountain"
+				}
+			]
+		},
+		"avatar_checkpoints": {
+			"checkpoint_1": [
+				{
+					"latitude": 55.659246,
+					"longitude": 12.590717,
+					"text": "avatar_statue"
+				}
+			],
+			"checkpoint_2": [
+				{
+					"latitude": 55.65981,
+					"longitude": 12.591078,
+					"text": "avatar_church"
+				},
+				{
+					"latitude": 55.659682,
+					"longitude": 12.591177,
+					"text": "avatar_bakery"
+				}
+			],
+			"checkpoint_3": [
+				{
+					"latitude": 55.65981,
+					"longitude": 12.591078,
+					"text": "avatar_church"
+				},
+				{
+					"latitude": 55.659682,
+					"longitude": 12.591177,
+					"text": "avatar_bakery"
+				}
+			]
+		}
+	}
+]

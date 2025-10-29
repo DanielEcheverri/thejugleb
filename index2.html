@@ -32,8 +32,8 @@
 		<div id="avatarBTdiv">
 			<div class="top-section">
 				<!-- Listen Button (left half) -->
-				<button id="listenButton" class="button listen-button" onclick="forward_Sound.play(), wakeLock(),listenFunction()">
-					<span class="material-symbols-outlined" style="vertical-align: middle;">hearing</span>Listen
+				<button id="listenButton" class="button listen-button" onclick="forward_Sound.play(), wakeLock(),listenFunction()" style="visibility: hidden;">
+					disabled
 				</button>
 
 				<!-- Toggle Switch -->
@@ -56,7 +56,7 @@
 				<button
 					id="interactButton"
 					class="button interact-button"
-					onclick="forward_Sound.play(),wakeLock(), interactFunction(), displayText('Interacting through an avatar.')"
+					onclick="forward_Sound.play(),wakeLock(), connectToDevice()"
 				>
 					<span class="material-symbols-outlined" style="vertical-align: middle;">back_hand</span>Interact
 				</button>
@@ -75,11 +75,20 @@
 			</div>
 		</div>
 		<!-- Movement tracking-->
-		<div id="avatarCanvas"></div>
+		<div id="avatarCanvas">
+			<img class="hachi_control" src="hachi.svg" alt="" />
+			<button id="bark_btn" class="control-button">Barking</button>
+			<button id="sniff_btn" class="control-button">Sniffing</button>
+			<button id="grab_btn" class="control-button">Grabbing</button>
+			<button id="jump_btn" class="control-button">Jumping</button>
+			<button id="back_btn" class="control-button">Standing back leg</button>
+			<button id="front_btn" class="control-button">Standing front leg</button>
+		</div>
 		<!-- Status-->
 		<div id="currentLocation"></div>
 		<!-- Message>-->
 		<div id="messageDisplayDiv"></div>
+		
 		<script>
 			//Script for pairing with Avatar_BT
 			let characteristic;
@@ -133,14 +142,7 @@
 									src: [sounds[key].src],
 									volume: 0.4,
 									onload: soundLoaded, // Call soundLoaded() when sound is loaded successfully.
-									onloaderror: function(error) {
-										console.error('Error loading audio resources:', error);
-									},
-									onstop: function(id) {
-										console.log(`Sound with key '${key}' and ID ${id} stopped.`);
-										console.log('Playback position:', this.seek());
-										console.trace(); // To see where the stop() was called from
-									}								
+									onloaderror: function(error) { console.error('Error loading audio resources:', error); }
 								});
 							}
 						}
@@ -165,7 +167,6 @@
 				// Check if latitude, longitude, and weatherDescription are not null
 				if (latitude !== null && longitude !== null) {
 					connectButton.disabled = false;
-					//initializeSounds();
 				} else {
 					// If any variable is still null, wait for a short delay and check again
 					setTimeout(checkVariables, 1000);
@@ -227,13 +228,13 @@
 					characterName = "Hachi";
 					initializeSounds();
 				} else {
-					deviceName = "avatar_BT";
+					deviceName = "hachi_BT";
 					console.log("Loading settings for "+ deviceName);
 					interactionMode="_int";
-					moveSource = 'avatar_moves.json';
-					movePatterns = 'avatar_patterns.json';
-					sentenceSource = 'avatar_sentences.json';
-					characterName = "Buro";
+					moveSource = 'hachi_moves.json';
+					movePatterns = 'hachi_patterns.json';
+					sentenceSource = 'hachi_sentences.json';
+					characterName = "Hachi";
 					initializeSounds();
 				}
 			}
@@ -261,77 +262,54 @@
 
 			async function connectToDevice() {
 				try {
-					if (!isConnected) {
-						// Request Bluetooth device
-						device = await navigator.bluetooth.requestDevice({
-							filters: [{ services: ["6e400001-b5a3-f393-e0a9-e50e24dcca9e"] }],
-						});
-						// Connect to the selected device
-						const server = await device.gatt.connect();
-						// Get UART service
-						const service = await server.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
-						// Get UART characteristic
-						characteristic = await service.getCharacteristic("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
-						// Start notifications for the characteristic
-						await characteristic.startNotifications();
-							// Get the device name
-						deviceName = device.name;
+					// Directly set deviceName to "hachi_BT" to skip BLE connection
+					deviceName = "hachi_BT";
 
-						if (deviceName === "hachi_BT") {
-							console.log("Loading settings for Hachi_BT");
-							interactionMode="_int";
-							labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG"];
-							moveSource = 'hachi_moves.json';
-							movePatterns = 'hachi_patterns.json';
-							sentenceSource = 'hachi_sentences.json';
-							tagSource = 'tags.json';
-							initializeSounds();
-							document.getElementById("hachiCheckbox").click();
-							characterName = "Hachi";
-							window[characterName + "_Sound"].play();
-							bgm_Sound.play();
-							notification_Sound.play();
-						} else {
-							console.log("Loading settings for Avatar_BT");
-							interactionMode="_int";
-							labels = ["LEFT FOREARM", "LEFT SHOULDER", "HEAD", "RIGHT SHOULDER", "RIGHT FOREARM", "WAIST", "LEFT LEG", "RIGHT LEG"];
-							moveSource = 'avatar_moves.json';
-							movePatterns = 'avatar_patterns.json';
-							sentenceSource = 'avatar_sentences.json';
-							tagSource = 'tags.json';
-							initializeSounds();
-							characterName = "Buro";
-							window[characterName + "_Sound"].play();
-							bgm_Sound.play();
-							notification_Sound.play();
-						}
-						// Listen for characteristic value changes
-						characteristic.addEventListener("characteristicvaluechanged", handleCharacteristicValueChanged);
-						// Update UI
-						document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_connected</span> Disconnect Avatar';
-						isConnected = true;
-							startDetectMovement = true;
-							blueToothStatus = "Online";
+					console.log("Skipping BLE connection and directly loading settings for Hachi_BT");
+					interactionMode = "_int";
+					labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG"];
+					moveSource = 'hachi_moves.json';
+					movePatterns = 'hachi_patterns.json';
+					sentenceSource = 'hachi_sentences.json';
+					tagSource = 'tags.json';
+					initializeSounds();
+					const hachiCheckbox = document.getElementById("hachiCheckbox");
+					if (hachiCheckbox) {
+						hachiCheckbox.click();
 					} else {
-						// Disconnect from the device
-						await characteristic.stopNotifications();
-						await device.gatt.disconnect();
-						isConnected = false;
-						document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_searching </span> Connect to Avatar';
-						// Set all potValues to 0
-						setTimeout(function() {
-							startDetectMovement = false;
-							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-							blueToothStatus = "Offline";
-							bgm_Sound.stop();
-						}, 4000);
+						console.warn("hachiCheckbox element not found.");
 					}
+					characterName = "Hachi";
+					if (window[characterName + "_Sound"]) {
+						window[characterName + "_Sound"].play();
+					} else {
+						console.warn(characterName + "_Sound not found in the window object.");
+					}
+					if (bgm_Sound) {
+						bgm_Sound.play();
+					} else {
+						console.warn("bgm_Sound not found.");
+					}
+					if (notification_Sound) {
+						notification_Sound.play();
+					} else {
+						console.warn("notification_Sound not found.");
+					}
+
+					// Update UI to reflect a "connected" state (even though it's simulated)
+					document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_connected</span> Disconnect Hachi (Simulated)';
+					isConnected = true;
+					speakFancy = true;
+					listenClient = false;
+					startDetectMovement = true;
+					blueToothStatus = "Online";
+					currentLocation.style.display = 'none';
 				} catch (error) {
-					console.error("Error connecting/disconnecting to device: " + error);
+					console.error("Error during simulated connection: " + error);
 				}
 			}
 			// Attach click event listener to button.
-			document.getElementById("connectButton").addEventListener("click", connectToDevice);
+			//document.getElementById("connectButton").addEventListener("click", connectToDevice);
 
 			// Function to handle incoming data from UART
 			function handleCharacteristicValueChanged(event) {
@@ -494,15 +472,7 @@
 
 							// Update the HTML element with different navigation variables
 							document.getElementById("currentLocation").innerHTML =
-								"<strong><span class='material-icons' style='vertical-align: middle;'>bluetooth</span> Bluetooth:</strong> " + blueToothStatus + "<br>" +
-								" <strong><span class='material-icons' style='vertical-align: middle;'>place</span> Latitude:</strong> " + latitude +
-								"<strong> Longitude:</strong> " + longitude + "<br>" +
-								"<strong><span class='material-icons' style='vertical-align: middle;'>location_city</span> Nearest street:</strong> " + streetName +
-								" <strong><span class='material-icons' style='vertical-align: middle;'>pets</span><span class='material-icons' style='vertical-align: middle;'>person</span> Separation :</strong> " + distEachOther.toFixed(2) +" m" + "<br>" +
-								" <strong><span class='material-icons' style='vertical-align: middle;'>explore</span> Direction:</strong> " + directionText +
-								" <strong><span class='material-icons' style='vertical-align: middle;'>speed</span> Speed:</strong> " + speed.toFixed(2) + "ms/s" + "<br>" +
-								" <strong><span class='material-icons' style='vertical-align: middle;'>directions_walk</span> Distance Walked: </strong> " + totalDistance.toFixed(2) +
-								" m <strong>Avatar Actions:</strong> "+ partMoving + " " + directionMoving;
+								"";
 						},
 						function (error) {
 							console.error("Error getting current location: ", error);
@@ -545,6 +515,13 @@
 				let tagID = 0;
 
 				function setup() {
+					//Do not load the regularP5 canvas
+					const shouldLoadAvatar = false;
+					if (!shouldLoadAvatar) {
+						noCanvas();
+						return; // Exit the function early
+					}
+
 					var avatarBTCanvas = createCanvas(windowWidth, windowHeight * 0.35);
 					avatarBTCanvas.parent("avatarCanvas");
 					potValues = [0, 0, 0, 0, 0, 0, 0, 0]; // Initialize potValues array with default values
@@ -754,7 +731,7 @@
 							}
 							previousPart = partMoving;
 							previousDirection = directionMoving;
-							trackMovementSequences();
+							//trackMovementSequences();
 						} else {
 							return;
 						}
@@ -767,23 +744,6 @@
 				// Function to track movement sequences and compare them against patterns
 				async function trackMovementSequences() {
 					try {
-						const currentSequence = { partMoving, directionMoving };
-
-						// Check if the current sequence is different from the previous one
-						if (
-							movementBuffer.length > 0 &&
-							movementBuffer[movementBuffer.length - 1].partMoving === partMoving &&
-							movementBuffer[movementBuffer.length - 1].directionMoving === directionMoving
-						) {
-							return; // Exit early if the sequence is the same as the previous one
-						}
-
-						movementBuffer.push(currentSequence);
-
-						// Limit the buffer to store only the last 5 variations
-						if (movementBuffer.length > 5) {
-							movementBuffer.shift(); // Remove the oldest variation
-						}
 
 						const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
 						for (const pattern of patterns) {
@@ -885,7 +845,7 @@
 
 								clearTimeout(timeoutID);
 								speakMessage(fullMessage);
-								updateDisplay(fullMessage);
+								//updateDisplay(fullMessage);
 
 								if (audioSoundscape !== "") {
 									window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
@@ -905,7 +865,7 @@
 
 								clearTimeout(timeoutID);
 								speakMessage(fullMessage);
-								updateDisplay(fullMessage);
+								//updateDisplay(fullMessage);
 								if (audioSoundscape !== "") {
 									window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
 								}
@@ -914,13 +874,13 @@
 							var fullMessage = message.substring(delimiterIndex + 1).trim(); // Extract the message text after the first delimiter
 							clearTimeout(timeoutID);
 							speakMessage(fullMessage);
-							updateDisplay(fullMessage);
+							//updateDisplay(fullMessage);
 						}
 					} else { // Handle the case where there's no delimiter at all
 						var fullMessage = message.trim(); // The full message is the entire input
 						clearTimeout(timeoutID);
 						speakMessage(fullMessage);
-						updateDisplay(fullMessage);
+						//updateDisplay(fullMessage);
 					}
 				}
 
@@ -1271,7 +1231,7 @@
 			let weatherDescription = null;
 
 			var noNarrative;
-			var speakFancy = true;
+			var speakFancy;
 
 			var previousTagID = 0 // Variable to store the previous tagID
 
@@ -1396,8 +1356,8 @@
 		</script>
 
 		<script type="module">
-			import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js'
-			import  { getDatabase, ref, set, onValue, off, update } from 'https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js'
+			import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js'
+			import  { getDatabase, ref, set, onValue, off, update } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js'
 
 			// Your Firebase configuration
 			const firebaseConfig = {
@@ -1574,7 +1534,7 @@
 
 			function toggleDeviceName2() {
 				var checkbox = document.getElementById("hachiCheckbox");
-				const databaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
+				const databaseName = (deviceName === 'hachi_BT') ? 'hachi_data' : 'hachi_data';
 				if (checkbox.checked) {
 					off(ref(database, databaseName));
 					readFromDatabase(deviceName); // Read data after writing
@@ -1676,6 +1636,94 @@
 			//Log window closure
 			window.addEventListener('beforeunload', function (event) {
 				console.log('End of session');
+			});
+		</script>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const barkButton = document.getElementById('bark_btn');
+
+				if (barkButton) {
+					barkButton.onclick = () => {
+						// Manually create the desired sequence for "Barking"
+						movementBuffer = [
+							{ "partMoving": "head", "directionMoving": "up" },
+							{ "partMoving": "head", "directionMoving": "down" },
+							{ "partMoving": "head", "directionMoving": "up" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
+			});
+
+			document.addEventListener('DOMContentLoaded', () => {
+				const sniffButton = document.getElementById('sniff_btn');
+
+				if (sniffButton) {
+					sniffButton.onclick = () => {
+						movementBuffer = [
+							{ "partMoving": "head", "directionMoving": "down" },
+							{ "partMoving": "head", "directionMoving": "up" },
+							{ "partMoving": "head", "directionMoving": "down" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
+			});
+			document.addEventListener('DOMContentLoaded', () => {
+				const grabButton = document.getElementById('grab_btn');
+
+				if (grabButton) {
+					grabButton.onclick = () => {
+						movementBuffer = [
+						{ "partMoving": "front leg", "directionMoving": "up" },
+						{ "partMoving": "front leg", "directionMoving": "down" },
+						{ "partMoving": "head", "directionMoving": "up" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
+			});
+			document.addEventListener('DOMContentLoaded', () => {
+				const jumpButton = document.getElementById('jump_btn');
+
+				if (jumpButton) {
+					jumpButton.onclick = () => {
+						movementBuffer = [
+						{ "partMoving": "back leg", "directionMoving": "up" },
+						{ "partMoving": "front leg", "directionMoving": "up" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
+			});
+			document.addEventListener('DOMContentLoaded', () => {
+				const backButton = document.getElementById('back_btn');
+
+				if (backButton) {
+					backButton.onclick = () => {
+						movementBuffer = [
+						{ "partMoving": "front leg", "directionMoving": "up" },
+						{ "partMoving": "front leg", "directionMoving": "down" },
+						{ "partMoving": "front leg", "directionMoving": "up" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
+			});
+			document.addEventListener('DOMContentLoaded', () => {
+				const frontButton = document.getElementById('front_btn');
+
+				if (frontButton) {
+					frontButton.onclick = () => {
+						movementBuffer = [
+						{ "partMoving": "back leg", "directionMoving": "up" },
+						{ "partMoving": "back leg", "directionMoving": "down" },
+						{ "partMoving": "back leg", "directionMoving": "up" }
+						];
+						trackMovementSequences(); // Call the function to check the buffer
+					};
+				}
 			});
 		</script>
 	</body>
