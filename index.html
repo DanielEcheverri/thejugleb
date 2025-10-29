@@ -340,7 +340,7 @@
 				const textDecoder = new TextDecoder();
 				const decodedValue = textDecoder.decode(value);
 				// Pass the received data to Processing sketch
-				console.log(decodedValue);
+				//console.log(decodedValue);
 				receiveData(decodedValue);
 			}
 			// Function to receive data from JavaScript
@@ -603,8 +603,6 @@
     				let values = cleanData.split(",");
 					//let values = data.split(",");
 					console.log(values);
-					//tagID = parseInt(values.pop(), 10);
-					//readTag();
 					if (values.length === numPotentiometers) { // Check if the length of values is 10
 						for (let i = 0; i < values.length; i++) {
 							potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));						}
@@ -1384,6 +1382,8 @@
 				lineColors[5] = color(0, 255, 0); // Bright Green
 				lineColors[6] = color(0, 128, 0); // Grass Green
 				lineColors[7] = color(0, 128, 0); // Grass Green
+				lineColors[8] = color(0, 128, 0); // Grass Green
+				lineColors[9] = color(0, 128, 0); // Grass Green
 			}
 			function setupBackgroundColors() {
 				backgroundColors[0] = color(0, 0, 0); // 0% black
@@ -1394,6 +1394,8 @@
 				backgroundColors[5] = color(0, 0, 0, 128); // 60% black
 				backgroundColors[6] = color(0, 0, 0, 100); // 60% black
 				backgroundColors[7] = color(0, 0, 0, 100); // 60% black
+				backgroundColors[8] = color(0, 0, 0, 100); // 60% black
+				backgroundColors[9] = color(0, 0, 0, 100); // 60% black
 			}
 		</script>
 
