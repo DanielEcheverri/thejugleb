@@ -601,8 +601,8 @@
 				function receiveData(data) {
 					let values = data.split(",");
 					console.log(values);
-					tagID = parseInt(values.pop(), 10);
-					readTag();
+					//tagID = parseInt(values.pop(), 10);
+					//readTag();
 					if (values.length === numPotentiometers) { // Check if the length of values is 10
 						for (let i = 0; i < values.length; i++) {
 							potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));						}
