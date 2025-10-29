@@ -599,7 +599,9 @@
 
 				// Function to receive data from JavaScript
 				function receiveData(data) {
-					let values = data.split(",");
+					let cleanData = data.trim();
+    				let values = cleanData.split(",");
+					//let values = data.split(",");
 					console.log(values);
 					//tagID = parseInt(values.pop(), 10);
 					//readTag();
