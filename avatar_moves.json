@@ -1,30 +1,30 @@
 [
 	{
 		"condition": {
-			"leftForearmMoving": true
+			"leftArmMoving": true
 		},
-		"partMoving": "left forearm",
-		"directionMoving": "right"
-	},
-	{
-		"condition": {
-			"leftForearmMoving": false
-		},
-		"partMoving": "left forearm",
-		"directionMoving": "left"
-	},
-	{
-		"condition": {
-			"leftShoulderMoving": true
-		},
-		"partMoving": "left shoulder",
+		"partMoving": "left arm",
 		"directionMoving": "up"
 	},
 	{
 		"condition": {
-			"leftShoulderMoving": false
+			"leftArmMoving": false
 		},
-		"partMoving": "left shoulder",
+		"partMoving": "left arm",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"rightArmMoving": true
+		},
+		"partMoving": "right arm",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"rightArmMoving": false
+		},
+		"partMoving": "right arm",
 		"directionMoving": "down"
 	},
 	{
@@ -32,92 +32,112 @@
 			"headMoving": true
 		},
 		"partMoving": "head",
-		"directionMoving": "up"
+		"directionMoving": "right"
 	},
 	{
 		"condition": {
 			"headMoving": false
 		},
 		"partMoving": "head",
-		"directionMoving": "down"
+		"directionMoving": "left"
 	},
 	{
 		"condition": {
-			"rightShoulderMoving": true
+			"leftLegMoving": true
 		},
-		"partMoving": "right shoulder",
-		"directionMoving": "down"
-	},
-	{
-		"condition": {
-			"rightShoulderMoving": false
-		},
-		"partMoving": "right shoulder",
+		"partMoving": "left leg",
 		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"leftLegMoving": false
+		},
+		"partMoving": "left leg",
+		"directionMoving": "down"
 	},
 
 	{
 		"condition": {
-			"rightForearmMoving": true
-		},
-		"partMoving": "right forearm",
-		"directionMoving": "right"
-	},
-	{
-		"condition": {
-			"rightForearmMoving": false
-		},
-		"partMoving": "right forearm",
-		"directionMoving": "left"
-	},
-	{
-		"condition": {
-			"waistMoving": false,
-			"leftLegMoving": true,
-			"rightLegMoving": false
-		},
-		"partMoving": "waist",
-		"directionMoving": "left"
-	},
-	{
-		"condition": {
-			"waistMoving": true,
-			"leftLegMoving": false,
 			"rightLegMoving": true
 		},
-		"partMoving": "waist",
-		"directionMoving": "right"
-	},
-	{
-		"condition": {
-			"leftLegMoving": true,
-			"waistMoving": null
-		},
-		"partMoving": "left leg",
-		"directionMoving": "down"
-	},
-	{
-		"condition": {
-			"leftLegMoving": false,
-			"waistMoving": null
-		},
-		"partMoving": "left leg",
+		"partMoving": "right leg",
 		"directionMoving": "up"
 	},
 	{
 		"condition": {
-			"rightLegMoving": true,
-			"waistMoving": null
+			"rightLegMoving": false
 		},
 		"partMoving": "right leg",
 		"directionMoving": "down"
 	},
-	{
+		{
 		"condition": {
-			"rightLegMoving": false,
-			"waistMoving": null
+			"leftFootPressed": true
 		},
-		"partMoving": "right leg",
-		"directionMoving": "up"
+		"partMoving": "left foot",
+		"directionMoving": "on"
+	},
+		{
+		"condition": {
+			"leftFootPressed": false
+		},
+		"partMoving": "left foot",
+		"directionMoving": "off"
+	},
+		{
+		"condition": {
+			"rightFootPressed": true
+		},
+		"partMoving": "right foot",
+		"directionMoving": "on"
+	},
+		{
+		"condition": {
+			"rightFootPressed": false
+		},
+		"partMoving": "right foot",
+		"directionMoving": "off"
+	},
+		{
+		"condition": {
+			"rightHandTouched": true
+		},
+		"partMoving": "right hand",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"rightHandTouched": false
+		},
+		"partMoving": "right hand",
+		"directionMoving": "released"
+	},
+		{
+		"condition": {
+			"leftHandTouched": true
+		},
+		"partMoving": "left hand",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"leftHandTouched": false
+		},
+		"partMoving": "left hand",
+		"directionMoving": "released"
+	},
+			{
+		"condition": {
+			"eyesTouched": true
+		},
+		"partMoving": "eyes",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"eyesTouched": false
+		},
+		"partMoving": "eyes",
+		"directionMoving": "released"
 	}
 ]

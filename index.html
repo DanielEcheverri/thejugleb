@@ -640,26 +640,30 @@
 					let labelMovements;
 					if (deviceName === "hachi_BT") {
 						labelMovements = {
+							"LEFT ARM": "leftArmMoving",
+							"RIGHT ARM": "rightArmMoving",
 							"HEAD": "headMoving",
-							"FRONT LEG": "leftLegMoving",
-							"BACK LEG": "rightLegMoving",
-							"LEFT SHOULDER": "leftShoulderMoving",
-							"RIGHT SHOULDER": "rightShoulderMoving",
-							"LEFT FOREARM": "leftForearmMoving",
-							"RIGHT FOREARM": "rightForearmMoving",
-							"TAIL": "waistMoving"
+							"LEFT LEG": "leftLegMoving",
+							"RIGHT LEG": "rightLegMoving",
+							"LEFT FOOT": "leftFootPressed",
+							"RIGHT FOOT": "rightFootPressed",
+							"RIGHT HAND": "rightHandTouched",
+							"LEFT HAND": "leftHandTouched",
+							"EYES": "eyesTouched"
 						};
 					} else {
 						// Default labelMovements object for avatar_BT
 						labelMovements = {
+							"LEFT ARM": "leftArmMoving",
+							"RIGHT ARM": "rightArmMoving",
 							"HEAD": "headMoving",
 							"LEFT LEG": "leftLegMoving",
 							"RIGHT LEG": "rightLegMoving",
-							"LEFT SHOULDER": "leftShoulderMoving",
-							"RIGHT SHOULDER": "rightShoulderMoving",
-							"LEFT FOREARM": "leftForearmMoving",
-							"RIGHT FOREARM": "rightForearmMoving",
-							"WAIST": "waistMoving"
+							"LEFT FOOT": "leftFootPressed",
+							"RIGHT FOOT": "rightFootPressed",
+							"RIGHT HAND": "rightHandTouched",
+							"LEFT HAND": "leftHandTouched",
+							"EYES": "eyesTouched"
 						};
 					}
 
@@ -749,7 +753,7 @@
 							console.log("--Movement: "+partMoving+" "+directionMoving);
 							if (noNarrative){
 								window.success_Sound.play();
-								//displayText("Avatar's"+ partMoving+" "+directionMoving);
+								displayText("Avatar's"+ partMoving+" "+directionMoving);
 							}
 							previousPart = partMoving;
 							previousDirection = directionMoving;
