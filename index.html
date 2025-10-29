@@ -280,7 +280,7 @@
 						if (deviceName === "hachi_BT") {
 							console.log("Loading settings for Hachi_BT");
 							interactionMode="_int";
-							labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG"];
+							labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
 							moveSource = 'hachi_moves.json';
 							movePatterns = 'hachi_patterns.json';
 							sentenceSource = 'hachi_sentences.json';
@@ -289,12 +289,12 @@
 							document.getElementById("hachiCheckbox").click();
 							characterName = "Hachi";
 							window[characterName + "_Sound"].play();
-							bgm_Sound.play();
+							//bgm_Sound.play(); No song
 							notification_Sound.play();
 						} else {
 							console.log("Loading settings for Avatar_BT");
 							interactionMode="_int";
-							labels = ["LEFT FOREARM", "LEFT SHOULDER", "HEAD", "RIGHT SHOULDER", "RIGHT FOREARM", "WAIST", "LEFT LEG", "RIGHT LEG"];
+							labels = ["LEFT FOREARM", "LEFT SHOULDER", "HEAD", "RIGHT SHOULDER", "RIGHT FOREARM", "WAIST", "LEFT LEG", "RIGHT LEG", "EMPTY", "EMPTY"];
 							moveSource = 'avatar_moves.json';
 							movePatterns = 'avatar_patterns.json';
 							sentenceSource = 'avatar_sentences.json';
@@ -302,7 +302,7 @@
 							initializeSounds();
 							characterName = "Buro";
 							window[characterName + "_Sound"].play();
-							bgm_Sound.play();
+							//bgm_Sound.play(); No song
 							notification_Sound.play();
 						}
 						// Listen for characteristic value changes
@@ -321,7 +321,7 @@
 						// Set all potValues to 0
 						setTimeout(function() {
 							startDetectMovement = false;
-							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 							blueToothStatus = "Offline";
 							bgm_Sound.stop();
 						}, 4000);
@@ -340,6 +340,7 @@
 				const textDecoder = new TextDecoder();
 				const decodedValue = textDecoder.decode(value);
 				// Pass the received data to Processing sketch
+				console.log(decodedValue);
 				receiveData(decodedValue);
 			}
 			// Function to receive data from JavaScript
@@ -602,7 +603,7 @@
 					console.log(values);
 					tagID = parseInt(values.pop(), 10);
 					readTag();
-					if (values.length === numPotentiometers) { // Check if the length of values is 8
+					if (values.length === numPotentiometers) { // Check if the length of values is 10
 						for (let i = 0; i < values.length; i++) {
 							potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));						}
 					}
