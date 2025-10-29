@@ -56,7 +56,7 @@
 				<button
 					id="interactButton"
 					class="button interact-button"
-					onclick="forward_Sound.play(),wakeLock(), interactFunction(), displayText('Interacting through an avatar.')"
+					onclick="forward_Sound.play(),wakeLock(), interactFunction()"
 				>
 					<span class="material-symbols-outlined" style="vertical-align: middle;">back_hand</span>Interact
 				</button>
@@ -601,8 +601,6 @@
 				function receiveData(data) {
 					let cleanData = data.trim();
     				let values = cleanData.split(",");
-					//let values = data.split(",");
-					console.log(values);
 					if (values.length === numPotentiometers) { // Check if the length of values is 10
 						for (let i = 0; i < values.length; i++) {
 							potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));						}
