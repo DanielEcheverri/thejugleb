@@ -736,11 +736,11 @@
 						// 1. Collect all currently active movements
 						let currentActiveMovements = [];
 
-						// Iterate over movement conditions to find ALL matches
+						// Iterate over movement conditions to find ALL matches (simultaneous detection)
 						cachedMovementConditions.forEach(condition => {
 							let match = true;
 							for (let key in condition.condition) {
-								// Check if the condition property exists AND the value matches the movement data
+								// Check if ALL properties in the condition match the movement data
 								if (movements[key] !== condition.condition[key]) {
 									match = false;
 									break;
@@ -750,21 +750,36 @@
 							if (match) {
 								// Found a match! Add it to the collection.
 								currentActiveMovements.push({
-									part: condition.partMoving,
+									part: condition.partMoving, 
 									direction: condition.directionMoving
 								});
 							}
 						});
 						
-						// 2. Stringify the two arrays for easy comparison
-						// NOTE: Arrays must be sorted so [{A}, {B}] == [{B}, {A}]
+						// --- Backward Compatibility Logic ---
+						
+						// 2. Update legacy single-movement variables (partMoving/directionMoving)
+						if (currentActiveMovements.length > 0) {
+							// Priority Rule: Use the first detected movement as the "primary" state
+							partMoving = currentActiveMovements[0].part;
+							directionMoving = currentActiveMovements[0].direction;
+						} else {
+							// Reset to default if no movements are active
+							partMoving = "none";
+							directionMoving = "none";
+						}
+
+						// --- State Comparison and Tracking Logic ---
+						
+						// 3. Prepare arrays for comparison
+						// NOTE: Arrays are sorted and stringified to ensure deep equality check.
 						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 
-						// 3. Check if the set of active movements has changed AND the entity isn't speaking
+						// 4. Check if the set of active movements has changed AND the entity isn't speaking
 						if ((currentMovementsString !== previousMovementsString) && !speaking) {
 							
-							// Build the log message for all active movements
+							// Log Message Construction (Uses the full array)
 							let logMessage;
 							if (currentActiveMovements.length > 0) {
 								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
@@ -774,14 +789,15 @@
 
 							console.log("--Movement: " + logMessage);
 							
+							// Optional display/sound logic 
 							if (noNarrative && currentActiveMovements.length > 0) {
 								window.success_Sound.play();
 								displayText("Avatar is doing: " + logMessage + ".");
 							}
 							
-							// 4. Update the global previous state and track the sequence
+							// 5. Update the global previous state and track the sequence
 							previousActiveMovements = currentActiveMovements;
-							trackMovementSequences(currentActiveMovements); // Pass the new set
+							trackMovementSequences(currentActiveMovements); 
 							
 						} else {
 							return;
