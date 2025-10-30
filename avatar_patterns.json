@@ -21,13 +21,6 @@
 		]
 	},
 	{
-		"patternName": "Landing",
-		"pattern": [
-			{ "partMoving": "left leg", "directionMoving": "down" },
-			{ "partMoving": "right leg", "directionMoving": "down" }
-		]
-	},
-	{
 		"patternName": "Greeting",
 		"pattern": [
 			{ "partMoving": "left forearm", "directionMoving": "left" },
