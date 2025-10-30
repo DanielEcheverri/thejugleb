@@ -786,7 +786,7 @@
 							console.log("--Movement: " + logMessage);
 							
 							// Optional display/sound logic 
-							if (noNarrative && currentActiveMovements.length > 0) {
+							if (noNarrative && !speaking && currentActiveMovements.length > 0) {
 								window.success_Sound.play();
 								displayText("Avatar is doing: " + logMessage + ".");
 							}
