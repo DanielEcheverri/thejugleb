@@ -780,7 +780,7 @@
 							if (currentActiveMovements.length > 0) {
 								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
 							} else {
-								logMessage = "No movement (reset)";
+								//logMessage = "No movement (reset)";
 							}
 
 							console.log("--Movement: " + logMessage);
@@ -801,54 +801,55 @@
 					}
 				}
 
-				//let movementBuffer = [];
-				//let cachedMovePatterns;
-
 				// Function to track movement sequences and compare them against patterns
 				async function trackMovementSequences(currentActiveMovements) {
-					try {
-						// 1. Normalize the Movement State (sorting the array)
-						const normalizedSequence = currentActiveMovements.sort((a, b) => 
-							(a.part + a.direction).localeCompare(b.part + b.direction)
-						);
-						const currentSequenceString = JSON.stringify(normalizedSequence);
-						
-						// 2. Check for Duplicates in the Buffer
-						if (
-							movementBuffer.length > 0 &&
-							JSON.stringify(movementBuffer[movementBuffer.length - 1]) === currentSequenceString
-						) {
-							return; // Exit early if the *entire set* of active movements is the same as the previous step
-						}
+					const PRUNE_TIME_MS = 1500; // Time limit for a sequence step (1.5 seconds)
+					const now = Date.now();
+					
+					// 1. Time-Based Pruning Logic: Remove all buffer entries older than the time limit
+					// We check the first element because entries are pushed to the end (FIFO).
+					while (movementBuffer.length > 0 && (now - movementBuffer[0].timestamp > PRUNE_TIME_MS)) {
+						movementBuffer.shift(); // Remove the oldest entry
+					}
+					
+					// 2. Normalize and check for duplicate states (The core of the multi-movement logic)
+					const normalizedSequence = currentActiveMovements.sort((a, b) => 
+						(a.part + a.direction).localeCompare(b.part + b.direction)
+					);
+					const currentSequenceString = JSON.stringify(normalizedSequence);
+					
+					// If the current state is the same as the last one, ignore it and exit early
+					if (
+						movementBuffer.length > 0 &&
+						JSON.stringify(movementBuffer[movementBuffer.length - 1].state) === currentSequenceString
+					) {
+						return; 
+					}
 
-						// 3. Push the new, unique state.
-						movementBuffer.push(normalizedSequence);
+					// 3. Push the new, unique state with a timestamp
+					movementBuffer.push({ 
+						state: normalizedSequence, 
+						timestamp: now 
+					});
 
-						// Limit the buffer (e.g., last 5 states)
-						if (movementBuffer.length > 5) {
-							movementBuffer.shift(); 
+					// 4. Pattern Matching Logic (Unchanged from previous versions)
+					const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
+					
+					// Create an array of only the states for the pattern checker
+					const bufferStates = movementBuffer.map(entry => entry.state);
+
+					for (const pattern of patterns) {
+						// We pass only the 'state' arrays to the checkPatternInBuffer function
+						if (checkPatternInBuffer(pattern.pattern, bufferStates)) { 
+							window.complete_Sound.play();
+							console.log(`--Pattern matched: ${pattern.patternName}`);
+							patternMovement = pattern.patternName;
+							
+							// Clear the buffer after a match
+							movementBuffer = [];
+							setTimeout(resetVariables, 4000); 
+							return;
 						}
-						
-						// 4. Pattern Matching Logic
-						const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
-						for (const pattern of patterns) {
-							// checkPatternInBuffer implements the subset matching logic
-							if (checkPatternInBuffer(pattern.pattern, movementBuffer)) { 
-								window.complete_Sound.play();
-								console.log(`--Pattern matched: ${pattern.patternName}`);
-								patternMovement = pattern.patternName;
-								if (noNarrative){
-									displayText(characterName + " is "+ patternMovement + ".");
-								}
-								
-								// Clear the buffer after a match
-								movementBuffer = [];
-								setTimeout(resetVariables, 4000); 
-								return;
-							}
-						}
-					} catch (error) {
-						console.error('Error in trackMovementSequences:', error);
 					}
 				}
 
