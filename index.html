@@ -321,7 +321,7 @@
 						// Set all potValues to 0
 						setTimeout(function() {
 							startDetectMovement = false;
-							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 							blueToothStatus = "Offline";
 							bgm_Sound.stop();
 						}, 4000);
@@ -340,7 +340,6 @@
 				const textDecoder = new TextDecoder();
 				const decodedValue = textDecoder.decode(value);
 				// Pass the received data to Processing sketch
-				//console.log(decodedValue);
 				receiveData(decodedValue);
 			}
 			// Function to receive data from JavaScript
@@ -705,6 +704,7 @@
 				let cachedMovementConditions = null;
 				let previousPart = "none";
 				let previousDirection = "none";
+				
 
 				async function checkMovement() {
 					// Detect movement
@@ -753,7 +753,7 @@
 							console.log("--Movement: "+partMoving+" "+directionMoving);
 							if (noNarrative){
 								window.success_Sound.play();
-								displayText("Avatar's "+ partMoving+" "+directionMoving);
+								displayText("Avatar's "+ partMoving+" is moving "+directionMoving+".");
 							}
 							previousPart = partMoving;
 							previousDirection = directionMoving;
