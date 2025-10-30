@@ -690,15 +690,19 @@
 					previousPotValues = potValues.slice(0, numPotentiometers);
 
 					// Return the detected movement
-					if (Object.keys(movements).length > 0) { // Check if movements object is not empty
+					// Check if any movements were detected in this cycle
+					if (Object.keys(movements).length > 0) { 
+						// If the movement state has changed...
 						if (!objectsEqual(movements, previousMovements)) {
-							previousMovements = { ...movements }; // Make a copy of movements
-							//console.log(movements);
-							return movements;
+							previousMovements = { ...movements }; // Make a copy of the new state
+							return movements; // Return the new movement state
 						}
+						// If movements were detected but haven't changed since last time, return the current/previous state
+						return previousMovements; 
 					}
 
-					return null; // No movement detected or movements haven't changed
+					// If the movements object is empty (e.g., no potentiometers processed), return an empty object
+					return {};
 				}
 
 				let cachedMovementConditions = null;
