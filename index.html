@@ -787,8 +787,8 @@
 							
 							// Optional display/sound logic 
 							if (noNarrative && !speaking && currentActiveMovements.length > 0) {
-								window.success_Sound.play();
-								displayText("Avatar is doing: " + logMessage + ".");
+								//window.success_Sound.play();
+								//displayText("Avatar is doing: " + logMessage + ".");
 							}
 							
 							// 5. Update the global previous state and track the sequence
@@ -838,7 +838,7 @@
 								console.log(`--Pattern matched: ${pattern.patternName}`);
 								patternMovement = pattern.patternName;
 								if (noNarrative){
-									//displayText(characterName + " is "+ patternMovement + ".");
+									displayText(characterName + " is "+ patternMovement + ".");
 								}
 								
 								// Clear the buffer after a match
