@@ -88,7 +88,7 @@
 			var message;
 			let partMoving = "none";
 			let directionMoving = "none";
-			let patternMovement ="none";
+			//let patternMovement ="none";
 			var blueToothStatus = "Offline";
 			var streetName = "Unknown";
 			var deviceName ="Unknown";
@@ -702,9 +702,11 @@
 				}
 
 				let cachedMovementConditions = null;
-				let previousPart = "none";
-				let previousDirection = "none";
-				
+				let previousActiveMovements = []; // Replaces previousPart and previousDirection
+				// Note: partMoving and directionMoving are obsolete and should be removed globally.
+				let movementBuffer = [];
+				let cachedMovePatterns;
+				let patternMovement = "none";
 
 				async function checkMovement() {
 					// Detect movement
@@ -728,112 +730,157 @@
 
 					function processMovementConditions(movements) {
 						if (!movements) {
-							//console.error("Movement data is null.");
 							return;
 						}
-						// Iterate over movement conditions.
+
+						// 1. Collect all currently active movements
+						let currentActiveMovements = [];
+
+						// Iterate over movement conditions to find ALL matches
 						cachedMovementConditions.forEach(condition => {
 							let match = true;
 							for (let key in condition.condition) {
-								if (condition.condition[key] !== movements[key]) {
+								// Check if the condition property exists AND the value matches the movement data
+								if (movements[key] !== condition.condition[key]) {
 									match = false;
 									break;
 								}
 							}
+
 							if (match) {
-								partMoving = condition.partMoving;
-								directionMoving = condition.directionMoving;
-								setTimeout(() => resetVariables(false), 4000);
+								// Found a match! Add it to the collection.
+								currentActiveMovements.push({
+									part: condition.partMoving,
+									direction: condition.directionMoving
+								});
 							}
 						});
+						
+						// 2. Stringify the two arrays for easy comparison
+						// NOTE: Arrays must be sorted so [{A}, {B}] == [{B}, {A}]
+						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 
-						// Check if partMoving or directionMoving are different from their previous values and add movement to the sequence buffer.
-						if ((partMoving !== previousPart || directionMoving !== previousDirection) && !speaking) {
-							// Add movement to the sequence buffer
-							console.log("--Movement: "+partMoving+" "+directionMoving);
-							if (noNarrative){
-								window.success_Sound.play();
-								displayText("Avatar's "+ partMoving+" is moving "+directionMoving+".");
+						// 3. Check if the set of active movements has changed AND the entity isn't speaking
+						if ((currentMovementsString !== previousMovementsString) && !speaking) {
+							
+							// Build the log message for all active movements
+							let logMessage;
+							if (currentActiveMovements.length > 0) {
+								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
+							} else {
+								logMessage = "No movement (reset)";
 							}
-							previousPart = partMoving;
-							previousDirection = directionMoving;
-							trackMovementSequences();
+
+							console.log("--Movement: " + logMessage);
+							
+							if (noNarrative && currentActiveMovements.length > 0) {
+								window.success_Sound.play();
+								displayText("Avatar is doing: " + logMessage + ".");
+							}
+							
+							// 4. Update the global previous state and track the sequence
+							previousActiveMovements = currentActiveMovements;
+							trackMovementSequences(currentActiveMovements); // Pass the new set
+							
 						} else {
 							return;
 						}
 					}
 				}
 
-				let movementBuffer = [];
-				let cachedMovePatterns;
+				//let movementBuffer = [];
+				//let cachedMovePatterns;
 
 				// Function to track movement sequences and compare them against patterns
-				async function trackMovementSequences() {
+				async function trackMovementSequences(currentActiveMovements) {
 					try {
-						const currentSequence = { partMoving, directionMoving };
-
-						// Check if the current sequence is different from the previous one
+						// 1. Normalize the Movement State (sorting the array)
+						const normalizedSequence = currentActiveMovements.sort((a, b) => 
+							(a.part + a.direction).localeCompare(b.part + b.direction)
+						);
+						const currentSequenceString = JSON.stringify(normalizedSequence);
+						
+						// 2. Check for Duplicates in the Buffer
 						if (
 							movementBuffer.length > 0 &&
-							movementBuffer[movementBuffer.length - 1].partMoving === partMoving &&
-							movementBuffer[movementBuffer.length - 1].directionMoving === directionMoving
+							JSON.stringify(movementBuffer[movementBuffer.length - 1]) === currentSequenceString
 						) {
-							return; // Exit early if the sequence is the same as the previous one
+							return; // Exit early if the *entire set* of active movements is the same as the previous step
 						}
 
-						movementBuffer.push(currentSequence);
+						// 3. Push the new, unique state.
+						movementBuffer.push(normalizedSequence);
 
-						// Limit the buffer to store only the last 5 variations
+						// Limit the buffer (e.g., last 5 states)
 						if (movementBuffer.length > 5) {
-							movementBuffer.shift(); // Remove the oldest variation
+							movementBuffer.shift(); 
 						}
-
+						
+						// 4. Pattern Matching Logic
 						const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
 						for (const pattern of patterns) {
-							if (checkPatternInBuffer(pattern.pattern)) {
+							// checkPatternInBuffer implements the subset matching logic
+							if (checkPatternInBuffer(pattern.pattern, movementBuffer)) { 
 								window.complete_Sound.play();
 								console.log(`--Pattern matched: ${pattern.patternName}`);
 								patternMovement = pattern.patternName;
 								if (noNarrative){
 									//displayText(characterName + " is "+ patternMovement + ".");
 								}
+								
 								// Clear the buffer after a match
-									// Clear the buffer after a match
-									movementBuffer = [];
-									setTimeout(resetVariables, 4000); // 4 seconds
+								movementBuffer = [];
+								setTimeout(resetVariables, 4000); 
 								return;
 							}
 						}
 					} catch (error) {
-						console.error(error);
+						console.error('Error in trackMovementSequences:', error);
 					}
 				}
 
 				function resetVariables(resetAll = true) {
-					directionMoving = "none";
-					partMoving = "none";
+					// Clear the new multi-state variable
+					previousActiveMovements = [];
 
+					// The old partMoving/directionMoving assignments are removed.
+
+					// Clear the pattern variable
 					if (resetAll) {
 						patternMovement = "none";
 					}
 				}
 
 				// Function to check if a pattern exists in the movement buffer
-				function checkPatternInBuffer(pattern) {
-					const bufferLength = movementBuffer.length;
-					if (bufferLength < pattern.length) {
-						return false; // Not enough movements in the buffer for pattern matching
+				function checkPatternInBuffer(pattern, buffer) {
+					if (buffer.length < pattern.length) { 
+						return false;
 					}
-
-					// Check the last 'pattern.length' movements in the buffer
-					const bufferSlice = movementBuffer.slice(-pattern.length);
+					
+					const bufferSlice = buffer.slice(-pattern.length); 
+					
 					for (let i = 0; i < pattern.length; i++) {
-						if (pattern[i].partMoving !== bufferSlice[i].partMoving ||
-							pattern[i].directionMoving !== bufferSlice[i].directionMoving) {
-							return false; // Pattern doesn't match
+						const requiredMovement = pattern[i]; 
+						const currentBufferState = bufferSlice[i]; // Array of ALL active movements
+						
+						let foundMatch = false;
+						
+						// Check if the required single movement is PRESENT in the multi-movement state
+						for (const activeMovement of currentBufferState) {
+							// Note: Uses 'part' and 'direction' from the buffer's activeMovement objects
+							if (activeMovement.part === requiredMovement.partMoving && 
+								activeMovement.direction === requiredMovement.directionMoving) {
+								foundMatch = true;
+								break; 
+							}
+						}
+
+						if (!foundMatch) {
+							return false; // Pattern step not found in the buffer state
 						}
 					}
-					return true; // Pattern matched
+					return true;
 				}
 
 				let cachedPatterns; // Variable to cache the fetched patterns data
