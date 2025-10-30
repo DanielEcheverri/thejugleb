@@ -702,7 +702,7 @@
 					}
 
 					// If the movements object is empty (e.g., no potentiometers processed), return an empty object
-					return {};
+					return previousMovements; 
 				}
 
 				let cachedMovementConditions = null;
@@ -713,7 +713,7 @@
 				let patternMovement = "none";
 
 				async function checkMovement() {
-					// Detect movement
+					// 1. Detect movement (handleMovement() now returns {} instead of null if no change/no relevant pots)
 					let movements = handleMovement();
 
 					// Fetch movement conditions JSON file if not already cached...
@@ -733,9 +733,20 @@
 					}
 
 					function processMovementConditions(movements) {
+						// --- CRUCIAL FIXES HERE ---
+
+						// Check 1: If movements is null/undefined (handleMovement should prevent this now)
 						if (!movements) {
-							return;
+							return; 
 						}
+						
+						// Check 2: If the object is empty ({}), meaning no relevant movement data was generated.
+						// This prevents the function from completing without an explicit return, which causes 'undefined'.
+						if (Object.keys(movements).length === 0) {
+							return; // Exit silently
+						}
+						
+						// --- END CRUCIAL FIXES ---
 
 						// 1. Collect all currently active movements
 						let currentActiveMovements = [];
@@ -744,7 +755,6 @@
 						cachedMovementConditions.forEach(condition => {
 							let match = true;
 							for (let key in condition.condition) {
-								// Check if ALL properties in the condition match the movement data
 								if (movements[key] !== condition.condition[key]) {
 									match = false;
 									break;
@@ -752,7 +762,6 @@
 							}
 
 							if (match) {
-								// Found a match! Add it to the collection.
 								currentActiveMovements.push({
 									part: condition.partMoving, 
 									direction: condition.directionMoving
@@ -760,48 +769,46 @@
 							}
 						});
 						
-						// --- Backward Compatibility Logic ---
-						
 						// 2. Update legacy single-movement variables (partMoving/directionMoving)
 						if (currentActiveMovements.length > 0) {
 							// Priority Rule: Use the first detected movement as the "primary" state
 							partMoving = currentActiveMovements[0].part;
 							directionMoving = currentActiveMovements[0].direction;
+						} else {
+							// Reset to default if no movements are active
+							partMoving = "none";
+							directionMoving = "none";
 						}
 
-						// --- State Comparison and Tracking Logic ---
-						
 						// 3. Prepare arrays for comparison
-						// NOTE: Arrays are sorted and stringified to ensure deep equality check.
 						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 
 						// 4. Check if the set of active movements has changed AND the entity isn't speaking
 						if ((currentMovementsString !== previousMovementsString) && !speaking) {
 							
-							// Log Message Construction (Uses the full array)
 							let logMessage;
 							if (currentActiveMovements.length > 0) {
 								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
 							} else {
-								//logMessage = "No movement (reset)";
+								logMessage = "No movement (reset)";
 							}
 
 							console.log("--Movement: " + logMessage);
 							
-							// Optional display/sound logic 
-							if (noNarrative && !speaking && currentActiveMovements.length > 0) {
-								//window.success_Sound.play();
-								//displayText("Avatar is doing: " + logMessage + ".");
+							if (noNarrative && currentActiveMovements.length > 0) {
+								window.success_Sound.play();
+								displayText("Avatar is doing: " + logMessage + ".");
 							}
 							
 							// 5. Update the global previous state and track the sequence
 							previousActiveMovements = currentActiveMovements;
 							trackMovementSequences(currentActiveMovements); 
 							
-						} else {
-							return;
-						}
+						} 
+						// Note: If the function reaches here, it has explicitly returned earlier 
+						// (via 'return' inside the conditional checks) or is part of a larger chain, 
+						// preventing the final 'undefined' log from the console when called in isolation.
 					}
 				}
 
