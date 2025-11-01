@@ -627,11 +627,16 @@
 					return true;
 				}
 
-				// Define variables for detecting movement in different body parts
-// NOTE: This function assumes the following variables are defined globally/in the outer scope:
-// - keysToForget: A global Set() initialized as: let keysToForget = new Set();
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
+// Define variables for detecting movement in different body parts
+
 let keysToForget = new Set(); // Stores movement labels that were just released.
+let digitalReleaseTimers = new Map();
+const RELEASE_PERSISTENCE_MS = 100;
+
+// NOTE: This function relies on the following global variables:
+// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
+// - digitalReleaseTimers: A global Map() to store timer IDs.
+// - RELEASE_PERSISTENCE_MS: A global constant for the duration (e.g., 100).
 
 function handleMovement() {
     let movements = {};
@@ -646,7 +651,7 @@ function handleMovement() {
 
     // Mapping between labels and movements 
     let labelMovements;
-    // We assume the mapping is consistent between deviceName checks
+    // Assuming the mapping is consistent between deviceName checks
     labelMovements = {
         "LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
         "HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
@@ -655,16 +660,6 @@ function handleMovement() {
         "LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
         "MOUTH": "mouthTouched"
     };
-
-    // --- NEW: CLEANUP KEYS FLAGGED IN THE PREVIOUS CYCLE ---
-    // This removes keys that were detected as 'false' in the last cycle.
-    if (keysToForget.size > 0) {
-        for (const key of keysToForget) {
-            delete previousMovements[key];
-        }
-        keysToForget.clear();
-    }
-    // ----------------------------------------------------
 
     // 1. Process All Sensors
     for (let i = 0; i < numPotentiometers; i++) {
@@ -679,9 +674,14 @@ function handleMovement() {
             // SCENARIO 1: DIGITAL Inputs - ONLY REPORT CHANGES
             
             let isCurrentlyActive = (potValues[i] > 0); 
-            // Check against the previous state stored in the persistent object.
             let wasPreviouslyActive = previousMovements[movement] === true; 
             
+            // If the state has changed or is still active, clear any pending release timer
+            if (digitalReleaseTimers.has(movement)) {
+                clearTimeout(digitalReleaseTimers.get(movement));
+                digitalReleaseTimers.delete(movement);
+            }
+
             // Only include the digital movement if the state has CHANGED
             if (isCurrentlyActive !== wasPreviouslyActive) {
                 movements[movement] = isCurrentlyActive; 
@@ -702,27 +702,40 @@ function handleMovement() {
     // 2. Update previous potentiometer values
     previousPotValues = potValues.slice(0, numPotentiometers);
 
-    // 3. Merge and Queue Keys for Forgetting
-    // Combine current changes/states with the persistent states from previousMovements.
+    // 3. Merge and Queue Keys for Timed Forgetting
     const mergedMovements = { ...previousMovements, ...movements };
+    const allMovementKeys = Object.values(labelMovements);
 
-    for (const key in mergedMovements) {
+    for (const key of allMovementKeys) {
         
-        // 1. Clean up Analog's 'null' values
+        // Skip if the key isn't in the merged state (e.g., was already deleted)
+        if (mergedMovements[key] === undefined) {
+            continue;
+        }
+
+        // 3a. Clean up Analog's 'null' values
         if (mergedMovements[key] === null) {
             delete mergedMovements[key];
             continue;
         }
         
-        // 2. Clean up Digital's 'false' values (Released/Inactive)
+        // 3b. Clean up Digital's 'false' values (Released/Inactive)
         const isDigitalKey = digitalParts.map(p => labelMovements[p]).includes(key);
 
         if (isDigitalKey && mergedMovements[key] === false) {
-            // Queue the key for deletion in the *next* cycle.
-            keysToForget.add(key);
+            // CRITICAL: We DO NOT delete immediately, but queue the actual deletion.
             
-            // Delete the key from the *current* merged state so it doesn't get persisted 
-            // as 'false' (it was registered in 'movements' if it was a change).
+            if (!digitalReleaseTimers.has(key)) {
+                 // Set the timer to delete the key from previousMovements after the persistence time
+                const timerId = setTimeout(() => {
+                    delete previousMovements[key];
+                    digitalReleaseTimers.delete(key);
+                }, RELEASE_PERSISTENCE_MS); // e.g., 100ms
+                
+                digitalReleaseTimers.set(key, timerId);
+            }
+            
+            // Delete the key from the *current* merged state so it doesn't get re-persisted as 'false'.
             delete mergedMovements[key]; 
         }
     }
