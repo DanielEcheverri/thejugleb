@@ -792,9 +792,10 @@
 							let logMessage;
 							if (currentActiveMovements.length > 0) {
 								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
-							} else {
-								logMessage = "No movement (reset)";
-							}
+							} 
+							//else {
+								//logMessage = "No movement (reset)";
+							//}
 
 							console.log("--Movement: " + logMessage);
 							
