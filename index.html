@@ -633,6 +633,11 @@ let keysToForget = new Set(); // Stores movement labels that were just released.
 let digitalReleaseTimers = new Map();
 const RELEASE_PERSISTENCE_MS = 1000;
 
+// NOTE: This function relies on the following external variables:
+// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
+// - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
+// - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
+
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
@@ -750,8 +755,23 @@ function handleMovement() {
     // Check if the current state is different from the last saved state
     if (!objectsEqual(currentStateToReturn, previousMovements)) {
         
-        // Update the global persistent state and return it
-        previousMovements = currentStateToReturn; 
+        // Selectively update previousMovements to preserve digital false states
+        // that are managed by timers
+        for (const key in currentStateToReturn) {
+            // Only update if not a digital false state being managed by a timer
+            if (!(digitalReleaseTimers.has(key) && previousMovements[key] === false)) {
+                previousMovements[key] = currentStateToReturn[key];
+            }
+        }
+        
+        // Remove keys that are no longer in currentStateToReturn
+        // (but preserve digital false states being managed by timers)
+        for (const key in previousMovements) {
+            if (!currentStateToReturn.hasOwnProperty(key) && !digitalReleaseTimers.has(key)) {
+                delete previousMovements[key];
+            }
+        }
+        
         return currentStateToReturn; 
     }
 
