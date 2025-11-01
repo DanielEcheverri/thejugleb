@@ -751,111 +751,116 @@ function handleMovement() {
     return null; 
 }
 
-				let cachedMovementConditions = null;
-				let previousActiveMovements = []; // Replaces previousPart and previousDirection
-				// Note: partMoving and directionMoving are obsolete and should be removed globally.
-				let movementBuffer = [];
-				let cachedMovePatterns;
-				let patternMovement = "none";
-				let movementResetTimer = null; // Stores the setTimeout ID
+let cachedMovementConditions = null;
+let previousActiveMovements = []; // Replaces previousPart and previousDirection
+// Note: partMoving and directionMoving are obsolete and should be removed globally.
+let movementBuffer = [];
+let cachedMovePatterns;
+let patternMovement = "none";
+let movementResetTimer = null; // Stores the setTimeout ID
 
-				async function checkMovement() {
-					// 1. Detect movement (handleMovement() should now return persistent digital states)
-					let movements = handleMovement();
+async function checkMovement() {
+    let movements = handleMovement(); // Get current movement data
 
-					// Fetch movement conditions JSON file if not already cached...
-					if (!cachedMovementConditions) {
-						try {
-							cachedMovementConditions = await $.get(moveSource);
-						} catch (error) {
-							console.error('Error fetching movement conditions JSON:', error);
-							return; // Exit if fetch fails
-						}
-					}
+    // 1. Fetch movement conditions JSON file if not already cached
+    if (!cachedMovementConditions) {
+        try {
+            cachedMovementConditions = await $.get(moveSource);
+        } catch (error) {
+            console.error('Error fetching movement conditions JSON:', error);
+            return; // Exit if fetch fails
+        }
+    }
+    
+    // 2. Execution Entry Point: Process state change
+    // We execute this if movements are available, regardless of the 'speaking' status.
+    if (movements) {
+        processMovementConditions(movements);
+    }
+    
+    // --- Inner Processor Function ---
+    function processMovementConditions(movements) {
+        
+        // Exit cleanly if movements is null/undefined or an empty object {}
+        if (!movements || Object.keys(movements).length === 0) {
+            return; 
+        }
+        
+        // 1. Collect all currently active movements (currentActiveMovements is built here)
+        let currentActiveMovements = [];
 
-					// 2. Execution Entry Point: Execute the processor if we have movement data and are not speaking
-					if (!speaking) {
-						processMovementConditions(movements);
-					}
+        cachedMovementConditions.forEach(condition => {
+            let match = true;
+            for (let key in condition.condition) {
+                if (movements[key] !== condition.condition[key]) {
+                    match = false;
+                    break;
+                }
+            }
 
-					function processMovementConditions(movements) {
-						
-						// Exit cleanly if movements is null/undefined or an empty object {}
-						if (!movements || Object.keys(movements).length === 0) {
-							return; 
-						}
-						
-						// 1. Collect all currently active movements
-						let currentActiveMovements = [];
+            if (match) {
+                currentActiveMovements.push({
+                    part: condition.partMoving, 
+                    direction: condition.directionMoving
+                });
+            }
+        });
+        
+        // 2. Prepare arrays for comparison
+        const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+        const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 
-						cachedMovementConditions.forEach(condition => {
-							let match = true;
-							for (let key in condition.condition) {
-								// This correctly checks analog changes (true/false) AND persistent digital states (true/false)
-								if (movements[key] !== condition.condition[key]) {
-									match = false;
-									break;
-								}
-							}
+        // 3. Check if the set of active movements has changed (MUST RUN ALWAYS)
+        if (currentMovementsString !== previousMovementsString) {
+            
+            // ACTION 1: Clear any existing reset timer, as a state change just occurred. (MUST RUN ALWAYS)
+            if (movementResetTimer) {
+                clearTimeout(movementResetTimer);
+                movementResetTimer = null;
+            }
+            
+            // --- DETERMINE NEW STATE AND TIMER ACTION ---
+            
+            if (currentActiveMovements.length === 0) {
+                // SCENARIO A: Movement HAS stopped (transition to empty array)
+                
+                // Set the timer to perform the legacy variable reset after 2 seconds
+                movementResetTimer = setTimeout(() => {
+                    partMoving = "none";
+                    directionMoving = "none";
+                    console.log("--Movement Timer Reset: Legacy variables cleared.");
+                }, 2000); 
+                
+                // Immediately update the multi-movement previous state to register the stop
+                previousActiveMovements = currentActiveMovements;
+                return; // Exit here. We registered the stop and set the timer.
+            }
+            
+            // --- ONLY PROCEED WITH LOGGING/ACTIONS IF NOT SPEAKING ---
+            if (!speaking) {
+                // SCENARIO B: Movement HAS started/changed (currentActiveMovements is NOT empty)
+                
+                // Update legacy single-movement variables
+                partMoving = currentActiveMovements[0].part;
+                directionMoving = currentActiveMovements[0].direction;
 
-							if (match) {
-								currentActiveMovements.push({
-									part: condition.partMoving, 
-									direction: condition.directionMoving
-								});
-							}
-						});
-						
-						// 2. Prepare arrays for comparison
-						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
-						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
-
-						// 3. Check if the set of active movements has changed AND the entity isn't speaking
-						if ((currentMovementsString !== previousMovementsString) && !speaking) {
-							
-							// ACTION 1: Clear any existing reset timer, as a state change just occurred.
-							if (movementResetTimer) {
-								clearTimeout(movementResetTimer);
-								movementResetTimer = null;
-							}
-							
-							// --- DETERMINE NEW STATE AND ACTION ---
-							
-							if (currentActiveMovements.length === 0) {
-								// SCENARIO A: Movement HAS stopped (transition from active state to empty array)
-								
-								// Set the timer to perform the legacy variable reset after 2 seconds
-								movementResetTimer = setTimeout(() => {
-									partMoving = "none";
-									directionMoving = "none";
-									console.log("--Movement Timer Reset: Legacy variables cleared.");
-								}, 2000); 
-								
-								// Immediately update the multi-movement previous state to register the stop
-								previousActiveMovements = currentActiveMovements;
-								return; // Exit silently
-							}
-							
-							// SCENARIO B: Movement HAS started/changed (currentActiveMovements is NOT empty)
-							
-							// Update legacy single-movement variables (required for downstream functions)
-							partMoving = currentActiveMovements[0].part;
-							directionMoving = currentActiveMovements[0].direction;
-
-							let logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
-							console.log("--Movement: " + logMessage);
-							
-							if (noNarrative) {
-								//window.success_Sound.play();
-								//displayText("Avatar is doing: " + logMessage + ".");
-							}
-							
-							// 4. Update the global previous state and track the sequence
-							previousActiveMovements = currentActiveMovements;
-							trackMovementSequences(currentActiveMovements); 
-						} 
-					}
-				}
+                let logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
+                console.log("--Movement: " + logMessage);
+                
+                if (noNarrative) {
+                    //window.success_Sound.play();
+                    //displayText("Avatar is doing: " + logMessage + ".");
+                }
+                
+                // 4. Update the global previous state and track the sequence
+                previousActiveMovements = currentActiveMovements;
+                trackMovementSequences(currentActiveMovements); 
+            }
+            // If speaking is TRUE, the state is still updated above (previousActiveMovements), 
+            // but we skip the logging/tracking/legacy variable update.
+        } 
+    }
+}
 
 			// Function to track movement sequences and compare them against patterns
 			async function trackMovementSequences(currentActiveMovements) {
