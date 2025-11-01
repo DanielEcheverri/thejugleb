@@ -14,85 +14,26 @@
 		]
 	},
 	{
+		"patternName": "Guiding the left hand down",
+		"pattern": [
+			{ "partMoving": "left arm", "directionMoving": "up" },
+			{ "partMoving": "left hand", "directionMoving": "touched" }
+		]
+	},
+	{
+		"patternName": "Guiding the right hand down",
+		"pattern": [
+			{ "partMoving": "right arm", "directionMoving": "up" },
+			{ "partMoving": "right hand", "directionMoving": "touched" }
+		]
+	},
+	{
 		"patternName": "Walking",
 		"pattern": [
 			{ "partMoving": "left leg", "directionMoving": "up" },
 			{ "partMoving": "right leg", "directionMoving": "down" },
 			{ "partMoving": "left leg", "directionMoving": "down" },
 			{ "partMoving": "right leg", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Greeting",
-		"pattern": [
-			{ "partMoving": "right forearm", "directionMoving": "left" },
-			{ "partMoving": "right forearm", "directionMoving": "right" },
-			{ "partMoving": "right forearm", "directionMoving": "left" }
-		]
-	},
-	{
-		"patternName": "Picking down",
-		"pattern": [
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "left shoulder", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Picking down",
-		"pattern": [
-			{ "partMoving": "left shoulder", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Picking down",
-		"pattern": [
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "right shoulder", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Picking down",
-		"pattern": [
-			{ "partMoving": "right shoulder", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Picking up",
-		"pattern": [
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "left shoulder", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Picking up",
-		"pattern": [
-			{ "partMoving": "left shoulder", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Picking up",
-		"pattern": [
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "right forearm", "directionMoving": "left" }
-		]
-	},
-	{
-		"patternName": "Picking up",
-		"pattern": [
-			{ "partMoving": "right shoulder", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Dancing",
-		"pattern": [
-			{ "partMoving": "waist", "directionMoving": "left" },
-			{ "partMoving": "waist", "directionMoving": "right" },
-			{ "partMoving": "waist", "directionMoving": "left" },
-			{ "partMoving": "waist", "directionMoving": "right" }
 		]
 	},
 	{
@@ -112,19 +53,17 @@
 		]
 	},
 	{
-		"patternName": "Looking",
+		"patternName": "Looking left",
 		"pattern": [
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "up" }
+			{ "partMoving": "head", "directionMoving": "left" },
+			{ "partMoving": "eyes", "directionMoving": "touched" }
 		]
 	},
-	{
-		"patternName": "Looking",
+		{
+		"patternName": "Looking right",
 		"pattern": [
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "down" }
+			{ "partMoving": "head", "directionMoving": "right" },
+			{ "partMoving": "eyes", "directionMoving": "touched" }
 		]
 	},
 	{
