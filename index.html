@@ -633,16 +633,6 @@ let keysToForget = new Set(); // Stores movement labels that were just released.
 let digitalReleaseTimers = new Map();
 const RELEASE_PERSISTENCE_MS = 1000;
 
-// NOTE: This function relies on the following global variables:
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
-// - digitalReleaseTimers: A global Map() for asynchronous cleanup.
-// - RELEASE_PERSISTENCE_MS: A global constant for the duration (e.g., 100).
-
-// NOTE: This function relies on the following external variables:
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
-// - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
-// - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
-
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
@@ -728,6 +718,10 @@ function handleMovement() {
         // 3b. Handle Digital Release (Value is false)
         if (isDigitalKey && value === false) {
             
+            // IMPORTANT: Update the persistent state to FALSE immediately
+            // This ensures the false state persists across function calls
+            previousMovements[key] = false;
+            
             // Set the timer to delete the key from the persistent state asynchronously
             if (!digitalReleaseTimers.has(key)) {
                 
@@ -740,7 +734,7 @@ function handleMovement() {
                 digitalReleaseTimers.set(key, timerId);
             }
             
-            // IMPORTANT: Set the current state to FALSE for this cycle's return, 
+            // Set the current state to FALSE for this cycle's return, 
             // allowing the release to be logged/tracked.
             currentStateToReturn[key] = false; 
             continue;
