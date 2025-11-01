@@ -734,6 +734,10 @@
 						}
 					}
 
+					if (!movements) {
+   						 return; // This is the clean exit path for no event!
+					}
+
 					function processMovementConditions(movements) {
 						// --- CRUCIAL FIXES HERE ---
 
