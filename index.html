@@ -633,11 +633,6 @@ let keysToForget = new Set(); // Stores movement labels that were just released.
 let digitalReleaseTimers = new Map();
 const RELEASE_PERSISTENCE_MS = 1000;
 
-// NOTE: This function relies on the following global variables:
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
-// - digitalReleaseTimers: A global Map() to store timer IDs.
-// - RELEASE_PERSISTENCE_MS: A global constant for the duration (e.g., 100).
-
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
@@ -651,7 +646,6 @@ function handleMovement() {
 
     // Mapping between labels and movements 
     let labelMovements;
-    // Assuming the mapping is consistent between deviceName checks
     labelMovements = {
         "LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
         "HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
@@ -660,6 +654,13 @@ function handleMovement() {
         "LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
         "MOUTH": "mouthTouched"
     };
+
+    // --- NEW: CLEANUP KEYS FLAGGED IN THE PREVIOUS CYCLE ---
+    if (digitalReleaseTimers.size > 0) {
+        // We only clear timers here if the key has been removed by the timer itself.
+        // The deletion from previousMovements is handled asynchronously by the setTimeout,
+        // so no explicit cleanup of previousMovements is needed here.
+    }
 
     // 1. Process All Sensors
     for (let i = 0; i < numPotentiometers; i++) {
@@ -671,7 +672,7 @@ function handleMovement() {
         }
 
         if (digitalParts.includes(label)) {
-            // SCENARIO 1: DIGITAL Inputs - ONLY REPORT CHANGES
+            // SCENARIO 1: DIGITAL Inputs - REPORT ACTIVE STATE OR TRANSITIONAL RELEASE
             
             let isCurrentlyActive = (potValues[i] > 0); 
             let wasPreviouslyActive = previousMovements[movement] === true; 
@@ -682,9 +683,11 @@ function handleMovement() {
                 digitalReleaseTimers.delete(movement);
             }
 
-            // Only include the digital movement if the state has CHANGED
-            if (isCurrentlyActive !== wasPreviouslyActive) {
-                movements[movement] = isCurrentlyActive; 
+            // CRITICAL FIX 1: Ensure active state is persistent, and release is registered.
+            if (isCurrentlyActive === true) {
+                movements[movement] = true; // State is active (Touched/Pressed)
+            } else if (isCurrentlyActive !== wasPreviouslyActive) {
+                movements[movement] = false; // State just became inactive (Released)
             }
         
         } else {
@@ -708,7 +711,6 @@ function handleMovement() {
 
     for (const key of allMovementKeys) {
         
-        // Skip if the key isn't in the merged state (e.g., was already deleted)
         if (mergedMovements[key] === undefined) {
             continue;
         }
@@ -723,27 +725,27 @@ function handleMovement() {
         const isDigitalKey = digitalParts.map(p => labelMovements[p]).includes(key);
 
         if (isDigitalKey && mergedMovements[key] === false) {
-            // CRITICAL: We DO NOT delete immediately, but queue the actual deletion.
-            
+            // CRITICAL FIX 2: Allow the 'false' state to be returned, THEN set the timer.
+
             if (!digitalReleaseTimers.has(key)) {
                  // Set the timer to delete the key from previousMovements after the persistence time
                 const timerId = setTimeout(() => {
                     delete previousMovements[key];
                     digitalReleaseTimers.delete(key);
-                }, RELEASE_PERSISTENCE_MS); // e.g., 100ms
+                }, RELEASE_PERSISTENCE_MS); 
                 
                 digitalReleaseTimers.set(key, timerId);
             }
             
-            // Delete the key from the *current* merged state so it doesn't get re-persisted as 'false'.
-            delete mergedMovements[key]; 
+            // DO NOT delete mergedMovements[key]. We want 'false' to persist temporarily.
+            // It will be saved into previousMovements in the return block below.
         }
     }
     
     // 4. Return Final State
     // If the merged state is different from the last state, return the new merged state.
     if (!objectsEqual(mergedMovements, previousMovements)) { 
-        previousMovements = mergedMovements; // Update and store the new persistent state
+        previousMovements = mergedMovements; // The 'false' state is now saved for 100ms
         return mergedMovements; 
     }
 
