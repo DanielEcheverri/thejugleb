@@ -816,193 +816,193 @@
 				}
 			}
 
-				// Function to track movement sequences and compare them against patterns
-				async function trackMovementSequences(currentActiveMovements) {
-					const PRUNE_TIME_MS = 1500; // Time limit for a sequence step (1.5 seconds)
-					const now = Date.now();
-					
-					// 1. Time-Based Pruning Logic: Remove all buffer entries older than the time limit
-					// We check the first element because entries are pushed to the end (FIFO).
-					while (movementBuffer.length > 0 && (now - movementBuffer[0].timestamp > PRUNE_TIME_MS)) {
-						movementBuffer.shift(); // Remove the oldest entry
-					}
-					
-					// 2. Normalize and check for duplicate states (The core of the multi-movement logic)
-					const normalizedSequence = currentActiveMovements.sort((a, b) => 
-						(a.part + a.direction).localeCompare(b.part + b.direction)
-					);
-					const currentSequenceString = JSON.stringify(normalizedSequence);
-					
-					// If the current state is the same as the last one, ignore it and exit early
-					if (
-						movementBuffer.length > 0 &&
-						JSON.stringify(movementBuffer[movementBuffer.length - 1].state) === currentSequenceString
-					) {
-						return; 
-					}
+			// Function to track movement sequences and compare them against patterns
+			async function trackMovementSequences(currentActiveMovements) {
+				const PRUNE_TIME_MS = 1500; // Time limit for a sequence step (1.5 seconds)
+				const now = Date.now();
+				
+				// 1. Time-Based Pruning Logic
+				while (movementBuffer.length > 0 && (now - movementBuffer[0].timestamp > PRUNE_TIME_MS)) {
+					movementBuffer.shift(); // Remove the oldest entry
+				}
+				
+				// 2. Normalize and check for duplicate states
+				const normalizedSequence = currentActiveMovements.sort((a, b) => 
+					(a.part + a.direction).localeCompare(b.part + b.direction)
+				);
+				const currentSequenceString = JSON.stringify(normalizedSequence);
+				
+				// 2a. Safely retrieve the state of the last entry
+				const lastEntryStateString = movementBuffer.length > 0 
+					? JSON.stringify(movementBuffer[movementBuffer.length - 1].state) 
+					: null;
 
-					// 3. Push the new, unique state with a timestamp
-					movementBuffer.push({ 
-						state: normalizedSequence, 
-						timestamp: now 
-					});
-
-					// 4. Pattern Matching Logic (Unchanged from previous versions)
-					const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
-					
-					// Create an array of only the states for the pattern checker
-					const bufferStates = movementBuffer.map(entry => entry.state);
-
-					for (const pattern of patterns) {
-						// We pass only the 'state' arrays to the checkPatternInBuffer function
-						if (checkPatternInBuffer(pattern.pattern, bufferStates)) { 
-							window.complete_Sound.play();
-							console.log(`--Pattern matched: ${pattern.patternName}`);
-							patternMovement = pattern.patternName;
-							
-							// Clear the buffer after a match
-							movementBuffer = [];
-							setTimeout(resetVariables, 4000); 
-							return;
-						}
-					}
+				// 2b. If the current state is the same as the last one, ignore it and exit early
+				if (lastEntryStateString === currentSequenceString) {
+					return; 
 				}
 
-				function resetVariables(resetAll = true) {
-					// Clear the new multi-state variable
-					previousActiveMovements = [];
+				// 3. Push the new, unique state with a timestamp
+				movementBuffer.push({ 
+					state: normalizedSequence, 
+					timestamp: now 
+				});
 
-					// The old partMoving/directionMoving assignments are removed.
+				// 4. Pattern Matching Logic
+				const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
+				
+				// Create an array of only the states for the pattern checker
+				const bufferStates = movementBuffer.map(entry => entry.state);
 
-					// Clear the pattern variable
-					if (resetAll) {
-						patternMovement = "none";
-					}
-				}
-
-				// Function to check if a pattern exists in the movement buffer
-				function checkPatternInBuffer(pattern, buffer) {
-					if (buffer.length < pattern.length) { 
-						return false;
-					}
-					
-					const bufferSlice = buffer.slice(-pattern.length); 
-					
-					for (let i = 0; i < pattern.length; i++) {
-						const requiredMovement = pattern[i]; 
-						const currentBufferState = bufferSlice[i]; // Array of ALL active movements
+				for (const pattern of patterns) {
+					// We pass only the 'state' arrays to the checkPatternInBuffer function
+					if (checkPatternInBuffer(pattern.pattern, bufferStates)) { 
+						window.complete_Sound.play();
+						console.log(`--Pattern matched: ${pattern.patternName}`);
+						patternMovement = pattern.patternName;
 						
-						let foundMatch = false;
-						
-						// Check if the required single movement is PRESENT in the multi-movement state
-						for (const activeMovement of currentBufferState) {
-							// Note: Uses 'part' and 'direction' from the buffer's activeMovement objects
-							if (activeMovement.part === requiredMovement.partMoving && 
-								activeMovement.direction === requiredMovement.directionMoving) {
-								foundMatch = true;
-								break; 
-							}
-						}
-
-						if (!foundMatch) {
-							return false; // Pattern step not found in the buffer state
-						}
-					}
-					return true;
-				}
-
-				let cachedPatterns; // Variable to cache the fetched patterns data
-				async function fetchMovementPatterns() {
-					try {
-						if (cachedPatterns) {
-							// If data is already cached, return it immediately
-							return cachedPatterns;
-						} else {
-							// If data is not cached, fetch it from the server
-							const patterns = await $.get(movePatterns);
-							cachedPatterns = patterns; // Cache the fetched data
-							return patterns;
-						}
-					} catch (error) {
-						console.error(error);
-						return []; // Return an empty array in case of error
+						// Clear the buffer after a match
+						movementBuffer = [];
+						setTimeout(resetVariables, 4000); 
+						return;
 					}
 				}
+			}
+			function resetVariables(resetAll = true) {
+				// Clear the new multi-state variable
+				previousActiveMovements = [];
 
-				var timeoutID; // Variable to hold the timeout ID.
-				var previousMessage = ""; // Variable to store the previous message
-				var previousLatitude;
-				var previousLongitude;
-				var previousPartMoving;
-				var previousDirectionMoving;
-				var timeOfDay;
+				// The old partMoving/directionMoving assignments are removed.
 
-				var fullMessage;
-				var messageID = ""; // Global variable to store the message ID.
-				var oldMessageID ="";
-				var messageID_tmp = "";
-				var playAction = false;
+				// Clear the pattern variable
+				if (resetAll) {
+					patternMovement = "none";
+				}
+			}
 
-				function displayText(message) {
-					var messageDisplayDiv = document.getElementById("messageDisplayDiv");
-					var delimiterIndex = message.indexOf("/"); // Find the index of the first delimiter "/"
+			// Function to check if a pattern exists in the movement buffer
+			function checkPatternInBuffer(pattern, buffer) {
+				if (buffer.length < pattern.length) { 
+					return false;
+				}
+				
+				const bufferSlice = buffer.slice(-pattern.length); 
+				
+				for (let i = 0; i < pattern.length; i++) {
+					const requiredMovement = pattern[i]; 
+					const currentBufferState = bufferSlice[i]; // Array of ALL active movements
+					
+					let foundMatch = false;
+					
+					// Check if the required single movement is PRESENT in the multi-movement state
+					for (const activeMovement of currentBufferState) {
+						// Note: Uses 'part' and 'direction' from the buffer's activeMovement objects
+						if (activeMovement.part === requiredMovement.partMoving && 
+							activeMovement.direction === requiredMovement.directionMoving) {
+							foundMatch = true;
+							break; 
+						}
+					}
 
-					if (delimiterIndex !== -1) { // Check if the first delimiter exists
-						messageID_tmp = message.substring(0, delimiterIndex); // Store the message ID
-						console.log("--Passage: "+messageID_tmp);
-						var secondDelimiterIndex = message.indexOf("/", delimiterIndex + 1); // Find the index of the second delimiter "/"
+					if (!foundMatch) {
+						return false; // Pattern step not found in the buffer state
+					}
+				}
+				return true;
+			}
 
-						if (secondDelimiterIndex !== -1 && secondDelimiterIndex !== delimiterIndex) { // Check if the second delimiter exists
-							var thirdDelimiterIndex = message.indexOf("/", secondDelimiterIndex + 1); // Find the index of the third delimiter "/"
+			let cachedPatterns; // Variable to cache the fetched patterns data
+			async function fetchMovementPatterns() {
+				try {
+					if (cachedPatterns) {
+						// If data is already cached, return it immediately
+						return cachedPatterns;
+					} else {
+						// If data is not cached, fetch it from the server
+						const patterns = await $.get(movePatterns);
+						cachedPatterns = patterns; // Cache the fetched data
+						return patterns;
+					}
+				} catch (error) {
+					console.error(error);
+					return []; // Return an empty array in case of error
+				}
+			}
 
-							if (thirdDelimiterIndex !== -1) { // Check if the third delimiter exists
-								var fourthDelimiterIndex = message.indexOf("/", thirdDelimiterIndex + 1); // Find the index of the fourth delimiter "/"
+			var timeoutID; // Variable to hold the timeout ID.
+			var previousMessage = ""; // Variable to store the previous message
+			var previousLatitude;
+			var previousLongitude;
+			var previousPartMoving;
+			var previousDirectionMoving;
+			var timeOfDay;
 
-								var fullMessage = message.substring(delimiterIndex + 1, secondDelimiterIndex).trim(); // Extract the message text between the first and second delimiters
-								var audioSoundscape = message.substring(secondDelimiterIndex + 1, thirdDelimiterIndex).trim(); // Extract the audioSoundscape variable between the second and third delimiters
+			var fullMessage;
+			var messageID = ""; // Global variable to store the message ID.
+			var oldMessageID ="";
+			var messageID_tmp = "";
+			var playAction = false;
 
-								clearTimeout(timeoutID);
-								speakMessage(fullMessage);
-								updateDisplay(fullMessage);
+			function displayText(message) {
+				var messageDisplayDiv = document.getElementById("messageDisplayDiv");
+				var delimiterIndex = message.indexOf("/"); // Find the index of the first delimiter "/"
 
-								if (audioSoundscape !== "") {
-									window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
-								}
+				if (delimiterIndex !== -1) { // Check if the first delimiter exists
+					messageID_tmp = message.substring(0, delimiterIndex); // Store the message ID
+					console.log("--Passage: "+messageID_tmp);
+					var secondDelimiterIndex = message.indexOf("/", delimiterIndex + 1); // Find the index of the second delimiter "/"
 
-								if (fourthDelimiterIndex !== -1) { // If the fourth delimiter exists
-									var functionToEval = message.substring(thirdDelimiterIndex + 1, fourthDelimiterIndex).trim(); // Extract the function between the third and fourth delimiters
-									try {
-										eval(functionToEval); // Run the function using eval()
-									} catch (error) {
-										console.error("Error executing displayText function: " + error);
-									}
-								}
-							} else { // Handle the case where there's no third delimiter
-								var fullMessage = message.substring(delimiterIndex + 1, secondDelimiterIndex).trim(); // Extract the message text between the first and second delimiters
-								var audioSoundscape = message.substring(secondDelimiterIndex + 1).trim(); // Extract the audioSoundscape variable after the second delimiter
+					if (secondDelimiterIndex !== -1 && secondDelimiterIndex !== delimiterIndex) { // Check if the second delimiter exists
+						var thirdDelimiterIndex = message.indexOf("/", secondDelimiterIndex + 1); // Find the index of the third delimiter "/"
 
-								clearTimeout(timeoutID);
-								speakMessage(fullMessage);
-								updateDisplay(fullMessage);
-								if (audioSoundscape !== "") {
-									window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
-								}
-							}
-						} else { // Handle the case where there's no second delimiter
-							var fullMessage = message.substring(delimiterIndex + 1).trim(); // Extract the message text after the first delimiter
+						if (thirdDelimiterIndex !== -1) { // Check if the third delimiter exists
+							var fourthDelimiterIndex = message.indexOf("/", thirdDelimiterIndex + 1); // Find the index of the fourth delimiter "/"
+
+							var fullMessage = message.substring(delimiterIndex + 1, secondDelimiterIndex).trim(); // Extract the message text between the first and second delimiters
+							var audioSoundscape = message.substring(secondDelimiterIndex + 1, thirdDelimiterIndex).trim(); // Extract the audioSoundscape variable between the second and third delimiters
+
 							clearTimeout(timeoutID);
 							speakMessage(fullMessage);
 							updateDisplay(fullMessage);
+
+							if (audioSoundscape !== "") {
+								window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
+							}
+
+							if (fourthDelimiterIndex !== -1) { // If the fourth delimiter exists
+								var functionToEval = message.substring(thirdDelimiterIndex + 1, fourthDelimiterIndex).trim(); // Extract the function between the third and fourth delimiters
+								try {
+									eval(functionToEval); // Run the function using eval()
+								} catch (error) {
+									console.error("Error executing displayText function: " + error);
+								}
+							}
+						} else { // Handle the case where there's no third delimiter
+							var fullMessage = message.substring(delimiterIndex + 1, secondDelimiterIndex).trim(); // Extract the message text between the first and second delimiters
+							var audioSoundscape = message.substring(secondDelimiterIndex + 1).trim(); // Extract the audioSoundscape variable after the second delimiter
+
+							clearTimeout(timeoutID);
+							speakMessage(fullMessage);
+							updateDisplay(fullMessage);
+							if (audioSoundscape !== "") {
+								window[audioSoundscape + "_Sound"].play(); // Play the corresponding audio based on the audioSoundscape variable if it is not empty
+							}
 						}
-					} else { // Handle the case where there's no delimiter at all
-						var fullMessage = message.trim(); // The full message is the entire input
+					} else { // Handle the case where there's no second delimiter
+						var fullMessage = message.substring(delimiterIndex + 1).trim(); // Extract the message text after the first delimiter
 						clearTimeout(timeoutID);
 						speakMessage(fullMessage);
 						updateDisplay(fullMessage);
 					}
+				} else { // Handle the case where there's no delimiter at all
+					var fullMessage = message.trim(); // The full message is the entire input
+					clearTimeout(timeoutID);
+					speakMessage(fullMessage);
+					updateDisplay(fullMessage);
 				}
+			}
 
-				function updateDisplay(displayMessage) {
+			function updateDisplay(displayMessage) {
 				try {
 					// Ensure the element exists
 					if (!messageDisplayDiv) {
