@@ -628,108 +628,6 @@
 				}
 
 				// Define variables for detecting movement in different body parts
-				function handleMovement() {
-					let movements = {};
-					const movementThreshold = 25;
-
-					// Configuration: Define parts that use DIGITAL logic
-					const digitalParts = [
-						"LEFT FOOT", "RIGHT FOOT", 
-						"RIGHT HAND", "LEFT HAND", 
-						"EYES", "MOUTH"
-					];
-
-					// Mapping between labels and movements (kept as is)
-					let labelMovements;
-					// ... (Your existing deviceName and labelMoves initialization here) ...
-					if (deviceName === "hachi_BT") {
-						labelMovements = {
-							"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
-							"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
-							"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
-							"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
-							"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
-							"MOUTH": "mouthTouched"
-						};
-					} else {
-						labelMovements = {
-							"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
-							"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
-							"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
-							"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
-							"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
-							"MOUTH": "mouthTouched"
-						};
-					}
-
-					// Check movement for each sensor
-					for (let i = 0; i < numPotentiometers; i++) {
-						let label = labels[i];
-						let movement = labelMovements[label];
-
-						if (movement === null || movement === undefined) {
-							continue;
-						}
-
-						// --- Logic Processing ---
-						if (digitalParts.includes(label)) {
-							// SCENARIO 1: DIGITAL (Boolean) Inputs - ONLY REPORT CHANGES
-							
-							let isCurrentlyActive = (potValues[i] > 0); 
-							// The value to compare against is the state in the last *returned* movements object.
-							let wasPreviouslyActive = previousMovements[movement] === true; 
-							
-							// Only include the digital movement if the state has changed
-							if (isCurrentlyActive !== wasPreviouslyActive) {
-								movements[movement] = isCurrentlyActive; 
-							}
-						
-						} else {
-							// SCENARIO 2: ANALOG (Potentiometer) Inputs - Report state OR null
-							if (potValues[i] < previousPotValues[i] - movementThreshold) {
-								movements[movement] = false; // Movement decreases
-							} else if (potValues[i] > previousPotValues[i] + movementThreshold) {
-								movements[movement] = true; // Movement increases
-							} else {
-								movements[movement] = null; // No significant change
-							}
-						}
-					}
-
-					// Update previous potentiometer values for next cycle
-					previousPotValues = potValues.slice(0, numPotentiometers);
-
-					// --- Final Return Logic ---
-					
-					// We now merge current changes with the persistent states from previousMovements 
-					// to check for overall state change.
-					const mergedMovements = { ...previousMovements, ...movements };
-					
-					// 1. Clean up null values (analog sensors that settled)
-					for (const key in mergedMovements) {
-						if (mergedMovements[key] === null) {
-							delete mergedMovements[key];
-						}
-					}
-					
-					// 2. If the merged state is different from the last state, return the new merged state.
-					if (!objectsEqual(mergedMovements, previousMovements)) { 
-						previousMovements = mergedMovements; // Update and store the new persistent state
-						return mergedMovements; 
-					}
-
-					// 3. If there is no change, return null.
-					return null; 
-				}
-
-				let cachedMovementConditions = null;
-				let previousActiveMovements = []; // Replaces previousPart and previousDirection
-				// Note: partMoving and directionMoving are obsolete and should be removed globally.
-				let movementBuffer = [];
-				let cachedMovePatterns;
-				let patternMovement = "none";
-				let movementResetTimer = null; // Stores the setTimeout ID
-
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
@@ -837,6 +735,112 @@ function handleMovement() {
     // If there is no change, return null.
     return null; 
 }
+
+				let cachedMovementConditions = null;
+				let previousActiveMovements = []; // Replaces previousPart and previousDirection
+				// Note: partMoving and directionMoving are obsolete and should be removed globally.
+				let movementBuffer = [];
+				let cachedMovePatterns;
+				let patternMovement = "none";
+				let movementResetTimer = null; // Stores the setTimeout ID
+
+				async function checkMovement() {
+					// 1. Detect movement (handleMovement() should now return persistent digital states)
+					let movements = handleMovement();
+
+					// Fetch movement conditions JSON file if not already cached...
+					if (!cachedMovementConditions) {
+						try {
+							cachedMovementConditions = await $.get(moveSource);
+						} catch (error) {
+							console.error('Error fetching movement conditions JSON:', error);
+							return; // Exit if fetch fails
+						}
+					}
+
+					// 2. Execution Entry Point: Execute the processor if we have movement data and are not speaking
+					if (!speaking) {
+						processMovementConditions(movements);
+					}
+
+					function processMovementConditions(movements) {
+						
+						// Exit cleanly if movements is null/undefined or an empty object {}
+						if (!movements || Object.keys(movements).length === 0) {
+							return; 
+						}
+						
+						// 1. Collect all currently active movements
+						let currentActiveMovements = [];
+
+						cachedMovementConditions.forEach(condition => {
+							let match = true;
+							for (let key in condition.condition) {
+								// This correctly checks analog changes (true/false) AND persistent digital states (true/false)
+								if (movements[key] !== condition.condition[key]) {
+									match = false;
+									break;
+								}
+							}
+
+							if (match) {
+								currentActiveMovements.push({
+									part: condition.partMoving, 
+									direction: condition.directionMoving
+								});
+							}
+						});
+						
+						// 2. Prepare arrays for comparison
+						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+
+						// 3. Check if the set of active movements has changed AND the entity isn't speaking
+						if ((currentMovementsString !== previousMovementsString) && !speaking) {
+							
+							// ACTION 1: Clear any existing reset timer, as a state change just occurred.
+							if (movementResetTimer) {
+								clearTimeout(movementResetTimer);
+								movementResetTimer = null;
+							}
+							
+							// --- DETERMINE NEW STATE AND ACTION ---
+							
+							if (currentActiveMovements.length === 0) {
+								// SCENARIO A: Movement HAS stopped (transition from active state to empty array)
+								
+								// Set the timer to perform the legacy variable reset after 2 seconds
+								movementResetTimer = setTimeout(() => {
+									partMoving = "none";
+									directionMoving = "none";
+									console.log("--Movement Timer Reset: Legacy variables cleared.");
+								}, 2000); 
+								
+								// Immediately update the multi-movement previous state to register the stop
+								previousActiveMovements = currentActiveMovements;
+								return; // Exit silently
+							}
+							
+							// SCENARIO B: Movement HAS started/changed (currentActiveMovements is NOT empty)
+							
+							// Update legacy single-movement variables (required for downstream functions)
+							partMoving = currentActiveMovements[0].part;
+							directionMoving = currentActiveMovements[0].direction;
+
+							let logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
+							console.log("--Movement: " + logMessage);
+							
+							if (noNarrative) {
+								//window.success_Sound.play();
+								//displayText("Avatar is doing: " + logMessage + ".");
+							}
+							
+							// 4. Update the global previous state and track the sequence
+							previousActiveMovements = currentActiveMovements;
+							trackMovementSequences(currentActiveMovements); 
+						} 
+					}
+				}
 
 			// Function to track movement sequences and compare them against patterns
 			async function trackMovementSequences(currentActiveMovements) {
