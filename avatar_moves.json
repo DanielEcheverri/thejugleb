@@ -139,5 +139,19 @@
 		},
 		"partMoving": "eyes",
 		"directionMoving": "released"
+	},
+				{
+		"condition": {
+			"eyesTouched": true
+		},
+		"partMoving": "mouth",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"eyesTouched": false
+		},
+		"partMoving": "mouth",
+		"directionMoving": "released"
 	}
 ]
