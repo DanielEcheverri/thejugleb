@@ -16,14 +16,14 @@
 	{
 		"patternName": "Guiding the left hand down",
 		"pattern": [
-			{ "partMoving": "left arm", "directionMoving": "up" },
+			{ "partMoving": "left arm", "directionMoving": "down" },
 			{ "partMoving": "left hand", "directionMoving": "touched" }
 		]
 	},
 	{
 		"patternName": "Guiding the right hand down",
 		"pattern": [
-			{ "partMoving": "right arm", "directionMoving": "up" },
+			{ "partMoving": "right arm", "directionMoving": "down" },
 			{ "partMoving": "right hand", "directionMoving": "touched" }
 		]
 	},
