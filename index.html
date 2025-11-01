@@ -601,7 +601,7 @@
 					let cleanData = data.trim();
     				let values = cleanData.split(",");
 					//console.log(values);
-					if (values.length === numPotentiometers) { // Check if the length of values is 10
+					if (values.length === numPotentiometers) { // Check if the length of values is 11
 						for (let i = 0; i < values.length; i++) {
 							potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));						}
 					}
@@ -648,7 +648,8 @@
 							"RIGHT FOOT": "rightFootPressed",
 							"RIGHT HAND": "rightHandTouched",
 							"LEFT HAND": "leftHandTouched",
-							"EYES": "eyesTouched"
+							"EYES": "eyesTouched",
+							"MOUTH": "mouthTouched"
 						};
 					} else {
 						// Default labelMovements object for avatar_BT
@@ -662,7 +663,8 @@
 							"RIGHT FOOT": "rightFootPressed",
 							"RIGHT HAND": "rightHandTouched",
 							"LEFT HAND": "leftHandTouched",
-							"EYES": "eyesTouched"
+							"EYES": "eyesTouched",
+							"MOUTH": "mouthTouched"
 						};
 					}
 
