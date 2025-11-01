@@ -92,7 +92,7 @@
 			var blueToothStatus = "Offline";
 			var streetName = "Unknown";
 			var deviceName ="Unknown";
-			let labels = ["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY"];
+			let labels = ["EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY","EMPTY"];
 			let moveSource = null;
 			let movePatterns = null;
 			let sentenceSource = null;
@@ -294,7 +294,7 @@
 						} else {
 							console.log("Loading settings for Avatar_BT");
 							interactionMode="_int";
-							labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES"];
+							labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
 							moveSource = 'avatar_moves.json';
 							movePatterns = 'avatar_patterns.json';
 							sentenceSource = 'avatar_sentences.json';
@@ -321,7 +321,7 @@
 						// Set all potValues to 0
 						setTimeout(function() {
 							startDetectMovement = false;
-							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+							potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 							blueToothStatus = "Offline";
 							bgm_Sound.stop();
 						}, 4000);
@@ -532,7 +532,7 @@
 
 		<script type="text/javascript">
 				// Processing 4 sketch to visualize movements of the Avatar.
-				let numPotentiometers = 10;
+				let numPotentiometers = 11;
 				let potValues;
 				let lineColors;
 				let backgroundColors;
@@ -547,7 +547,7 @@
 				function setup() {
 					var avatarBTCanvas = createCanvas(windowWidth, windowHeight * 0.35);
 					avatarBTCanvas.parent("avatarCanvas");
-					potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // Initialize potValues array with default values
+					potValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // Initialize potValues array with default values
 					lineColors = new Array(numPotentiometers);
 					backgroundColors = new Array(numPotentiometers);
 					setupColors();
@@ -1458,6 +1458,7 @@
 				lineColors[7] = color(0, 128, 0); // Grass Green
 				lineColors[8] = color(0, 128, 0); // Grass Green
 				lineColors[9] = color(255, 0, 0); // Red
+				lineColors[10] = color(204, 204, 0); // Dark Yellow
 			}
 			function setupBackgroundColors() {
 				backgroundColors[0] = color(0, 0, 0); // 0% black
@@ -1470,6 +1471,7 @@
 				backgroundColors[7] = color(0, 0, 0, 230); // 75% black
 				backgroundColors[8] = color(0, 0, 0, 230); // 75% black
 				backgroundColors[9] = color(0, 0, 0, 200); // 90% black
+				backgroundColors[10] = color(0, 0, 0, 128); // 60% black
 			}
 		</script>
 
