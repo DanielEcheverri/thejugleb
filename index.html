@@ -638,6 +638,11 @@ const RELEASE_PERSISTENCE_MS = 1000;
 // - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
 // - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
 
+// NOTE: This function relies on the following external variables:
+// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
+// - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
+// - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
+
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
