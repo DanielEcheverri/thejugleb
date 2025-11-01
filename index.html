@@ -700,11 +700,11 @@
 							return movements; // Return the new movement state
 						}
 						// If movements were detected but haven't changed since last time, return the current/previous state
-						return previousMovements; 
+						return null; 
 					}
 
 					// If the movements object is empty (e.g., no potentiometers processed), return an empty object
-					return previousMovements; 
+					return null; 
 				}
 
 				let cachedMovementConditions = null;
