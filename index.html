@@ -780,11 +780,12 @@
 							// Priority Rule: Use the first detected movement as the "primary" state
 							partMoving = currentActiveMovements[0].part;
 							directionMoving = currentActiveMovements[0].direction;
-						} else {
+						} 
+						//else {
 							// Reset to default if no movements are active
-							partMoving = "none";
-							directionMoving = "none";
-						}
+						//	partMoving = "none";
+						//	directionMoving = "none";
+						//}
 
 						// 3. Prepare arrays for comparison
 						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
