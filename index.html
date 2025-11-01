@@ -629,97 +629,98 @@
 
 				// Define variables for detecting movement in different body parts
 				function handleMovement() {
-				let movements = {};
-				const movementThreshold = 25;
+					let movements = {};
+					const movementThreshold = 25;
 
-				// Configuration: Define parts that use DIGITAL (Persistent) Logic
-				const digitalParts = [
-					"LEFT FOOT", "RIGHT FOOT", 
-					"RIGHT HAND", "LEFT HAND", 
-					"EYES", "MOUTH"
-				];
+					// Configuration: Define parts that use DIGITAL logic
+					const digitalParts = [
+						"LEFT FOOT", "RIGHT FOOT", 
+						"RIGHT HAND", "LEFT HAND", 
+						"EYES", "MOUTH"
+					];
 
-				// Mapping between labels and movements (kept as is)
-				let labelMovements;
-				// ... (Your existing deviceName and labelMoves initialization here) ...
-				if (deviceName === "hachi_BT") {
-					labelMovements = {
-						"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
-						"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
-						"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
-						"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
-						"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
-						"MOUTH": "mouthTouched"
-					};
-				} else {
-					labelMovements = {
-						"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
-						"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
-						"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
-						"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
-						"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
-						"MOUTH": "mouthTouched"
-					};
-				}
-
-				// Check movement for each sensor
-				for (let i = 0; i < numPotentiometers; i++) {
-					let label = labels[i];
-					let movement = labelMovements[label];
-
-					if (movement === null || movement === undefined) {
-						continue;
-					}
-
-					// --- Logic Processing ---
-					if (digitalParts.includes(label)) {
-						// SCENARIO 1: DIGITAL Inputs - Check against previous state
-						
-						// 1. Determine the current BOOLEAN state
-						let isCurrentlyActive = (potValues[i] > 0); 
-						
-						// 2. Check the previous state saved in the global previousMovements object
-						// Use 'null' as default if the key doesn't exist (i.e., it was false/null last time)
-						let wasPreviouslyActive = previousMovements[movement];
-						
-						// 3. Only include in the current 'movements' object if the state has CHANGED OR is currently ACTIVE.
-						if (isCurrentlyActive !== wasPreviouslyActive) {
-							// Include if state changed (e.g., Pressed -> Released)
-							movements[movement] = isCurrentlyActive;
-						} else if (isCurrentlyActive === true) {
-							// Include if still ACTIVE (true), even if it hasn't changed.
-							// This is the core persistence logic required by checkMovement.
-							movements[movement] = isCurrentlyActive;
-						}
-					
+					// Mapping between labels and movements (kept as is)
+					let labelMovements;
+					// ... (Your existing deviceName and labelMoves initialization here) ...
+					if (deviceName === "hachi_BT") {
+						labelMovements = {
+							"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
+							"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
+							"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
+							"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
+							"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
+							"MOUTH": "mouthTouched"
+						};
 					} else {
-						// SCENARIO 2: ANALOG (Potentiometer) Inputs - Change Detection
-						if (potValues[i] < previousPotValues[i] - movementThreshold) {
-							movements[movement] = false; // Movement decreases
-						} else if (potValues[i] > previousPotValues[i] + movementThreshold) {
-							movements[movement] = true; // Movement increases
+						labelMovements = {
+							"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
+							"HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
+							"RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
+							"RIGHT FOOT": "rightFootPressed", "RIGHT HAND": "rightHandTouched",
+							"LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
+							"MOUTH": "mouthTouched"
+						};
+					}
+
+					// Check movement for each sensor
+					for (let i = 0; i < numPotentiometers; i++) {
+						let label = labels[i];
+						let movement = labelMovements[label];
+
+						if (movement === null || movement === undefined) {
+							continue;
+						}
+
+						// --- Logic Processing ---
+						if (digitalParts.includes(label)) {
+							// SCENARIO 1: DIGITAL (Boolean) Inputs - ONLY REPORT CHANGES
+							
+							let isCurrentlyActive = (potValues[i] > 0); 
+							// The value to compare against is the state in the last *returned* movements object.
+							let wasPreviouslyActive = previousMovements[movement] === true; 
+							
+							// Only include the digital movement if the state has changed
+							if (isCurrentlyActive !== wasPreviouslyActive) {
+								movements[movement] = isCurrentlyActive; 
+							}
+						
 						} else {
-							movements[movement] = null; // No significant change
+							// SCENARIO 2: ANALOG (Potentiometer) Inputs - Report state OR null
+							if (potValues[i] < previousPotValues[i] - movementThreshold) {
+								movements[movement] = false; // Movement decreases
+							} else if (potValues[i] > previousPotValues[i] + movementThreshold) {
+								movements[movement] = true; // Movement increases
+							} else {
+								movements[movement] = null; // No significant change
+							}
 						}
 					}
-				}
 
-				// Update previous potentiometer values
-				previousPotValues = potValues.slice(0, numPotentiometers);
+					// Update previous potentiometer values for next cycle
+					previousPotValues = potValues.slice(0, numPotentiometers);
 
-				// Return the detected movement
-				if (Object.keys(movements).length > 0) { 
-					if (!objectsEqual(movements, previousMovements)) {
-						previousMovements = { ...movements };
-						return movements;
+					// --- Final Return Logic ---
+					
+					// We now merge current changes with the persistent states from previousMovements 
+					// to check for overall state change.
+					const mergedMovements = { ...previousMovements, ...movements };
+					
+					// 1. Clean up null values (analog sensors that settled)
+					for (const key in mergedMovements) {
+						if (mergedMovements[key] === null) {
+							delete mergedMovements[key];
+						}
 					}
-					// If state was processed but hasn't changed, return null
+					
+					// 2. If the merged state is different from the last state, return the new merged state.
+					if (!objectsEqual(mergedMovements, previousMovements)) { 
+						previousMovements = mergedMovements; // Update and store the new persistent state
+						return mergedMovements; 
+					}
+
+					// 3. If there is no change, return null.
 					return null; 
 				}
-
-				// If the movements object is empty, return null 
-				return null; 
-			}
 
 				let cachedMovementConditions = null;
 				let previousActiveMovements = []; // Replaces previousPart and previousDirection
