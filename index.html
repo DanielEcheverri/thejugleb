@@ -715,110 +715,106 @@
 				let patternMovement = "none";
 
 				async function checkMovement() {
-					// 1. Detect movement (handleMovement() now returns {} instead of null if no change/no relevant pots)
-					let movements = handleMovement();
+				// 1. Detect movement 
+				// handleMovement() should return the new state object or null/{} if no change/no relevant pots.
+				let movements = handleMovement();
 
-					// Fetch movement conditions JSON file if not already cached...
-					if (!cachedMovementConditions) {
-						try {
-							cachedMovementConditions = await $.get(moveSource);
-							if (!speaking){
-								processMovementConditions(movements);
-							}
-						} catch (error) {
-							console.error('Error fetching movement conditions JSON:', error);
-						}
-					} else {
-						if (!speaking){
-							processMovementConditions(movements);
-						}
-					}
-
-					if (!movements) {
-   						 return; // This is the clean exit path for no event!
-					}
-
-					function processMovementConditions(movements) {
-						// --- CRUCIAL FIXES HERE ---
-
-						// Check 1: If movements is null/undefined (handleMovement should prevent this now)
-						if (!movements) {
-							return; 
-						}
-						
-						// Check 2: If the object is empty ({}), meaning no relevant movement data was generated.
-						// This prevents the function from completing without an explicit return, which causes 'undefined'.
-						if (Object.keys(movements).length === 0) {
-							return; // Exit silently
-						}
-						
-						// --- END CRUCIAL FIXES ---
-
-						// 1. Collect all currently active movements
-						let currentActiveMovements = [];
-
-						// Iterate over movement conditions to find ALL matches (simultaneous detection)
-						cachedMovementConditions.forEach(condition => {
-							let match = true;
-							for (let key in condition.condition) {
-								if (movements[key] !== condition.condition[key]) {
-									match = false;
-									break;
-								}
-							}
-
-							if (match) {
-								currentActiveMovements.push({
-									part: condition.partMoving, 
-									direction: condition.directionMoving
-								});
-							}
-						});
-						
-						// 2. Update legacy single-movement variables (partMoving/directionMoving)
-						if (currentActiveMovements.length > 0) {
-							// Priority Rule: Use the first detected movement as the "primary" state
-							partMoving = currentActiveMovements[0].part;
-							directionMoving = currentActiveMovements[0].direction;
-						} 
-						//else {
-							// Reset to default if no movements are active
-						//	partMoving = "none";
-						//	directionMoving = "none";
-						//}
-
-						// 3. Prepare arrays for comparison
-						const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
-						const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
-
-						// 4. Check if the set of active movements has changed AND the entity isn't speaking
-						if ((currentMovementsString !== previousMovementsString) && !speaking) {
-							
-							let logMessage;
-							if (currentActiveMovements.length > 0) {
-								logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
-							} 
-							//else {
-								//logMessage = "No movement (reset)";
-							//}
-
-							console.log("--Movement: " + logMessage);
-							
-							if (noNarrative && currentActiveMovements.length > 0) {
-								//window.success_Sound.play();
-								//displayText("Avatar is doing: " + logMessage + ".");
-							}
-							
-							// 5. Update the global previous state and track the sequence
-							previousActiveMovements = currentActiveMovements;
-							trackMovementSequences(currentActiveMovements); 
-							
-						} 
-						// Note: If the function reaches here, it has explicitly returned earlier 
-						// (via 'return' inside the conditional checks) or is part of a larger chain, 
-						// preventing the final 'undefined' log from the console when called in isolation.
+				// Fetch movement conditions JSON file if not already cached...
+				if (!cachedMovementConditions) {
+					try {
+						cachedMovementConditions = await $.get(moveSource);
+						// NOTE: We do NOT call processMovementConditions here, 
+						// but rely on the call after the async block.
+					} catch (error) {
+						console.error('Error fetching movement conditions JSON:', error);
+						return; // Exit if fetch fails
 					}
 				}
+
+				// 2. Execution Entry Point
+				// Exit if there is no movement data or if the speaker flag is set.
+				if (!movements || !speaking) {
+					processMovementConditions(movements);
+				}
+
+				function processMovementConditions(movements) {
+					// Exit cleanly if movements is null/undefined or an empty object {}
+					if (!movements || Object.keys(movements).length === 0) {
+						return; 
+					}
+					
+					// 1. Collect all currently active movements
+					let currentActiveMovements = [];
+
+					cachedMovementConditions.forEach(condition => {
+						let match = true;
+						for (let key in condition.condition) {
+							if (movements[key] !== condition.condition[key]) {
+								match = false;
+								break;
+							}
+						}
+
+						if (match) {
+							currentActiveMovements.push({
+								part: condition.partMoving, 
+								direction: condition.directionMoving
+							});
+						}
+					});
+					
+					// 2. Prepare arrays for comparison
+					const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+					const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
+
+					// 3. Check if the set of active movements has changed AND the entity isn't speaking
+					if ((currentMovementsString !== previousMovementsString) && !speaking) {
+						
+						// ACTION 1: Clear any existing reset timer, as a state change just occurred.
+						if (movementResetTimer) {
+							clearTimeout(movementResetTimer);
+							movementResetTimer = null;
+						}
+						
+						// --- DETERMINE NEW STATE AND ACTION ---
+						
+						if (currentActiveMovements.length === 0) {
+							// SCENARIO A: Movement HAS stopped (transition from active state to empty array)
+							
+							// Set the timer to perform the legacy variable reset after 2 seconds
+							movementResetTimer = setTimeout(() => {
+								partMoving = "none";
+								directionMoving = "none";
+								console.log("--Movement Timer Reset: Legacy variables cleared.");
+							}, 2000); 
+							
+							// Immediately update the multi-movement previous state to register the stop
+							previousActiveMovements = currentActiveMovements;
+							return; // Exit silently, suppressing "No movement (reset)" log
+						}
+						
+						// SCENARIO B: Movement HAS started/changed (currentActiveMovements is NOT empty)
+						
+						// Update legacy single-movement variables (required for downstream functions)
+						// Priority Rule: Use the first detected movement as the "primary" state
+						partMoving = currentActiveMovements[0].part;
+						directionMoving = currentActiveMovements[0].direction;
+
+						let logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
+						console.log("--Movement: " + logMessage);
+						
+						if (noNarrative) {
+							window.success_Sound.play();
+							displayText("Avatar is doing: " + logMessage + ".");
+						}
+						
+						// 4. Update the global previous state and track the sequence
+						previousActiveMovements = currentActiveMovements;
+						trackMovementSequences(currentActiveMovements); 
+						
+					} 
+				}
+			}
 
 				// Function to track movement sequences and compare them against patterns
 				async function trackMovementSequences(currentActiveMovements) {
