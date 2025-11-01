@@ -713,6 +713,7 @@
 				let movementBuffer = [];
 				let cachedMovePatterns;
 				let patternMovement = "none";
+				let movementResetTimer = null; // Stores the setTimeout ID
 
 				async function checkMovement() {
 				// 1. Detect movement 
