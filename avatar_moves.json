@@ -142,14 +142,14 @@
 	},
 				{
 		"condition": {
-			"eyesTouched": true
+			"mouthTouched": true
 		},
 		"partMoving": "mouth",
 		"directionMoving": "touched"
 	},
 		{
 		"condition": {
-			"eyesTouched": false
+			"mouthTouched": false
 		},
 		"partMoving": "mouth",
 		"directionMoving": "released"
