@@ -631,7 +631,7 @@
 
 let keysToForget = new Set(); // Stores movement labels that were just released.
 let digitalReleaseTimers = new Map();
-const RELEASE_PERSISTENCE_MS = 1000;
+const RELEASE_PERSISTENCE_MS = 100;
 
 function handleMovement() {
     let movements = {};
