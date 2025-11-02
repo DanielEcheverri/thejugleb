@@ -706,41 +706,29 @@ function handleMovement() {
     previousPotValues = potValues.slice(0, numPotentiometers);
 
     // 3. Merge and Queue Keys for Timed Forgetting
-    const mergedMovements = { ...previousMovements, ...movements };
     const allMovementKeys = Object.values(labelMovements);
+    let mergedMovements = { ...movements, ...previousMovements }; // note the reversed order!
 
-    for (const key of allMovementKeys) {
-        
-        if (mergedMovements[key] === undefined) {
-            continue;
-        }
+		for (const key of Object.values(labelMovements)) {
+			const isDigitalKey = digitalParts.map(p => labelMovements[p]).includes(key);
 
-        // 3a. Clean up Analog's 'null' values
-        if (mergedMovements[key] === null) {
-            delete mergedMovements[key];
-            continue;
-        }
-        
-        // 3b. Clean up Digital's 'false' values (Released/Inactive)
-        const isDigitalKey = digitalParts.map(p => labelMovements[p]).includes(key);
-
-        if (isDigitalKey && mergedMovements[key] === false) {
-            // CRITICAL FIX 2: Allow the 'false' state to be returned, THEN set the timer.
-
-            if (!digitalReleaseTimers.has(key)) {
-                 // Set the timer to delete the key from previousMovements after the persistence time
-                const timerId = setTimeout(() => {
+			if (mergedMovements[key] === null || mergedMovements[key] === undefined) {
 				delete mergedMovements[key];
-				digitalReleaseTimers.delete(key);
-			}, RELEASE_PERSISTENCE_MS);
-                
-                digitalReleaseTimers.set(key, timerId);
-            }
-            
-            // DO NOT delete mergedMovements[key]. We want 'false' to persist temporarily.
-            // It will be saved into previousMovements in the return block below.
-        }
-    }
+				continue;
+			}
+
+			// Handle digital release
+			if (isDigitalKey && mergedMovements[key] === false) {
+				if (!digitalReleaseTimers.has(key)) {
+					const timerId = setTimeout(() => {
+						// Delete directly from the persistent object that will live on
+						delete previousMovements[key];
+						digitalReleaseTimers.delete(key);
+					}, RELEASE_PERSISTENCE_MS);
+					digitalReleaseTimers.set(key, timerId);
+				}
+			}
+		}
     
     // 4. Return Final State
     // If the merged state is different from the last state, return the new merged state.
