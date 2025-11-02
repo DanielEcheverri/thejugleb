@@ -777,7 +777,6 @@ function handleMovement() {
 
 let cachedMovementConditions = null;
 let previousActiveMovements = []; // Replaces previousPart and previousDirection
-// Note: partMoving and directionMoving are obsolete and should be removed globally.
 let movementBuffer = [];
 let cachedMovePatterns;
 let patternMovement = "none";
@@ -801,18 +800,17 @@ async function checkMovement() {
     if (movements) {
         processMovementConditions(movements);
     }
-    
+
     // --- Inner Processor Function ---
     function processMovementConditions(movements) {
-        
+
         // Exit cleanly if movements is null/undefined or an empty object {}
         if (!movements || Object.keys(movements).length === 0) {
-            return; 
+            return;
         }
-        
-        // 1. Collect all currently active movements (currentActiveMovements is built here)
-        let currentActiveMovements = [];
 
+        // 1. Collect all currently active movements (build fresh objects)
+        const currentActiveMovements = [];
         cachedMovementConditions.forEach(condition => {
             let match = true;
             for (let key in condition.condition) {
@@ -821,68 +819,98 @@ async function checkMovement() {
                     break;
                 }
             }
-
             if (match) {
                 currentActiveMovements.push({
-                    part: condition.partMoving, 
+                    part: condition.partMoving,
                     direction: condition.directionMoving
                 });
             }
         });
-        
-        // 2. Prepare arrays for comparison
-        const currentMovementsString = JSON.stringify(currentActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
-        const previousMovementsString = JSON.stringify(previousActiveMovements.sort((a, b) => (a.part + a.direction).localeCompare(b.part + b.direction)));
 
-        // 3. Check if the set of active movements has changed (MUST RUN ALWAYS)
+        // 2. Prepare deterministic string forms for comparison (sort cloned arrays)
+        function canonicalize(arr) {
+            const copy = arr.map(x => ({ part: x.part, direction: x.direction }));
+            copy.sort((a, b) => ('' + a.part + a.direction).localeCompare('' + b.part + b.direction));
+            return JSON.stringify(copy);
+        }
+
+        const currentMovementsString = canonicalize(currentActiveMovements);
+        const previousMovementsString = canonicalize(previousActiveMovements || []);
+
+        // 3. Check for change (MUST RUN ALWAYS)
         if (currentMovementsString !== previousMovementsString) {
-            
-            // ACTION 1: Clear any existing reset timer, as a state change just occurred. (MUST RUN ALWAYS)
+
+            // ACTION 1: Clear any existing reset timer, as a state change just occurred.
             if (movementResetTimer) {
                 clearTimeout(movementResetTimer);
                 movementResetTimer = null;
+                console.log("--Movement Timer Cleared (state changed)");
             }
-            
-            // --- DETERMINE NEW STATE AND TIMER ACTION ---
-            
-            if (currentActiveMovements.length === 0) {
-                // SCENARIO A: Movement HAS stopped (transition to empty array)
-                
-                // Set the timer to perform the legacy variable reset after 2 seconds
-                movementResetTimer = setTimeout(() => {
-                    partMoving = "none";
-                    directionMoving = "none";
-                    console.log("--Movement Timer Reset: Legacy variables cleared.");
-                }, 2000); 
-                
-                // Immediately update the multi-movement previous state to register the stop
-                previousActiveMovements = currentActiveMovements;
-                return; // Exit here. We registered the stop and set the timer.
-            }
-            
-            // --- ONLY PROCEED WITH LOGGING/ACTIONS IF NOT SPEAKING ---
-            if (!speaking) {
-                // SCENARIO B: Movement HAS started/changed (currentActiveMovements is NOT empty)
-                
-                // Update legacy single-movement variables
-                partMoving = currentActiveMovements[0].part;
-                directionMoving = currentActiveMovements[0].direction;
 
-                let logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
-                console.log("--Movement: " + logMessage);
-                
-                if (noNarrative) {
-                    //window.success_Sound.play();
-                    //displayText("Avatar is doing: " + logMessage + ".");
-                }
-                
-                // 4. Update the global previous state and track the sequence
-                previousActiveMovements = currentActiveMovements;
-                trackMovementSequences(currentActiveMovements); 
+            // SCENARIO A: Movement HAS stopped (currentActiveMovements is empty)
+            if (currentActiveMovements.length === 0) {
+
+                // Make previousActiveMovements a fresh empty array (no shared ref)
+                previousActiveMovements = [];
+
+                // Schedule a safe reset only if not already scheduled
+                movementResetTimer = setTimeout(() => {
+                    try {
+                        // Defensive: only set legacy vars if they exist in the environment
+                        if (typeof partMoving !== "undefined") {
+                            try { partMoving = "none"; } catch (e) { console.warn("Could not set partMoving:", e); }
+                        }
+                        if (typeof directionMoving !== "undefined") {
+                            try { directionMoving = "none"; } catch (e) { console.warn("Could not set directionMoving:", e); }
+                        }
+
+                        // Optional: clear any other legacy buffers if they exist
+                        if (typeof movementBuffer !== "undefined" && Array.isArray(movementBuffer)) {
+                            movementBuffer.length = 0;
+                        }
+
+                        console.log("--Movement Timer Reset: Legacy variables cleared.");
+                    } catch (err) {
+                        console.error("Movement reset timer callback error:", err);
+                    } finally {
+                        movementResetTimer = null;
+                    }
+                }, 2000);
+
+                console.log("--Movement: all stopped — scheduled legacy reset in 2000ms");
+                return;
             }
-            // If speaking is TRUE, the state is still updated above (previousActiveMovements), 
-            // but we skip the logging/tracking/legacy variable update.
-        } 
+
+            // SCENARIO B: Movement HAS started/changed and not speaking
+            if (!speaking) {
+                const first = currentActiveMovements[0];
+                if (first) {
+                    if (typeof partMoving !== "undefined") {
+                        try { partMoving = first.part; } catch (e) { console.warn("Could not set partMoving:", e); }
+                    }
+                    if (typeof directionMoving !== "undefined") {
+                        try { directionMoving = first.direction; } catch (e) { console.warn("Could not set directionMoving:", e); }
+                    }
+                }
+
+                let logMessage = currentActiveMovements.map(m => (m.part + " " + m.direction)).join(" & ");
+                console.log("--Movement: " + logMessage);
+
+                if (noNarrative) {
+                    // window.success_Sound.play();
+                    // displayText("Avatar is doing: " + logMessage + ".");
+                }
+
+                // Update previousActiveMovements as a fresh deep clone (prevent shared refs)
+                previousActiveMovements = JSON.parse(JSON.stringify(currentActiveMovements));
+
+                // Track sequences
+                trackMovementSequences(currentActiveMovements);
+            } else {
+                // If speaking is true, update previousActiveMovements for change detection
+                previousActiveMovements = JSON.parse(JSON.stringify(currentActiveMovements));
+            }
+        }
     }
 }
 
