@@ -730,9 +730,9 @@ function handleMovement() {
             if (!digitalReleaseTimers.has(key)) {
                  // Set the timer to delete the key from previousMovements after the persistence time
                 const timerId = setTimeout(() => {
-                    delete previousMovements[key];
-                    digitalReleaseTimers.delete(key);
-                }, RELEASE_PERSISTENCE_MS); 
+				delete mergedMovements[key];
+				digitalReleaseTimers.delete(key);
+			}, RELEASE_PERSISTENCE_MS);
                 
                 digitalReleaseTimers.set(key, timerId);
             }
