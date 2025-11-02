@@ -644,8 +644,9 @@ function handleMovement() {
         "EYES", "MOUTH"
     ];
 
-    // Mapping between labels and movements (Simplified for brevity)
-    let labelMovements = {
+    // Mapping between labels and movements 
+    let labelMovements;
+    labelMovements = {
         "LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
         "HEAD": "headMoving", "LEFT LEG": "leftLegMoving",
         "RIGHT LEG": "rightLegMoving", "LEFT FOOT": "leftFootPressed",
@@ -653,6 +654,13 @@ function handleMovement() {
         "LEFT HAND": "leftHandTouched", "EYES": "eyesTouched",
         "MOUTH": "mouthTouched"
     };
+
+    // --- NEW: CLEANUP KEYS FLAGGED IN THE PREVIOUS CYCLE ---
+    if (digitalReleaseTimers.size > 0) {
+        // We only clear timers here if the key has been removed by the timer itself.
+        // The deletion from previousMovements is handled asynchronously by the setTimeout,
+        // so no explicit cleanup of previousMovements is needed here.
+    }
 
     // 1. Process All Sensors
     for (let i = 0; i < numPotentiometers; i++) {
@@ -664,30 +672,30 @@ function handleMovement() {
         }
 
         if (digitalParts.includes(label)) {
-            // SCENARIO 1: DIGITAL Inputs - Report Active State or Transitional Release
+            // SCENARIO 1: DIGITAL Inputs - REPORT ACTIVE STATE OR TRANSITIONAL RELEASE
             
             let isCurrentlyActive = (potValues[i] > 0); 
             let wasPreviouslyActive = previousMovements[movement] === true; 
             
-            // If the state changed or is active, clear any pending release timer
+            // If the state has changed or is still active, clear any pending release timer
             if (digitalReleaseTimers.has(movement)) {
                 clearTimeout(digitalReleaseTimers.get(movement));
                 digitalReleaseTimers.delete(movement);
             }
 
-            // CRITICAL LOGIC: If active, report it. If toggled to inactive, report it once.
+            // CRITICAL FIX 1: Ensure active state is persistent, and release is registered.
             if (isCurrentlyActive === true) {
-                movements[movement] = true; // State is active (Persistent context)
+                movements[movement] = true; // State is active (Touched/Pressed)
             } else if (isCurrentlyActive !== wasPreviouslyActive) {
-                movements[movement] = false; // State just became inactive (Transitional context)
+                movements[movement] = false; // State just became inactive (Released)
             }
         
         } else {
-            // SCENARIO 2: ANALOG (Potentiometer) Inputs - Report change OR null
+            // SCENARIO 2: ANALOG (Potentiometer) Inputs - Report state OR null
             if (potValues[i] < previousPotValues[i] - movementThreshold) {
-                movements[movement] = false; 
+                movements[movement] = false; // Movement decreases
             } else if (potValues[i] > previousPotValues[i] + movementThreshold) {
-                movements[movement] = true; 
+                movements[movement] = true; // Movement increases
             } else {
                 movements[movement] = null; // No significant change
             }
@@ -697,56 +705,48 @@ function handleMovement() {
     // 2. Update previous potentiometer values
     previousPotValues = potValues.slice(0, numPotentiometers);
 
-    // 3. Final State Processing and Cleanup
-    // Start with the last known persistent state
-    const currentStateToReturn = {}; 
+    // 3. Merge and Queue Keys for Timed Forgetting
+    const mergedMovements = { ...previousMovements, ...movements };
+    const allMovementKeys = Object.values(labelMovements);
 
-    // Iterate over the keys in the complete possible state (previous + current changes)
-    for (const key in { ...previousMovements, ...movements }) {
-        let value = { ...previousMovements, ...movements }[key];
-
-        // 1. Clean up settled analog values
-        if (value === null) {
+    for (const key of allMovementKeys) {
+        
+        if (mergedMovements[key] === undefined) {
             continue;
         }
 
-        const isDigitalKey = Object.values(labelMovements).includes(key) && digitalParts.includes(Object.keys(labelMovements).find(k => labelMovements[k] === key));
-
-        // 2. Handle Digital (Timed Forgetting)
-        if (isDigitalKey) {
-            if (value === true) {
-                // If TRUE, it must be persisted for the next cycle.
-                currentStateToReturn[key] = true;
-            } else if (value === false) {
-                // If FALSE (Released), trigger the timer to clean up the state, 
-                // but DO NOT persist the 'false' value in currentStateToReturn.
-                if (!digitalReleaseTimers.has(key)) {
-                    const timerId = setTimeout(() => {
-                        delete previousMovements[key]; // Asynchronous delete from the persistent state
-                        digitalReleaseTimers.delete(key);
-                    }, RELEASE_PERSISTENCE_MS);
-                    
-                    digitalReleaseTimers.set(key, timerId);
-                }
-                // The 'false' state is registered by the presence of the key in 'movements'
-                // during this cycle, but its persistence ends now.
-            }
-        } 
+        // 3a. Clean up Analog's 'null' values
+        if (mergedMovements[key] === null) {
+            delete mergedMovements[key];
+            continue;
+        }
         
-        // 3. Handle Analog (Persist Active Change)
-        else {
-            // Analog changes (true/false) must be persisted until they settle to null.
-            currentStateToReturn[key] = value;
+        // 3b. Clean up Digital's 'false' values (Released/Inactive)
+        const isDigitalKey = digitalParts.map(p => labelMovements[p]).includes(key);
+
+        if (isDigitalKey && mergedMovements[key] === false) {
+            // CRITICAL FIX 2: Allow the 'false' state to be returned, THEN set the timer.
+
+            if (!digitalReleaseTimers.has(key)) {
+                 // Set the timer to delete the key from previousMovements after the persistence time
+                const timerId = setTimeout(() => {
+                    delete previousMovements[key];
+                    digitalReleaseTimers.delete(key);
+                }, RELEASE_PERSISTENCE_MS); 
+                
+                digitalReleaseTimers.set(key, timerId);
+            }
+            
+            // DO NOT delete mergedMovements[key]. We want 'false' to persist temporarily.
+            // It will be saved into previousMovements in the return block below.
         }
     }
-
+    
     // 4. Return Final State
-    // Check if the current state is different from the last saved state
-    if (!objectsEqual(currentStateToReturn, previousMovements)) {
-        
-        // Update the global persistent state and return it
-        previousMovements = currentStateToReturn; 
-        return currentStateToReturn; 
+    // If the merged state is different from the last state, return the new merged state.
+    if (!objectsEqual(mergedMovements, previousMovements)) { 
+        previousMovements = mergedMovements; // The 'false' state is now saved for 100ms
+        return mergedMovements; 
     }
 
     // If there is no change, return null.
