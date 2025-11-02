@@ -683,7 +683,6 @@ function handleMovement() {
 						const timerId = setTimeout(() => {
 							delete previousMovements[movement];
 							digitalReleaseTimers.delete(movement);
-							console.log(`Timer fired: removed ${movement}`);
 						}, RELEASE_PERSISTENCE_MS);
 						digitalReleaseTimers.set(movement, timerId);
 					}
@@ -737,9 +736,6 @@ function handleMovement() {
                             // Only delete if the key is still false (safety check)
                             if (previousMovements[key] === false) {
                                 delete previousMovements[key];
-                                if (DEBUG) console.log(`Timer fired: removed ${key} from previousMovements`);
-                            } else {
-                                if (DEBUG) console.log(`Timer fired: ${key} not removed because its value changed`);
                             }
                         } finally {
                             digitalReleaseTimers.delete(key);
@@ -765,8 +761,6 @@ function handleMovement() {
             for (const k of Object.keys(merged)) {
                 previousMovements[k] = merged[k];
             }
-
-            if (DEBUG) console.log("Return movement:", JSON.stringify(previousMovements));
             return { ...previousMovements }; // return a snapshot
         }
 
