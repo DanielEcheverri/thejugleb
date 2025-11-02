@@ -796,33 +796,34 @@ async function checkMovement() {
     }
     
     // 2. Execution Entry Point: Process state change
-    if (movements) {
-        processMovementConditions(movements);
-    }
+    // If movements is null, we treat it as empty object (no movement)
+    processMovementConditions(movements || {});
 
     function processMovementConditions(movements) {
-    // Treat null or empty object as “no movement”
-    if (!movements || Object.keys(movements).length === 0) {
-        movements = {}; // ensure we have a consistent object
-    }
 
-    // Collect all currently active movements
-    const currentActiveMovements = [];
-    cachedMovementConditions.forEach(condition => {
-        let match = true;
-        for (let key in condition.condition) {
-            if (movements[key] !== condition.condition[key]) {
-                match = false;
-                break;
+        // Debug: show current raw movements
+        console.log("DEBUG movements:", movements);
+
+        // Collect all currently active movements
+        const currentActiveMovements = [];
+        cachedMovementConditions.forEach(condition => {
+            let match = true;
+            for (let key in condition.condition) {
+                if (movements[key] !== condition.condition[key]) {
+                    match = false;
+                    break;
+                }
             }
-        }
-        if (match) {
-            currentActiveMovements.push({
-                part: condition.partMoving,
-                direction: condition.directionMoving
-            });
-        }
-    });
+            if (match) {
+                currentActiveMovements.push({
+                    part: condition.partMoving,
+                    direction: condition.directionMoving
+                });
+            }
+        });
+
+        // Debug: show what is considered active
+        console.log("DEBUG currentActiveMovements:", currentActiveMovements);
 
         // Compare current vs previous
         function canonicalize(arr) {
@@ -846,7 +847,7 @@ async function checkMovement() {
                 console.log("--Movement Timer Cleared (new movement started)");
             }
 
-            // Movement stopped: schedule reset
+            // SCENARIO A: Movement HAS stopped
             if (currentActiveMovements.length === 0) {
                 previousActiveMovements = [];
 
@@ -873,13 +874,12 @@ async function checkMovement() {
                             movementResetInterval = null;
                         }
                     }, 2000);
-
                 }
 
                 return; 
             }
 
-            // Movement started/changed
+            // SCENARIO B: Movement HAS started/changed
             if (!speaking) {
                 const first = currentActiveMovements[0];
                 if (first) {
@@ -891,8 +891,8 @@ async function checkMovement() {
                 console.log("--Movement: " + logMessage);
 
                 if (noNarrative) {
-                    //window.success_Sound.play();
-                    //displayText("Avatar is doing: " + logMessage + ".");
+                    // window.success_Sound.play();
+                    // displayText("Avatar is doing: " + logMessage + ".");
                 }
 
                 previousActiveMovements = JSON.parse(JSON.stringify(currentActiveMovements));
@@ -903,7 +903,6 @@ async function checkMovement() {
         }
     }
 }
-
 
 
 			// Function to track movement sequences and compare them against patterns
