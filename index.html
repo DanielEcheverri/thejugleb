@@ -663,34 +663,33 @@ function handleMovement() {
             if (movement === null || movement === undefined) continue;
 
             if (digitalParts.includes(label)) {
-                // digital
-                const isCurrentlyActive = (potValues[i] > 0);
-                const wasPreviouslyActive = previousMovements[movement] === true;
+				const isCurrentlyActive = potValues[i] > 0;
+				const wasPreviouslyActive = previousMovements[movement] === true;
 
-                // cancel pending release timer if we see activity
-                if (digitalReleaseTimers.has(movement)) {
-                    clearTimeout(digitalReleaseTimers.get(movement));
-                    digitalReleaseTimers.delete(movement);
-                    if (DEBUG) console.log(`Cleared pending release timer for ${movement}`);
-                }
+				// cancel any pending timer if reactivated
+				if (isCurrentlyActive && digitalReleaseTimers.has(movement)) {
+					clearTimeout(digitalReleaseTimers.get(movement));
+					digitalReleaseTimers.delete(movement);
+				}
 
-                if (isCurrentlyActive === true) {
-                    movements[movement] = true;
-                } else if (isCurrentlyActive !== wasPreviouslyActive) {
-                    // only emit false if the state actually changed from previous true -> false
-                    movements[movement] = false;
-                } 
-                // else no explicit change -> leave undefined (do not reintroduce stale false)
-            } else {
-                // analog
-                if (potValues[i] < previousPotValues[i] - movementThreshold) {
-                    movements[movement] = false;
-                } else if (potValues[i] > previousPotValues[i] + movementThreshold) {
-                    movements[movement] = true;
-                } else {
-                    movements[movement] = null; // explicit "no-significant-change" marker
-                }
-            }
+				if (isCurrentlyActive && !wasPreviouslyActive) {
+					// just pressed
+					movements[movement] = true;
+				} else if (!isCurrentlyActive && wasPreviouslyActive) {
+					// just released → fire one-shot release
+					movements[movement] = false;
+
+					if (!digitalReleaseTimers.has(movement)) {
+						const timerId = setTimeout(() => {
+							delete previousMovements[movement];
+							digitalReleaseTimers.delete(movement);
+							console.log(`Timer fired: removed ${movement}`);
+						}, RELEASE_PERSISTENCE_MS);
+						digitalReleaseTimers.set(movement, timerId);
+					}
+				}
+				// if inactive and was never active before → do nothing (don’t keep resending false)
+			}
         }
 
         // 2) Update previousPotValues (keep this as before)
