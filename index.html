@@ -858,7 +858,7 @@ async function checkMovement() {
                 }
 
                 const logMessage = currentActiveMovements.map(m => m.part + " " + m.direction).join(" & ");
-                console.log("--Movement: " + logMessage);
+                //console.log("--Movement: " + logMessage);
 
                 if (noNarrative) {
                     // window.success_Sound.play();
@@ -898,13 +898,16 @@ async function trackMovementSequences(currentActiveMovements) {
     // --- 4. Add to buffer ---
     movementBuffer.push({ state: normalizedSequence, timestamp: now });
 
-    // --- 5. Fetch movement patterns if not cached ---
+    // --- 5. Automatically log buffer ---
+    logMovementBuffer();
+
+    // --- 6. Fetch movement patterns if not cached ---
     const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
 
-    // --- 6. Prepare buffer for pattern checking ---
+    // --- 7. Prepare buffer for pattern checking ---
     const bufferStates = movementBuffer.map(entry => entry.state);
 
-    // --- 7. Pattern Matching: Sliding Window & Longest First ---
+    // --- 8. Pattern Matching: Sliding Window & Longest First ---
     let matchedPattern = null;
     let matchedStartIndex = -1;
     let maxPatternLength = 0;
@@ -918,7 +921,7 @@ async function trackMovementSequences(currentActiveMovements) {
         }
     }
 
-    // --- 8. Handle pattern match ---
+    // --- 9. Handle pattern match ---
     if (matchedPattern) {
         window.complete_Sound.play();
         console.log(`--Pattern matched: ${matchedPattern.patternName}`);
@@ -932,6 +935,55 @@ async function trackMovementSequences(currentActiveMovements) {
         setTimeout(resetVariables, 4000); // Optional reset for patternMovement
     }
 }
+
+// Reset legacy and pattern variables
+function resetVariables(resetAll = true) {
+    previousActiveMovements = [];
+    if (resetAll) patternMovement = "none";
+}
+
+// Improved sliding window matcher with starting index return
+function checkPatternInBufferWithIndex(pattern, buffer) {
+    if (buffer.length < pattern.length) return { found: false, startIndex: -1 };
+
+    for (let start = 0; start <= buffer.length - pattern.length; start++) {
+        let matched = true;
+
+        for (let i = 0; i < pattern.length; i++) {
+            const requiredMovement = pattern[i];
+            const bufferState = buffer[start + i];
+
+            const foundMatch = bufferState.some(activeMovement =>
+                activeMovement.part === requiredMovement.partMoving &&
+                activeMovement.direction === requiredMovement.directionMoving
+            );
+
+            if (!foundMatch) {
+                matched = false;
+                break;
+            }
+        }
+
+        if (matched) return { found: true, startIndex: start };
+    }
+
+    return { found: false, startIndex: -1 };
+}
+
+// --- Buffer logging helper ---
+function logMovementBuffer() {
+    if (movementBuffer.length === 0) {
+        console.log("--Movement buffer is empty");
+        return;
+    }
+
+    console.log("--Movement buffer contents:");
+    movementBuffer.forEach((entry, index) => {
+        const movements = entry.state.map(m => `${m.part} ${m.direction}`).join(" & ");
+        console.log(`  [${index}] ${movements} (t=${entry.timestamp})`);
+    });
+}
+
 
 // Reset legacy and pattern variables
 function resetVariables(resetAll = true) {
