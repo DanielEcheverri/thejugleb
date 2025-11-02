@@ -874,7 +874,6 @@ async function checkMovement() {
     }
 }
 
-// Tracks movement sequences and compares them against patterns
 async function trackMovementSequences(currentActiveMovements) {
     const PRUNE_TIME_MS = 1500; // Keep recent movement entries only
     const now = Date.now();
@@ -907,14 +906,15 @@ async function trackMovementSequences(currentActiveMovements) {
 
     // --- 7. Pattern Matching: Sliding Window & Longest First ---
     let matchedPattern = null;
+    let matchedStartIndex = -1;
     let maxPatternLength = 0;
 
     for (const pattern of patterns) {
-        if (checkPatternInBuffer(pattern.pattern, bufferStates)) {
-            if (pattern.pattern.length > maxPatternLength) {
-                matchedPattern = pattern;
-                maxPatternLength = pattern.pattern.length;
-            }
+        const result = checkPatternInBufferWithIndex(pattern.pattern, bufferStates);
+        if (result.found && pattern.pattern.length > maxPatternLength) {
+            matchedPattern = pattern;
+            maxPatternLength = pattern.pattern.length;
+            matchedStartIndex = result.startIndex;
         }
     }
 
@@ -924,10 +924,47 @@ async function trackMovementSequences(currentActiveMovements) {
         console.log(`--Pattern matched: ${matchedPattern.patternName}`);
         patternMovement = matchedPattern.patternName;
 
-        // Clear buffer after match
-        movementBuffer = [];
+        // Remove only the matched portion from the buffer to allow overlapping patterns
+        if (matchedStartIndex >= 0) {
+            movementBuffer.splice(matchedStartIndex, maxPatternLength);
+        }
+
         setTimeout(resetVariables, 4000); // Optional reset for patternMovement
     }
+}
+
+// Reset legacy and pattern variables
+function resetVariables(resetAll = true) {
+    previousActiveMovements = [];
+    if (resetAll) patternMovement = "none";
+}
+
+// Improved sliding window matcher with starting index return
+function checkPatternInBufferWithIndex(pattern, buffer) {
+    if (buffer.length < pattern.length) return { found: false, startIndex: -1 };
+
+    for (let start = 0; start <= buffer.length - pattern.length; start++) {
+        let matched = true;
+
+        for (let i = 0; i < pattern.length; i++) {
+            const requiredMovement = pattern[i];
+            const bufferState = buffer[start + i];
+
+            const foundMatch = bufferState.some(activeMovement =>
+                activeMovement.part === requiredMovement.partMoving &&
+                activeMovement.direction === requiredMovement.directionMoving
+            );
+
+            if (!foundMatch) {
+                matched = false;
+                break;
+            }
+        }
+
+        if (matched) return { found: true, startIndex: start };
+    }
+
+    return { found: false, startIndex: -1 };
 }
 
 // Reset legacy and pattern variables
