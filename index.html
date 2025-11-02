@@ -898,9 +898,6 @@ async function trackMovementSequences(currentActiveMovements) {
     // --- 4. Add to buffer ---
     movementBuffer.push({ state: normalizedSequence, timestamp: now });
 
-    // --- 5. Automatically log buffer ---
-    logMovementBuffer();
-
     // --- 6. Fetch movement patterns if not cached ---
     const patterns = await fetchJSONFile(movePatterns, cachedMovePatterns);
 
@@ -969,21 +966,6 @@ function checkPatternInBufferWithIndex(pattern, buffer) {
 
     return { found: false, startIndex: -1 };
 }
-
-// --- Buffer logging helper ---
-function logMovementBuffer() {
-    if (movementBuffer.length === 0) {
-        console.log("--Movement buffer is empty");
-        return;
-    }
-
-    console.log("--Movement buffer contents:");
-    movementBuffer.forEach((entry, index) => {
-        const movements = entry.state.map(m => `${m.part} ${m.direction}`).join(" & ");
-        console.log(`  [${index}] ${movements} (t=${entry.timestamp})`);
-    });
-}
-
 
 // Reset legacy and pattern variables
 function resetVariables(resetAll = true) {
