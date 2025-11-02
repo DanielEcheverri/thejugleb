@@ -662,7 +662,7 @@ function handleMovement() {
 
             if (movement === null || movement === undefined) continue;
 
-            if (digitalParts.includes(label)) {
+			if (digitalParts.includes(label)) {
 				const isCurrentlyActive = potValues[i] > 0;
 				const wasPreviouslyActive = previousMovements[movement] === true;
 
@@ -689,7 +689,16 @@ function handleMovement() {
 					}
 				}
 				// if inactive and was never active before → do nothing (don’t keep resending false)
-			}
+            } else {
+                // analog
+                if (potValues[i] < previousPotValues[i] - movementThreshold) {
+                    movements[movement] = false;
+                } else if (potValues[i] > previousPotValues[i] + movementThreshold) {
+                    movements[movement] = true;
+                } else {
+                    movements[movement] = null; // explicit "no-significant-change" marker
+                }
+            }
         }
 
         // 2) Update previousPotValues (keep this as before)
