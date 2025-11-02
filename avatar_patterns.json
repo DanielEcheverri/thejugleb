@@ -33,7 +33,14 @@
 			{ "partMoving": "left leg", "directionMoving": "up" },
 			{ "partMoving": "right leg", "directionMoving": "down" },
 			{ "partMoving": "left leg", "directionMoving": "down" },
-			{ "partMoving": "right leg", "directionMoving": "up" }
+		]
+	},
+		{
+		"patternName": "Walking",
+		"pattern": [
+			{ "partMoving": "right leg", "directionMoving": "up" },
+			{ "partMoving": "left leg", "directionMoving": "down" },
+			{ "partMoving": "right leg", "directionMoving": "down" },
 		]
 	},
 	{
