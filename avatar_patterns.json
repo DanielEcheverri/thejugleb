@@ -72,17 +72,12 @@
 		]
 	},
 	{
-		"patternName": "Keeping",
+		"patternName": "Talking",
 		"pattern": [
-			{ "partMoving": "left shoulder", "directionMoving": "up" },
-			{ "partMoving": "left forearm", "directionMoving": "left" }
-		]
-	},
-	{
-		"patternName": "Keeping",
-		"pattern": [
-			{ "partMoving": "right shoulder", "directionMoving": "up" },
-			{ "partMoving": "right forearm", "directionMoving": "left" }
+			{ "partMoving": "mouth", "directionMoving": "touched" },
+			{ "partMoving": "mouth", "directionMoving": "released" },
+			{ "partMoving": "mouth", "directionMoving": "touched" },
+			{ "partMoving": "mouth", "directionMoving": "released" }
 		]
 	}
 ]
