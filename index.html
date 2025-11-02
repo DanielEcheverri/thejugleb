@@ -801,26 +801,28 @@ async function checkMovement() {
     }
 
     function processMovementConditions(movements) {
+    // Treat null or empty object as “no movement”
+    if (!movements || Object.keys(movements).length === 0) {
+        movements = {}; // ensure we have a consistent object
+    }
 
-        if (!movements || Object.keys(movements).length === 0) return;
-
-        // Collect all active movements
-        const currentActiveMovements = [];
-        cachedMovementConditions.forEach(condition => {
-            let match = true;
-            for (let key in condition.condition) {
-                if (movements[key] !== condition.condition[key]) {
-                    match = false;
-                    break;
-                }
+    // Collect all currently active movements
+    const currentActiveMovements = [];
+    cachedMovementConditions.forEach(condition => {
+        let match = true;
+        for (let key in condition.condition) {
+            if (movements[key] !== condition.condition[key]) {
+                match = false;
+                break;
             }
-            if (match) {
-                currentActiveMovements.push({
-                    part: condition.partMoving,
-                    direction: condition.directionMoving
-                });
-            }
-        });
+        }
+        if (match) {
+            currentActiveMovements.push({
+                part: condition.partMoving,
+                direction: condition.directionMoving
+            });
+        }
+    });
 
         // Compare current vs previous
         function canonicalize(arr) {
