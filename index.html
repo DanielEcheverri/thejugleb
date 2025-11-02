@@ -993,27 +993,31 @@ function resetVariables(resetAll = true) {
 
 // Improved sliding window matcher with starting index return
 function checkPatternInBufferWithIndex(pattern, buffer) {
-    if (buffer.length < pattern.length) return { found: false, startIndex: -1 };
+    if (buffer.length === 0) return { found: false, startIndex: -1 };
 
-    for (let start = 0; start <= buffer.length - pattern.length; start++) {
-        let matched = true;
+    for (let start = 0; start < buffer.length; start++) {
+        let bufferIndex = start;
+        let patternIndex = 0;
 
-        for (let i = 0; i < pattern.length; i++) {
-            const requiredMovement = pattern[i];
-            const bufferState = buffer[start + i];
+        while (bufferIndex < buffer.length && patternIndex < pattern.length) {
+            const requiredMovement = pattern[patternIndex];
+            const bufferState = buffer[bufferIndex];
 
-            const foundMatch = bufferState.some(activeMovement =>
-                activeMovement.part === requiredMovement.partMoving &&
-                activeMovement.direction === requiredMovement.directionMoving
+            // If the required step exists in this buffer state, move to next pattern step
+            const found = bufferState.some(m =>
+                m.part === requiredMovement.partMoving &&
+                m.direction === requiredMovement.directionMoving
             );
 
-            if (!foundMatch) {
-                matched = false;
-                break;
+            if (found) {
+                patternIndex++; // Step matched, move to next
             }
+            bufferIndex++; // Always move to next frame
         }
 
-        if (matched) return { found: true, startIndex: start };
+        if (patternIndex === pattern.length) {
+            return { found: true, startIndex: start }; // Entire pattern found
+        }
     }
 
     return { found: false, startIndex: -1 };
