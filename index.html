@@ -633,16 +633,6 @@ let keysToForget = new Set(); // Stores movement labels that were just released.
 let digitalReleaseTimers = new Map();
 const RELEASE_PERSISTENCE_MS = 1000;
 
-// NOTE: This function relies on the following external variables:
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
-// - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
-// - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
-
-// NOTE: This function relies on the following external variables:
-// - previousPotValues, previousMovements, potValues, labels, numPotentiometers, deviceName, objectsEqual
-// - digitalReleaseTimers: A global Map() for asynchronous cleanup (Map<movementLabel, setTimeoutID>).
-// - RELEASE_PERSISTENCE_MS: A global constant for the persistence duration (e.g., 100).
-
 function handleMovement() {
     let movements = {};
     const movementThreshold = 25;
@@ -677,16 +667,15 @@ function handleMovement() {
             // SCENARIO 1: DIGITAL Inputs - Report Active State or Transitional Release
             
             let isCurrentlyActive = (potValues[i] > 0); 
-            // Check against the previous persistent state
             let wasPreviouslyActive = previousMovements[movement] === true; 
             
-            // If the state changed or is still active, clear any pending release timer
+            // If the state changed or is active, clear any pending release timer
             if (digitalReleaseTimers.has(movement)) {
                 clearTimeout(digitalReleaseTimers.get(movement));
                 digitalReleaseTimers.delete(movement);
             }
 
-            // CRITICAL LOGIC: Only record the state if it's currently TRUE, or if it just toggled.
+            // CRITICAL LOGIC: If active, report it. If toggled to inactive, report it once.
             if (isCurrentlyActive === true) {
                 movements[movement] = true; // State is active (Persistent context)
             } else if (isCurrentlyActive !== wasPreviouslyActive) {
@@ -705,53 +694,48 @@ function handleMovement() {
         }
     }
 
-    // 2. Update previous potentiometer values (for analog calculation next cycle)
+    // 2. Update previous potentiometer values
     previousPotValues = potValues.slice(0, numPotentiometers);
 
     // 3. Final State Processing and Cleanup
-    // Start the state to be returned by copying the last known persistent state.
-    const currentStateToReturn = { ...previousMovements }; 
+    // Start with the last known persistent state
+    const currentStateToReturn = {}; 
 
-    // Iterate over all possible persistent keys to determine the new state
+    // Iterate over the keys in the complete possible state (previous + current changes)
     for (const key in { ...previousMovements, ...movements }) {
         let value = { ...previousMovements, ...movements }[key];
-        const isDigitalKey = Object.values(labelMovements).includes(key) && digitalParts.includes(Object.keys(labelMovements).find(k => labelMovements[k] === key));
-        
-        // 3a. Handle Settled Analog (Value is null)
+
+        // 1. Clean up settled analog values
         if (value === null) {
-            if (currentStateToReturn.hasOwnProperty(key)) {
-                delete currentStateToReturn[key]; // Delete the settled analog state
-            }
             continue;
         }
-        
-        // 3b. Handle Digital Release (Value is false)
-        if (isDigitalKey && value === false) {
-            
-            // IMPORTANT: Update the persistent state to FALSE immediately
-            // This ensures the false state persists across function calls
-            previousMovements[key] = false;
-            
-            // Set the timer to delete the key from the persistent state asynchronously
-            if (!digitalReleaseTimers.has(key)) {
-                
-                const timerId = setTimeout(() => {
-                    // This deletes the 'false' state after the persistence window.
-                    delete previousMovements[key];
-                    digitalReleaseTimers.delete(key);
-                }, RELEASE_PERSISTENCE_MS); 
-                
-                digitalReleaseTimers.set(key, timerId);
+
+        const isDigitalKey = Object.values(labelMovements).includes(key) && digitalParts.includes(Object.keys(labelMovements).find(k => labelMovements[k] === key));
+
+        // 2. Handle Digital (Timed Forgetting)
+        if (isDigitalKey) {
+            if (value === true) {
+                // If TRUE, it must be persisted for the next cycle.
+                currentStateToReturn[key] = true;
+            } else if (value === false) {
+                // If FALSE (Released), trigger the timer to clean up the state, 
+                // but DO NOT persist the 'false' value in currentStateToReturn.
+                if (!digitalReleaseTimers.has(key)) {
+                    const timerId = setTimeout(() => {
+                        delete previousMovements[key]; // Asynchronous delete from the persistent state
+                        digitalReleaseTimers.delete(key);
+                    }, RELEASE_PERSISTENCE_MS);
+                    
+                    digitalReleaseTimers.set(key, timerId);
+                }
+                // The 'false' state is registered by the presence of the key in 'movements'
+                // during this cycle, but its persistence ends now.
             }
-            
-            // Set the current state to FALSE for this cycle's return, 
-            // allowing the release to be logged/tracked.
-            currentStateToReturn[key] = false; 
-            continue;
         } 
         
-        // 3c. Handle Active Digital/Analog Change (Value is true/false for analog, true for digital)
-        if (currentStateToReturn[key] !== value) {
+        // 3. Handle Analog (Persist Active Change)
+        else {
+            // Analog changes (true/false) must be persisted until they settle to null.
             currentStateToReturn[key] = value;
         }
     }
@@ -760,23 +744,8 @@ function handleMovement() {
     // Check if the current state is different from the last saved state
     if (!objectsEqual(currentStateToReturn, previousMovements)) {
         
-        // Selectively update previousMovements to preserve digital false states
-        // that are managed by timers
-        for (const key in currentStateToReturn) {
-            // Only update if not a digital false state being managed by a timer
-            if (!(digitalReleaseTimers.has(key) && previousMovements[key] === false)) {
-                previousMovements[key] = currentStateToReturn[key];
-            }
-        }
-        
-        // Remove keys that are no longer in currentStateToReturn
-        // (but preserve digital false states being managed by timers)
-        for (const key in previousMovements) {
-            if (!currentStateToReturn.hasOwnProperty(key) && !digitalReleaseTimers.has(key)) {
-                delete previousMovements[key];
-            }
-        }
-        
+        // Update the global persistent state and return it
+        previousMovements = currentStateToReturn; 
         return currentStateToReturn; 
     }
 
