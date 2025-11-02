@@ -774,13 +774,13 @@ function handleMovement() {
     }
 }
 
-
 let cachedMovementConditions = null;
-let previousActiveMovements = []; // Replaces previousPart and previousDirection
+let previousActiveMovements = []; 
 let movementBuffer = [];
 let cachedMovePatterns;
 let patternMovement = "none";
 let movementResetTimer = null; // Stores the setTimeout ID
+let movementResetInterval = null; // Interval for debug countdown
 
 async function checkMovement() {
     let movements = handleMovement(); // Get current movement data
@@ -791,25 +791,20 @@ async function checkMovement() {
             cachedMovementConditions = await $.get(moveSource);
         } catch (error) {
             console.error('Error fetching movement conditions JSON:', error);
-            return; // Exit if fetch fails
+            return; 
         }
     }
     
     // 2. Execution Entry Point: Process state change
-    // We execute this if movements are available, regardless of the 'speaking' status.
     if (movements) {
         processMovementConditions(movements);
     }
 
-    // --- Inner Processor Function ---
     function processMovementConditions(movements) {
 
-        // Exit cleanly if movements is null/undefined or an empty object {}
-        if (!movements || Object.keys(movements).length === 0) {
-            return;
-        }
+        if (!movements || Object.keys(movements).length === 0) return;
 
-        // 1. Collect all currently active movements (build fresh objects)
+        // Collect all active movements
         const currentActiveMovements = [];
         cachedMovementConditions.forEach(condition => {
             let match = true;
@@ -827,45 +822,62 @@ async function checkMovement() {
             }
         });
 
-        // 2. Prepare deterministic string forms for comparison (sort cloned arrays)
+        // Compare current vs previous
         function canonicalize(arr) {
             const copy = arr.map(x => ({ part: x.part, direction: x.direction }));
             copy.sort((a, b) => ('' + a.part + a.direction).localeCompare('' + b.part + b.direction));
             return JSON.stringify(copy);
         }
-
         const currentMovementsString = canonicalize(currentActiveMovements);
         const previousMovementsString = canonicalize(previousActiveMovements || []);
 
-        // 3. Check for change (MUST RUN ALWAYS)
         if (currentMovementsString !== previousMovementsString) {
 
-            // --- CLEAR EXISTING TIMER ONLY IF NEW MOVEMENT STARTS ---
+            // Clear reset timer if new movement starts
             if (movementResetTimer && currentActiveMovements.length > 0) {
                 clearTimeout(movementResetTimer);
                 movementResetTimer = null;
+                if (movementResetInterval) {
+                    clearInterval(movementResetInterval);
+                    movementResetInterval = null;
+                }
                 console.log("--Movement Timer Cleared (new movement started)");
             }
 
-            // SCENARIO A: Movement HAS stopped (no active conditions)
+            // Movement stopped: schedule reset
             if (currentActiveMovements.length === 0) {
                 previousActiveMovements = [];
 
                 if (!movementResetTimer) {
+                    let countdown = 2.0; // seconds
+                    console.log(`--Movement stopped — scheduling reset in ${countdown.toFixed(1)}s`);
+
+                    // Interval to show live countdown every 0.1s
+                    movementResetInterval = setInterval(() => {
+                        countdown -= 0.1;
+                        if (countdown > 0) {
+                            console.log(`--Reset in ${countdown.toFixed(1)}s`);
+                        }
+                    }, 100);
+
                     movementResetTimer = setTimeout(() => {
                         partMoving = "none";
                         directionMoving = "none";
                         console.log("--Movement Timer Reset: Legacy variables cleared.");
+
                         movementResetTimer = null;
+                        if (movementResetInterval) {
+                            clearInterval(movementResetInterval);
+                            movementResetInterval = null;
+                        }
                     }, 2000);
 
-                    console.log("--Movement: all stopped — scheduled legacy reset in 2000ms");
                 }
 
-                return; // Exit here: no active movement, timer is running
+                return; 
             }
 
-            // SCENARIO B: Movement HAS started/changed
+            // Movement started/changed
             if (!speaking) {
                 const first = currentActiveMovements[0];
                 if (first) {
@@ -881,18 +893,15 @@ async function checkMovement() {
                     //displayText("Avatar is doing: " + logMessage + ".");
                 }
 
-                // Update previousActiveMovements for comparison in next loop
                 previousActiveMovements = JSON.parse(JSON.stringify(currentActiveMovements));
-
-                // Track sequences if applicable
                 trackMovementSequences(currentActiveMovements);
             } else {
-                // If speaking == true, just update for detection
                 previousActiveMovements = JSON.parse(JSON.stringify(currentActiveMovements));
             }
         }
     }
 }
+
 
 
 			// Function to track movement sequences and compare them against patterns
