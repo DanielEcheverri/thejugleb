@@ -94,7 +94,12 @@ h1 {
 	cursor: pointer;
 	border-radius: 8px;
 	font-family: "Roboto", sans-serif;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	box-shadow: 
+        /* Outer Shadow (Gives the button 'lift') */
+        0 4px 8px rgba(0, 0, 0, 0.2), 
+        
+        /* Inner Shadow (Gives the button a 'pressed' or 'beveled' look) */
+        inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .listen-button {
