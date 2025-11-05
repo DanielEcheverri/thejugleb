@@ -96,7 +96,7 @@ h1 {
 	font-family: "Roboto", sans-serif;
 	box-shadow: 
 			0 4px 8px rgba(0, 0, 0, 0.2), 
-			inset 0 0 10px rgba(255, 255, 255, 0.4); 
+			inset 0 0 10px rgba(0, 0, 0, 0.4); 
 }
 
 .listen-button {
