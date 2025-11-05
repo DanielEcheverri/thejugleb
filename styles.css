@@ -95,11 +95,8 @@ h1 {
 	border-radius: 8px;
 	font-family: "Roboto", sans-serif;
 	box-shadow: 
-        /* Outer Shadow (Gives the button 'lift') */
-        0 4px 8px rgba(0, 0, 0, 0.2), 
-        
-        /* Inner Shadow (Gives the button a 'pressed' or 'beveled' look) */
-        inset 0 2px 4px rgba(0, 0, 0, 0.5);
+			0 4px 8px rgba(0, 0, 0, 0.2), 
+			inset 0 0 10px rgba(255, 255, 255, 0.4); 
 }
 
 .listen-button {
