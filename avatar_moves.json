@@ -75,28 +75,28 @@
 			"leftFootPressed": true
 		},
 		"partMoving": "left foot",
-		"directionMoving": "on"
+		"directionMoving": "pressed"
 	},
 		{
 		"condition": {
 			"leftFootPressed": false
 		},
 		"partMoving": "left foot",
-		"directionMoving": "off"
+		"directionMoving": "released"
 	},
 		{
 		"condition": {
 			"rightFootPressed": true
 		},
 		"partMoving": "right foot",
-		"directionMoving": "on"
+		"directionMoving": "pressed"
 	},
 		{
 		"condition": {
 			"rightFootPressed": false
 		},
 		"partMoving": "right foot",
-		"directionMoving": "off"
+		"directionMoving": "released"
 	},
 		{
 		"condition": {
