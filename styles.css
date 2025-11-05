@@ -84,7 +84,7 @@ h1 {
 	background-color: #164010; /* Green */
 	width: 96%; /* Adjust the width as needed */
 	border: none;
-	color: #F2E085;
+	color: white;
 	padding: 15px 32px;
 	text-align: center;
 	text-decoration: none;
@@ -101,7 +101,7 @@ h1 {
 
 .listen-button {
 	background-color: #164010; /* Green */
-	color: white; /* Text color */
+	color: #F2E085; /* Text color */
 	margin-right: 2%; /* Adjust spacing between buttons */
 	width: 48%; /* Adjusted width for each button */
 	display: inline-block;
@@ -110,7 +110,7 @@ h1 {
 
 .interact-button {
 	background-color: #164010; /* Blue */
-	color: white; /* Text color */
+	color: #F2E085; /* Text color */
 	margin-left: 2%; /* Adjust spacing between buttons */
 	width: 48%; /* Adjusted width for each button */
 	display: inline-block;
