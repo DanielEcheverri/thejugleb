@@ -7,7 +7,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
-	background-color: #BF4E24;
+	background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
 }
 h1 {
 	font-size: 30px;
