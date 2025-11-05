@@ -34,14 +34,14 @@ h1 {
 #currentLocation {
 	width: 90%;
 	text-align: center;
-	color: #999da0; /* Black text color */
+	color: #F2E085; /* Black text color */
 	font-size: 16px; /* Text size */
 }
 
 #consoleOutput {
 	width: 90%;
 	text-align: center;
-	color: #999da0; /* Black text color */
+	color: #164010; /* Black text color */
 	font-size: 14px; /* Text size */
 	font-family: "Courier New", Courier, monospace; /* Console */
 }
@@ -81,7 +81,7 @@ h1 {
 }
 
 .button {
-	background-color: #98BF45; /* Green */
+	background-color: #164010; /* Green */
 	width: 96%; /* Adjust the width as needed */
 	border: none;
 	color: white;
@@ -97,7 +97,7 @@ h1 {
 }
 
 .listen-button {
-	background-color: #98BF45; /* Green */
+	background-color: #164010; /* Green */
 	color: white; /* Text color */
 	margin-right: 2%; /* Adjust spacing between buttons */
 	width: 48%; /* Adjusted width for each button */
@@ -106,7 +106,7 @@ h1 {
 }
 
 .interact-button {
-	background-color: #98BF45; /* Blue */
+	background-color: #164010; /* Blue */
 	color: white; /* Text color */
 	margin-left: 2%; /* Adjust spacing between buttons */
 	width: 48%; /* Adjusted width for each button */
@@ -236,7 +236,7 @@ input:checked + .slider:before {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #98BF45;
+	background-color: #BF4E24;
 	display: flex;
 	justify-content: center;
 	align-items: center;
