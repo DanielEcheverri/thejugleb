@@ -1581,35 +1581,33 @@ function checkPatternInBuffer(pattern, buffer) {
 					}
 				}
 			}
-
+			
 			const rootStyles = getComputedStyle(document.documentElement);
 			function setupColors() {
-			// Read the CSS variable string and convert it to a p5.js color object
-				lineColors[0] = color(rootStyles.getPropertyValue('--line-color-0'));
-				lineColors[1] = color(rootStyles.getPropertyValue('--line-color-1'));
-				lineColors[2] = color(rootStyles.getPropertyValue('--line-color-2'));
-				lineColors[3] = color(rootStyles.getPropertyValue('--line-color-3'));
-				lineColors[4] = color(rootStyles.getPropertyValue('--line-color-4'));
-				lineColors[5] = color(rootStyles.getPropertyValue('--line-color-5'));
-				lineColors[6] = color(rootStyles.getPropertyValue('--line-color-6'));
-				lineColors[7] = color(rootStyles.getPropertyValue('--line-color-7'));
-				lineColors[8] = color(rootStyles.getPropertyValue('--line-color-8'));
-				lineColors[9] = color(rootStyles.getPropertyValue('--line-color-9'));
-				lineColors[10] = color(rootStyles.getPropertyValue('--line-color-10'));
+				lineColors[0] = color(204, 204, 0); // Dark Yellow
+				lineColors[1] = color(204, 204, 0); // Dark Yellow
+				lineColors[2] = color(255, 0, 0); // Red
+				lineColors[3] = color(204, 204, 0); // Dark Yellow
+				lineColors[4] = color(204, 204, 0); // Dark Yellow
+				lineColors[5] = color(0, 255, 0); // Bright Green
+				lineColors[6] = color(0, 255, 0); // Bright Green
+				lineColors[7] = color(0, 128, 0); // Grass Green
+				lineColors[8] = color(0, 128, 0); // Grass Green
+				lineColors[9] = color(255, 0, 0); // Red
+				lineColors[10] = color(204, 204, 0); // Dark Yellow
 			}
 			function setupBackgroundColors() {
-			// Read the CSS variable string and convert it to a p5.js color object
-				backgroundColors[0] = color(rootStyles.getPropertyValue('--bg-color-0'));
-				backgroundColors[1] = color(rootStyles.getPropertyValue('--bg-color-1'));
-				backgroundColors[2] = color(rootStyles.getPropertyValue('--bg-color-2'));
-				backgroundColors[3] = color(rootStyles.getPropertyValue('--bg-color-3'));
-				backgroundColors[4] = color(rootStyles.getPropertyValue('--bg-color-4'));
-				backgroundColors[5] = color(rootStyles.getPropertyValue('--bg-color-5'));
-				backgroundColors[6] = color(rootStyles.getPropertyValue('--bg-color-6'));
-				backgroundColors[7] = color(rootStyles.getPropertyValue('--bg-color-7'));
-				backgroundColors[8] = color(rootStyles.getPropertyValue('--bg-color-8'));
-				backgroundColors[9] = color(rootStyles.getPropertyValue('--bg-color-9'));
-				backgroundColors[10] = color(rootStyles.getPropertyValue('--bg-color-10'));
+				backgroundColors[0] = color(0, 0, 0); // 0% black
+				backgroundColors[1] = color(0, 0, 0); // 0% black
+				backgroundColors[2] = color(0, 0, 0, 200); // 90% black
+				backgroundColors[3] = color(0, 0, 0, 230); // 75% black
+				backgroundColors[4] = color(0, 0, 0, 230); // 75% black
+				backgroundColors[5] = color(0, 0, 0, 128); // 60% black
+				backgroundColors[6] = color(0, 0, 0, 128); // 60% black
+				backgroundColors[7] = color(0, 0, 0, 230); // 75% black
+				backgroundColors[8] = color(0, 0, 0, 230); // 75% black
+				backgroundColors[9] = color(0, 0, 0, 200); // 90% black
+				backgroundColors[10] = color(0, 0, 0, 128); // 60% black
 			}
 		</script>
 
