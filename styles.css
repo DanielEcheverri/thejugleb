@@ -275,53 +275,33 @@ input:checked + .slider:before {
 	padding-bottom: 20vh;
 }
 
-/* Target the hachi.svg image */
-#avatarCanvas img.hachi_control {
-    display: block; /* Ensure it behaves as a block-level element */
-    width: 100vw; /* Make it take 100% of the width of its parent (avatarCanvas) */
-    height: auto; /* Maintain aspect ratio */
-}
+ /* --- For processing sketch --- */
 
-.control-button {
-	position: absolute;
-	padding: 10px 15px;
-	border: 1px solid #ccc;
-	background-color: white;
-	cursor: pointer;
-	border-radius: 20px;
-	font-size: 14px;
-	font-weight: bold;
-	color: black;
-}
+:root {
+    /* --- Line Colors --- */
+    --line-color-0: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-1: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-2: rgb(255, 0, 0);     /* Red */
+    --line-color-3: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-4: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-5: rgb(0, 255, 0);     /* Bright Green */
+    --line-color-6: rgb(0, 255, 0);     /* Bright Green */
+    --line-color-7: rgb(0, 128, 0);     /* Grass Green */
+    --line-color-8: rgb(0, 128, 0);     /* Grass Green */
+    --line-color-9: rgb(255, 0, 0);     /* Red */
+    --line-color-10: rgb(204, 204, 0);  /* Dark Yellow */
 
-/* Position the buttons relative to the avatarCanvas using percentages */
-#bark_btn {
-	top: 49%;
-	left: 31%;
-}
-
-#sniff_btn {
-	top: 41%;
-	right: 75%;
-}
-
-#jump_btn {
-	top: 73%;
-	left: 52%;
-	transform: translate(-50%, -50%);
-}
-
-#back_btn {
-	bottom: 14%;
-	left: 59%;
-}
-
-#grab_btn {
-	bottom: 28%;
-	left: 4%;
-}
-
-#front_btn {
-	bottom: 14%;
-	right: 59%;
+    /* --- Background Colors --- */
+    /* Note: p5 color(R, G, B, A) maps A (0-255) to alpha (0-1) for CSS rgba() */
+    --bg-color-0: rgba(0, 0, 0, 0.0);   /* 0% black (A=0/255) */
+    --bg-color-1: rgba(0, 0, 0, 0.0);   /* 0% black (A=0/255) */
+    --bg-color-2: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
+    --bg-color-3: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-4: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-5: rgba(0, 0, 0, 0.50);  /* 60% black (A=128/255 ≈ 0.50) */
+    --bg-color-6: rgba(0, 0, 0, 0.50);  /* 60% black (A=128/255 ≈ 0.50) */
+    --bg-color-7: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-8: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-9: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
+    --bg-color-10: rgba(0, 0, 0, 0.50); /* 60% black (A=128/255 ≈ 0.50) */
 }
