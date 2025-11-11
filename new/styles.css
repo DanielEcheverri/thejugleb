@@ -1,0 +1,309 @@
+body {
+	font-family: "Roboto", sans-serif;
+	margin: 0; /* Remove default margin */
+	padding: 0; /* Remove default padding */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
+}
+h1 {
+	font-size: 30px;
+	color: #999da0;
+	margin-top: 0px;
+}
+
+#avatarBTdiv {
+	margin-bottom: 20px;
+	width: 100vw;
+	height: 16vh;
+	position: relative;
+}
+
+.top-section,
+.bottom-section {
+	width: 100%;
+	height: 50%; /* Each section takes 50% of the height */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#currentLocation {
+	width: 90%;
+	text-align: center;
+	color: #F2E085; /* Text color */
+	font-size: 16px; /* Text size */
+}
+
+#consoleOutput {
+	width: 90%;
+	text-align: center;
+	color: #164010; /* Black text color */
+	font-size: 14px; /* Text size */
+	font-family: "Courier New", Courier, monospace; /* Console */
+}
+
+#logoSpace {
+	width: 80%;
+	text-align: center;
+}
+
+#currentLocation,
+#consoleOutput {
+	font-size: 12px; /* Text size */
+}
+
+#messageDisplayDiv {
+	font-weight: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	max-height: 100vh;
+	background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+	color: white;
+	font-size: 9vw; /* Very big text size */
+	opacity: 0; /* Initially hidden */
+	visibility: hidden; /* Prevent interactions */
+	z-index: 9999; /* Ensure it appears above other content */
+	text-align: center; /* Center align the text */
+	padding-top: 0vh; /* Vertical padding to center the text */
+	transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth transitions */
+}
+
+#messageDisplayDiv.visible {
+	opacity: 1; /* Fully visible */
+	visibility: visible; /* Allow interactions */
+}
+
+.button {
+	background-color: #164010; /* Green */
+	width: 96%; /* Adjust the width as needed */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 12px;
+	cursor: pointer;
+	border-radius: 8px;
+	font-family: "Roboto", sans-serif;
+	box-shadow: 
+			0 4px 8px rgba(0, 0, 0, 0.2), 
+			inset 0 0 10px rgba(0, 0, 0, 0.4); 
+}
+
+.listen-button {
+	background-color: #164010; /* Green */
+	color: #F2E085; /* Text color */
+	margin-right: 2%; /* Adjust spacing between buttons */
+	width: 48%; /* Adjusted width for each button */
+	display: inline-block;
+	box-sizing: border-box; /* Ensure padding and border are included in width */
+}
+
+.interact-button {
+	background-color: #164010; /* Blue */
+	color: #F2E085; /* Text color */
+	margin-left: 2%; /* Adjust spacing between buttons */
+	width: 48%; /* Adjusted width for each button */
+	display: inline-block;
+	box-sizing: border-box; /* Ensure padding and border are included in width */
+}
+
+.logo {
+	max-width: 90vw;
+}
+
+/* Disconnect button style */
+#connectButton {
+	background-color: #0082fc; /* Blue */
+}
+
+#dismissButton {
+	background-color: #ffffff; /* White */
+	color: black;
+	width: 60%; /* Adjust the width as needed */
+	position: absolute; /* Position absolute */
+	box-sizing: border-box; /* Include padding and border in the width */
+
+	/* Center the button both horizontally and vertically */
+	position: absolute;
+	bottom: 35px;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+/* Style for disabled */
+#connectButton[disabled] {
+	background-color: #dddddd; /* Light gray */
+	color: #aaaaaa; /* Dark gray */
+	cursor: not-allowed;
+}
+
+#hachiCheckboxContainer {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+}
+
+.hachiLabel {
+	font-size: 14px;
+	color: #333;
+}
+
+/* Toggle switch container */
+#toggleContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 4px;
+	width: 50%;
+}
+
+/* Toggle switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #0082fc;
+	transition: 0.4s;
+	border-radius: 34px;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	transition: 0.4s;
+	border-radius: 50%;
+}
+
+input:checked + .slider {
+	background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+	transform: translateX(26px);
+}
+
+/* Labels for the toggle */
+#buroToggle,
+#hachiToggle {
+	display: flex;
+	align-items: center; /* Center vertically */
+	flex-direction: column; /* Stack items vertically */
+	text-align: center; /* Center text */
+	justify-content: center; /* Center horizontally */
+	margin: 10px;
+	font-size: 16px;
+	font-family: "Roboto", sans-serif;
+	color: white;
+}
+
+.material-symbols-outlined {
+	vertical-align: middle;
+	/* Adjust other styles for the symbol as needed */
+}
+
+#loading-screen {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #BF4E24;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999; /* Ensure it's on top of everything else */
+	flex-direction: column; /* Stack children vertically */
+	opacity: 1; /* Fully visible */
+	transition: opacity 1s ease; /* Smooth transition over 0.5 seconds */
+}
+
+#loading-screen.hidden {
+	opacity: 0; /* Fully transparent */
+	pointer-events: none; /* Avoid interaction when hidden */
+}
+
+#loading-text {
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #ffffff;
+}
+
+.hearing-icon {
+	text-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+	font-size: 40vh; /* Set the size of the hearing icon */
+	vertical-align: middle; /* Align the icon */
+}
+
+.center-wrapper {
+	display: flex; /* Use flexbox to arrange items */
+	flex-direction: column; /* Stack items vertically */
+	justify-content: center; /* Center the items vertically */
+	align-items: center; /* Center the items horizontally */
+	text-align: center; /* Ensure text inside spans is also centered */
+	width: 100%; /* Ensure the wrapper takes up full width */
+	height: 100%; /* Ensure the wrapper takes up full height */
+	padding-bottom: 20vh;
+}
+
+ /* --- For processing sketch --- */
+
+:root {
+    /* --- Line Colors --- */
+    --line-color-0: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-1: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-2: rgb(255, 0, 0);     /* Red */
+    --line-color-3: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-4: rgb(204, 204, 0);   /* Dark Yellow */
+    --line-color-5: rgb(0, 255, 0);     /* Bright Green */
+    --line-color-6: rgb(0, 255, 0);     /* Bright Green */
+    --line-color-7: rgb(0, 128, 0);     /* Grass Green */
+    --line-color-8: rgb(0, 128, 0);     /* Grass Green */
+    --line-color-9: rgb(255, 0, 0);     /* Red */
+    --line-color-10: rgb(204, 204, 0);  /* Dark Yellow */
+
+    /* --- Background Colors --- */
+    /* Note: p5 color(R, G, B, A) maps A (0-255) to alpha (0-1) for CSS rgba() */
+    --bg-color-0: rgba(0, 0, 0, 0.0);   /* 0% black (A=0/255) */
+    --bg-color-1: rgba(0, 0, 0, 0.0);   /* 0% black (A=0/255) */
+    --bg-color-2: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
+    --bg-color-3: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-4: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-5: rgba(0, 0, 0, 0.50);  /* 60% black (A=128/255 ≈ 0.50) */
+    --bg-color-6: rgba(0, 0, 0, 0.50);  /* 60% black (A=128/255 ≈ 0.50) */
+    --bg-color-7: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-8: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
+    --bg-color-9: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
+    --bg-color-10: rgba(0, 0, 0, 0.50); /* 60% black (A=128/255 ≈ 0.50) */
+}
