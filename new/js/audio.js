@@ -14,7 +14,7 @@ bgm_Sound = new Howl({
 // --- Sound Initialization ---
 async function initializeSounds() {
 	try {
-		const sounds = await fetchJSONFile('sounds.json', window.sounds); // Assumes fetchJSONFile is global (it is, from main.js)
+		const sounds = await fetchJSONFile('data/sounds.json', window.sounds); // Assumes fetchJSONFile is global (it is, from main.js)
 		if (sounds) {
 			const totalSounds = Object.keys(sounds).length;
 			let loadedSounds = 0;
