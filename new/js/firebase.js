@@ -170,7 +170,7 @@ function toggleListening() {
 	const toggleSwitch = document.getElementById('toggleSwitch');
 	deviceName = toggleSwitch.checked ? "hachi_BT" : "avatar_BT"; // global
 	const databaseName = deviceName === 'hachi_BT' ? 'avatar_data' : 'hachi_data';
-	const deviceToCharacter = { 'hachi_BT': 'Hachi', 'avatar_BT': 'Buro' };
+	const deviceToCharacter = { 'hachi_BT': 'Bageera', 'avatar_BT': 'Baloo' };
 	const charName = deviceToCharacter[deviceName] || 'Unknown'; // Use local var
 	let toggleState = toggleSwitch.checked;
 	
@@ -206,7 +206,7 @@ function toggleListening() {
                 `;
 				const hearingIcon = document.querySelector('.hearing-icon');
 				if (hearingIcon) {
-					hearingIcon.style.color = toggleState ? '#4caf50' : '#0082fc';
+					hearingIcon.style.color = toggleState ? '#BF4E24' : '#164010';
 				}
 			}
 			displayText("Listening as " + charName + "."); // from main.js
