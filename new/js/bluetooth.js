@@ -23,7 +23,7 @@ async function connectToDevice() {
 				tagSource = 'tags.json';
 				initializeSounds(); // from audio.js
 				document.getElementById("hachiCheckbox").click();
-				characterName = "Hachi";
+				characterName = "Bageera";
 				window[characterName + "_Sound"].play();
 				notification_Sound.play();
 			} else {
@@ -35,7 +35,7 @@ async function connectToDevice() {
 				sentenceSource = 'avatar_sentences.json';
 				tagSource = 'tags.json';
 				initializeSounds(); // from audio.js
-				characterName = "Buro";
+				characterName = "Baloo";
 				window[characterName + "_Sound"].play();
 				notification_Sound.play();
 			}

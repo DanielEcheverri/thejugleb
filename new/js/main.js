@@ -96,7 +96,7 @@ function toggleDeviceName() {
 		moveSource = 'data/hachi_moves.json';
 		movePatterns = 'data/hachi_patterns.json';
 		sentenceSource = 'data/hachi_sentences.json';
-		characterName = "Hachi";
+		characterName = "Bageera";
 		initializeSounds();
 	} else {
 		deviceName = "avatar_BT";
@@ -105,7 +105,7 @@ function toggleDeviceName() {
 		moveSource = 'data/avatar_moves.json';
 		movePatterns = 'data/avatar_patterns.json';
 		sentenceSource = 'data/avatar_sentences.json';
-		characterName = "Buro";
+		characterName = "Baloo";
 		initializeSounds();
 	}
 }
