@@ -307,7 +307,3 @@ input:checked + .slider:before {
     --bg-color-9: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
     --bg-color-10: rgba(0, 0, 0, 0.50); /* 60% black (A=128/255 ≈ 0.50) */
 }
-
-.hidden {
-	display: none !important;
-}

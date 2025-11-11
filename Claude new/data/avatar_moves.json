@@ -1,0 +1,157 @@
+[
+	{
+		"condition": {
+			"leftArmMoving": true
+		},
+		"partMoving": "left arm",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"leftArmMoving": false
+		},
+		"partMoving": "left arm",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"rightArmMoving": true
+		},
+		"partMoving": "right arm",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"rightArmMoving": false
+		},
+		"partMoving": "right arm",
+		"directionMoving": "down"
+	},
+	{
+		"condition": {
+			"headMoving": true
+		},
+		"partMoving": "head",
+		"directionMoving": "right"
+	},
+	{
+		"condition": {
+			"headMoving": false
+		},
+		"partMoving": "head",
+		"directionMoving": "left"
+	},
+	{
+		"condition": {
+			"leftLegMoving": true
+		},
+		"partMoving": "left leg",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"leftLegMoving": false
+		},
+		"partMoving": "left leg",
+		"directionMoving": "down"
+	},
+
+	{
+		"condition": {
+			"rightLegMoving": true
+		},
+		"partMoving": "right leg",
+		"directionMoving": "up"
+	},
+	{
+		"condition": {
+			"rightLegMoving": false
+		},
+		"partMoving": "right leg",
+		"directionMoving": "down"
+	},
+		{
+		"condition": {
+			"leftFootPressed": true
+		},
+		"partMoving": "left foot",
+		"directionMoving": "pressed"
+	},
+		{
+		"condition": {
+			"leftFootPressed": false
+		},
+		"partMoving": "left foot",
+		"directionMoving": "released"
+	},
+		{
+		"condition": {
+			"rightFootPressed": true
+		},
+		"partMoving": "right foot",
+		"directionMoving": "pressed"
+	},
+		{
+		"condition": {
+			"rightFootPressed": false
+		},
+		"partMoving": "right foot",
+		"directionMoving": "released"
+	},
+		{
+		"condition": {
+			"rightHandTouched": true
+		},
+		"partMoving": "right hand",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"rightHandTouched": false
+		},
+		"partMoving": "right hand",
+		"directionMoving": "released"
+	},
+		{
+		"condition": {
+			"leftHandTouched": true
+		},
+		"partMoving": "left hand",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"leftHandTouched": false
+		},
+		"partMoving": "left hand",
+		"directionMoving": "released"
+	},
+			{
+		"condition": {
+			"eyesTouched": true
+		},
+		"partMoving": "eyes",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"eyesTouched": false
+		},
+		"partMoving": "eyes",
+		"directionMoving": "released"
+	},
+				{
+		"condition": {
+			"mouthTouched": true
+		},
+		"partMoving": "mouth",
+		"directionMoving": "touched"
+	},
+		{
+		"condition": {
+			"mouthTouched": false
+		},
+		"partMoving": "mouth",
+		"directionMoving": "released"
+	}
+]

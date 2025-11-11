@@ -1,105 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Jungle B - Refactored</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-    
-    <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-</head>
-<body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <img class="logo" src="logo.svg" alt="Logo" />
-        <p id="loading-text">Initializing...</p>
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>The Jungle B</title>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+	</head>
+	<body>
+		<div id="loading-screen">
+			<div class="loader"></div>
+			<img class="logo" src="logo.svg" alt="Logo" />
+			<p id="loading-text">Initializing...</p>
+		</div>
 
-    <!-- Device Selector (Hidden Checkbox for Hachi) -->
-    <div id="hachiCheckboxContainer">
-        <input type="checkbox" id="hachiCheckbox" />
-    </div>
+		<div id="hachiCheckboxContainer">
+			<input type="checkbox" id="hachiCheckbox" />
+		</div>
+		<div id="consoleOutput"></div>
+		<div id="logoSpace">
+			<img class="logo" src="logo.svg" alt="Logo" />
+		</div>
+		<div id="avatarBTdiv">
+			<div class="top-section">
+				<button id="listenButton" class="button listen-button">
+					<span class="material-symbols-outlined" style="vertical-align: middle;">hearing</span>Listen
+				</button>
 
-    <!-- Console Output -->
-    <div id="consoleOutput"></div>
+				<div id="toggleContainer" class="hidden">
+					<span id="buroToggle">
+						<span class="material-symbols-outlined" style="vertical-align: middle;">accessibility_new</span>
+						<span class="label">Buro</span>
+					</span>
+					<label class="switch">
+						<input type="checkbox" id="toggleSwitch" />
+						<span class="slider"></span>
+					</label>
+					<span id="hachiToggle">
+						<span class="material-symbols-outlined" style="vertical-align: middle;">pets</span>
+						<span class="label">Hachi</span>
+					</span>
+				</div>
 
-    <!-- Logo Space -->
-    <div id="logoSpace">
-        <img class="logo" src="logo.svg" alt="Logo" />
-    </div>
+				<button id="interactButton" class="button interact-button">
+					<span class="material-symbols-outlined" style="vertical-align: middle;">back_hand</span>Interact
+				</button>
+			</div>
+			<div class="bottom-section">
+				<button id="connectButton" class="button hidden" disabled>
+					<span class="material-icons" style="vertical-align: middle;">bluetooth_searching</span> Connect to Avatar
+				</button>
+			</div>
+		</div>
+		<div id="avatarCanvas"></div>
+		<div id="currentLocation"></div>
+		<div id="messageDisplayDiv"></div>
 
-    <!-- Main Control Panel -->
-    <div id="avatarBTdiv">
-        <div class="top-section">
-            <!-- Listen Button -->
-            <button id="listenButton" class="button listen-button">
-                <span class="material-symbols-outlined" style="vertical-align: middle;">hearing</span>Listen
-            </button>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
 
-            <!-- Toggle Switch (Character Selection) -->
-            <div id="toggleContainer" style="display: none;">
-                <span id="buroToggle">
-                    <span class="material-symbols-outlined" style="vertical-align: middle;">accessibility_new</span>
-                    <span class="label">Buro</span>
-                </span>
-                <label class="switch">
-                    <input type="checkbox" id="toggleSwitch" />
-                    <span class="slider"></span>
-                </label>
-                <span id="hachiToggle">
-                    <span class="material-symbols-outlined" style="vertical-align: middle;">pets</span>
-                    <span class="label">Hachi</span>
-                </span>
-            </div>
-
-            <!-- Interact Button -->
-            <button id="interactButton" class="button interact-button">
-                <span class="material-symbols-outlined" style="vertical-align: middle;">back_hand</span>Interact
-            </button>
-        </div>
-
-        <div class="bottom-section">
-            <!-- Connect Button -->
-            <button id="connectButton" class="button" style="display: none;" disabled>
-                <span class="material-icons" style="vertical-align: middle;">bluetooth_searching</span> Connect to Avatar
-            </button>
-        </div>
-    </div>
-
-    <!-- Movement Visualization Canvas -->
-    <div id="avatarCanvas"></div>
-
-    <!-- Status Display -->
-    <div id="currentLocation"></div>
-
-    <!-- Message Display -->
-    <div id="messageDisplayDiv"></div>
-
-    <!-- Core Application Scripts (Load in Order) -->
-    <script src="js/config.js"></script>
-    <script src="js/utils/helpers.js"></script>
-    <script src="js/utils/logger.js"></script>
-    <script src="js/utils/event-bus.js"></script>
-    <script src="js/audio/sound-manager.js"></script>
-    <script src="js/audio/tts-service.js"></script>
-    <script src="js/location/geolocation-tracker.js"></script>
-    <script src="js/location/checkpoint-manager.js"></script>
-    <script src="js/bluetooth/bluetooth-manager.js"></script>
-    <script src="js/bluetooth/movement-detector.js"></script>
-    <script src="js/firebase/firebase-manager.js"></script>
-    <script src="js/ui/ui-controller.js"></script>
-    <script src="js/ui/canvas-visualizer.js"></script>
-    <script src="js/main.js"></script>
-</body>
+		<script src="js/state.js" defer></script>
+		<script src="js/audio.js" defer></script>
+		<script src="js/location.js" defer></script>
+		<script src="js/bluetooth.js" defer></script>
+		<script src="js/sketch.js" defer></script>
+		<script src="js/main.js" defer></script>
+		<script type="module" src="js/firebase.js"></script>
+	</body>
 </html>
