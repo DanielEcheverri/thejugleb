@@ -118,9 +118,9 @@ function interactFunction() {
 }
 
 function listenFunction() {
-	listenClient = true;
+    listenClient = true;
 	document.getElementById('interactButton').classList.add('hidden');
-	document.getElementById('toggleContainer').style.display = 'flex'; // Uses flex, so classList is tricky
+	document.getElementById('toggleContainer').classList.remove('hidden');
 	document.getElementById("toggleSwitch").click();
 }
 

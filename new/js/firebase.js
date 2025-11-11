@@ -212,7 +212,7 @@ function toggleListening() {
 			displayText("Listening as " + charName + "."); // from main.js
 			console.log("Listening as: " + deviceName + ".");
 			window[charName + "_Sound"].play();
-			bgm_Sound.play(); // from audio.js
+			//bgm_Sound.play(); // from audio.js
 		}
 	}, 5000);
 }
