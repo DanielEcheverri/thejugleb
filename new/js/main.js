@@ -93,18 +93,18 @@ function toggleDeviceName() {
 		deviceName = "hachi_BT";
 		console.log("Loading settings for " + deviceName);
 		interactionMode = "_int";
-		moveSource = 'hachi_moves.json';
-		movePatterns = 'hachi_patterns.json';
-		sentenceSource = 'hachi_sentences.json';
+		moveSource = 'data/hachi_moves.json';
+		movePatterns = 'data/hachi_patterns.json';
+		sentenceSource = 'data/hachi_sentences.json';
 		characterName = "Hachi";
 		initializeSounds();
 	} else {
 		deviceName = "avatar_BT";
 		console.log("Loading settings for " + deviceName);
 		interactionMode = "_int";
-		moveSource = 'avatar_moves.json';
-		movePatterns = 'avatar_patterns.json';
-		sentenceSource = 'avatar_sentences.json';
+		moveSource = 'data/avatar_moves.json';
+		movePatterns = 'data/avatar_patterns.json';
+		sentenceSource = 'data/avatar_sentences.json';
 		characterName = "Buro";
 		initializeSounds();
 	}
