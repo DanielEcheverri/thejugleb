@@ -207,7 +207,7 @@ h1 {
 }
 
 input:checked + .slider {
-	background-color: #4caf50;
+	background-color: #BF4E24;
 }
 
 input:checked + .slider:before {
