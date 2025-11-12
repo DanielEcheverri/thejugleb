@@ -92,7 +92,16 @@ const sketch = (p) => {
 	function handleMovement() {
 		const DEBUG = true;
 		let movements = {};
-		const movementThreshold = 25;
+        // Example: Head is more sensitive
+        const movementThresholds = {
+        "LEFT ARM": 25,
+        "RIGHT ARM": 25,
+        "HEAD": 15,   
+        "LEFT LEG": 30,    
+        "RIGHT LEG": 30
+        };
+        const defaultMovementThreshold = 25;
+		//const movementThreshold = 25;
 		const digitalParts = ["LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
 		const labelMovements = {
 			"LEFT ARM": "leftArmMoving", "RIGHT ARM": "rightArmMoving",
@@ -129,13 +138,19 @@ const sketch = (p) => {
 						}
 					}
 				} else {
-					if (potValues[i] < previousPotValues[i] - movementThreshold) {
-						movements[movement] = false;
-					} else if (potValues[i] > previousPotValues[i] + movementThreshold) {
-						movements[movement] = true;
-					} else {
-						movements[movement] = null;
-					}
+                // Get the threshold for this specific label,
+                // or use the default if it's not in our map.
+                const threshold = movementThresholds[label] || defaultMovementThreshold;
+
+                // Use the new 'threshold' variable instead of 'movementThreshold'
+                if (potValues[i] < previousPotValues[i] - threshold) {
+                    movements[movement] = false;
+                } else if (potValues[i] > previousPotValues[i] + threshold) {
+                    movements[movement] = true;
+                } else {
+                    movements[movement] = null;
+                }
+                // --- End Modification 2 ---
 				}
 			}
 
