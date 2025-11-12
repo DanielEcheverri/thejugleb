@@ -73,6 +73,9 @@ h1 {
 	display: flex;
     align-items: center;     /* Vertically centers the content */
     justify-content: center; /* Horizontally centers the content */
+	text-align: center;      /* For multi-line text */
+    padding: 0 5vw;          /* Adds 5% viewport width padding on left/right */
+    box-sizing: border-box;  /* Includes padding in the 100vw width */
 	transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth transitions */
 }
 
