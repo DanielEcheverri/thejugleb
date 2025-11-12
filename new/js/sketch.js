@@ -94,9 +94,9 @@ const sketch = (p) => {
 		let movements = {};
         // Example: Head is more sensitive
         const movementThresholds = {
-        "LEFT ARM": 25,
-        "RIGHT ARM": 25,
-        "HEAD": 15,   
+        "LEFT ARM": 50,
+        "RIGHT ARM": 50,
+        "HEAD": 45,   
         "LEFT LEG": 30,    
         "RIGHT LEG": 30
         };
