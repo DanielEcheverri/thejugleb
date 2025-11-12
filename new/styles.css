@@ -70,8 +70,9 @@ h1 {
 	opacity: 0; /* Initially hidden */
 	visibility: hidden; /* Prevent interactions */
 	z-index: 9999; /* Ensure it appears above other content */
-	text-align: center; /* Center align the text */
-	padding-top: 0vh; /* Vertical padding to center the text */
+	display: flex;
+    align-items: center;     /* Vertically centers the content */
+    justify-content: center; /* Horizontally centers the content */
 	transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth transitions */
 }
 
