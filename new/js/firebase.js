@@ -206,7 +206,7 @@ function toggleListening() {
                 `;
 				const hearingIcon = document.querySelector('.hearing-icon');
 				if (hearingIcon) {
-					hearingIcon.style.color = toggleState ? '#BF4E24' : '#164010';
+					hearingIcon.style.color = toggleState ? '#ffffffff' : '#ffffffff';
 				}
 			}
 			displayText("Listening as " + charName + "."); // from main.js
