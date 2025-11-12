@@ -85,7 +85,7 @@
 	"street_Sound": { "src": "audio/environment/street.mp3" },
 	"fairy_Sound": { "src": "audio/environment/fairy.mp3" },
 	"meow_Sound": { "src": "audio/environment/meow.mp3" },
-	"Hachi_Sound": { "src": "audio/hachi/talking2.mp3" },
-	"Buro_Sound": { "src": "audio/male/GIFTGIVER_TADAM7.mp3" },
+	"Bageera_Sound": { "src": "audio/hachi/talking2.mp3" },
+	"Baloo_Sound": { "src": "audio/male/GIFTGIVER_TADAM7.mp3" },
 	"tramdepart_Sound": { "src": "audio/environment/tramdepart.mp3" }
 }
