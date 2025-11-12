@@ -17,10 +17,10 @@ async function connectToDevice() {
 				console.log("Loading settings for Hachi_BT");
 				interactionMode = "_int";
 				labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
-				moveSource = 'hachi_moves.json';
-				movePatterns = 'hachi_patterns.json';
-				sentenceSource = 'hachi_sentences.json';
-				tagSource = 'tags.json';
+				moveSource = 'data/hachi_moves.json';
+				movePatterns = 'data/hachi_patterns.json';
+				sentenceSource = 'data/hachi_sentences.json';
+				tagSource = 'data/tags.json';
 				initializeSounds(); // from audio.js
 				document.getElementById("hachiCheckbox").click();
 				characterName = "Bageera";
@@ -30,10 +30,10 @@ async function connectToDevice() {
 				console.log("Loading settings for Avatar_BT");
 				interactionMode = "_int";
 				labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
-				moveSource = 'avatar_moves.json';
-				movePatterns = 'avatar_patterns.json';
-				sentenceSource = 'avatar_sentences.json';
-				tagSource = 'tags.json';
+				moveSource = 'data/avatar_moves.json';
+				movePatterns = 'data/avatar_patterns.json';
+				sentenceSource = 'data/avatar_sentences.json';
+				tagSource = 'data/tags.json';
 				initializeSounds(); // from audio.js
 				characterName = "Baloo";
 				window[characterName + "_Sound"].play();
