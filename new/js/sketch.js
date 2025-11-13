@@ -137,8 +137,7 @@ const sketch = (p) => {
 						}
 					}
 				} else {
-                // Get the threshold for this specific label,
-                // or use the default if it's not in our map.
+                // Get the threshold for this specific label, or use the default if it's not in our map.
                 const threshold = movementThresholds[label] || defaultMovementThreshold;
 
                 // Use the new 'threshold' variable instead of 'movementThreshold'
@@ -149,7 +148,6 @@ const sketch = (p) => {
                 } else {
                     movements[movement] = null;
                 }
-                // --- End Modification 2 ---
 				}
 			}
 
