@@ -93,11 +93,11 @@ const sketch = (p) => {
 		let movements = {};
         // Different sensitivites for different parts of the puppet
         const movementThresholds = {
-        "LEFT ARM": 50,
-        "RIGHT ARM": 50,
-        "HEAD": 45,   
-        "LEFT LEG": 30,    
-        "RIGHT LEG": 30
+            "LEFT ARM": 50,
+            "RIGHT ARM": 50,
+            "HEAD": 45,   
+            "LEFT LEG": 30,    
+            "RIGHT LEG": 30
         };
         const defaultMovementThreshold = 25;
 		//const movementThreshold = 25;
