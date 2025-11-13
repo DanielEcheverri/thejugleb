@@ -90,9 +90,8 @@ const sketch = (p) => {
 	}
 
 	function handleMovement() {
-		const DEBUG = true;
 		let movements = {};
-        // Example: Head is more sensitive
+        // Different sensitivites for different parts of the puppet
         const movementThresholds = {
         "LEFT ARM": 50,
         "RIGHT ARM": 50,
@@ -180,7 +179,6 @@ const sketch = (p) => {
 							}
 						}, RELEASE_PERSISTENCE_MS);
 						digitalReleaseTimers.set(key, timerId);
-						if (DEBUG) console.log(`Scheduled release timer for ${key} (${RELEASE_PERSISTENCE_MS}ms)`);
 					}
 				} else {
 					merged[key] = val;
