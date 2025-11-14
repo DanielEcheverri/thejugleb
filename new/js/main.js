@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	document.getElementById('connectButton').addEventListener('click', () => {
 		connecting_Sound.play();
-		// The original code had a strange displayText call. I'm calling connectToDevice directly.
-		// displayText(String(document.getElementById("connectButton").lastChild.textContent.trim()));
 		connectToDevice(); // from bluetooth.js
 	});
 
