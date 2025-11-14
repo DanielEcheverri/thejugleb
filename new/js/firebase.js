@@ -240,19 +240,24 @@ function startApp() {
             hasRun = true;
         }
     }, 200);
-
-    // This listener setup will also wait until after sign-in
-    document.addEventListener('DOMContentLoaded', function () {
-        var listenHachi = document.getElementById("hachiCheckbox");
+    
+    var listenHachi = document.getElementById("hachiCheckbox");
+    if (listenHachi) {
         listenHachi.addEventListener('click', function () {
             toggleDeviceName2();
         });
+    } else {
+        console.error("Could not find element 'hachiCheckbox'");
+    }
 
-        var listenCheckbox = document.getElementById("toggleSwitch");
+    var listenCheckbox = document.getElementById("toggleSwitch");
+    if (listenCheckbox) {
         listenCheckbox.addEventListener('click', function () {
             toggleListening();
         });
-    });
+    } else {
+        console.error("Could not find element 'toggleSwitch'");
+    }
 }
 
 // --- Authentication ---
