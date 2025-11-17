@@ -70,8 +70,12 @@ h1 {
 	opacity: 0; /* Initially hidden */
 	visibility: hidden; /* Prevent interactions */
 	z-index: 9999; /* Ensure it appears above other content */
-	text-align: center; /* Center align the text */
-	padding-top: 0vh; /* Vertical padding to center the text */
+	display: flex;
+    align-items: center;     /* Vertically centers the content */
+    justify-content: center; /* Horizontally centers the content */
+	text-align: center;      /* For multi-line text */
+    padding: 0 5vw;          /* Adds 5% viewport width padding on left/right */
+    box-sizing: border-box;  /* Includes padding in the 100vw width */
 	transition: opacity 0.5s ease, visibility 0.5s ease; /* Smooth transitions */
 }
 
@@ -189,7 +193,7 @@ h1 {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: #0082fc;
+	background-color: #164010;
 	transition: 0.4s;
 	border-radius: 34px;
 }
@@ -207,7 +211,7 @@ h1 {
 }
 
 input:checked + .slider {
-	background-color: #4caf50;
+	background-color: #BF4E24;
 }
 
 input:checked + .slider:before {
@@ -306,4 +310,8 @@ input:checked + .slider:before {
     --bg-color-8: rgba(0, 0, 0, 0.90);  /* 75% black (A=230/255 ≈ 0.90) */
     --bg-color-9: rgba(0, 0, 0, 0.78);  /* 90% black (A=200/255 ≈ 0.78) */
     --bg-color-10: rgba(0, 0, 0, 0.50); /* 60% black (A=128/255 ≈ 0.50) */
+}
+
+.hidden {
+	display: none !important;
 }
