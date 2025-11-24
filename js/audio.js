@@ -92,8 +92,6 @@ function speakMessage(fullMessage) {
 
 async function speakMessage_azure(fullMessage) {
     
-    // Removed the escapeXml helper function
-    
     const transliteratedMessage = transliterate(fullMessage);
     console.log("Transliterated: " + transliteratedMessage);
     
@@ -118,9 +116,6 @@ async function speakMessage_azure(fullMessage) {
     let ssmlContent = "";
     
     for (let i = 0; i < messageParts.length; i++) {
-        // NOTE: Text is inserted directly without XML escaping. 
-        // Ensure that the original message does not contain characters 
-        // like <, >, or & that will break the SSML structure.
         const text = messageParts[i].trim(); 
         if (text === "") continue; 
 
@@ -136,12 +131,9 @@ async function speakMessage_azure(fullMessage) {
         `;
     }
 
-const ssml = `
-<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>${ssmlContent.trim()}
-</speak>`;
-
-    // 🛑 DEBUGGING STEP: Log the SSML payload
-    console.log("Generated SSML (Check this for syntax errors):", ssml);
+	const ssml = `
+	<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>${ssmlContent.trim()}
+	</speak>`;
 
     try {
         const headers = {
@@ -156,8 +148,6 @@ const ssml = `
                 try {
                     const response = await fetch(url, options);
                     if (response.ok) return response;
-                    // If response is not OK (e.g., 400), throw an error immediately
-                    // to show the status and message.
                     throw new Error(`HTTP Error Status: ${response.status} - ${response.statusText}`);
                 } catch (error) {
                     console.log(`Attempt ${attempt} encountered an error: ${error.message}`);
@@ -169,7 +159,6 @@ const ssml = `
 
         const response = await fetchWithRetry(endpoint, { method: "POST", headers: headers, body: ssml });
         
-        // ... (The rest of your Howler.js and playback logic)
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
 
