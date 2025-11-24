@@ -136,11 +136,9 @@ async function speakMessage_azure(fullMessage) {
         `;
     }
 
-    const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
-            ${ssmlContent}
-        </speak>
-    `;
+const ssml = `
+<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>${ssmlContent.trim()}
+</speak>`;
 
     // 🛑 DEBUGGING STEP: Log the SSML payload
     console.log("Generated SSML (Check this for syntax errors):", ssml);
