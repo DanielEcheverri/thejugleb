@@ -61,7 +61,6 @@ function hideLoadingScreen() {
 	loadingScreen.classList.add('hidden');
 }
 
-
 // --- Text-to-Speech (TTS) ---
 
 const transliterationMap = {
