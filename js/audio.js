@@ -105,7 +105,7 @@ async function speakMessage_azure(fullMessage) {
 	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
 	const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
 	//const voiceName = "en-GB-SoniaNeural";
-	const voiceName = "en-IN-KunalNeural";
+	//const voiceName = "en-IN-KunalNeural";
 	//const outputFormat = "audio-24khz-160kbitrate-mono-mp3";
 	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
