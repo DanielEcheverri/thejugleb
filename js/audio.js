@@ -91,56 +91,31 @@ function speakMessage(fullMessage) {
 }
 
 async function speakMessage_azure(fullMessage) {
-const transliteratedMessage = transliterate(fullMessage);
-    console.log("Transliterated: " + transliteratedMessage);
-    
-    if (transliteratedMessage === lastSpokenMessage) {
-        console.log("Message already spoken.");
-        return;
-    }
-    if (transliteratedMessage.trim() === "") {
-        console.log("Empty text, message ignored.");
-        return;
-    }
+	const transliteratedMessage = transliterate(fullMessage);
+	console.log("Transliterated:"+transliteratedMessage);
+	if (transliteratedMessage === lastSpokenMessage) {
+		console.log("Message already spoken.");
+		return;
+	}
+	if (transliteratedMessage === "") {
+		console.log("Empty text, message ignored.");
+		return;
+	}
 
-    const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
-    // NOTE: Subscription key should be loaded securely, not hardcoded.
-    const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
-    const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
-
-    // Define the two voices for alternating speech
-    const voiceSonia = "en-GB-SoniaNeural"; // Voice 1 (Starts at index 0)
-    const voiceKunal = "en-IN-KunalNeural"; // Voice 2
-    
-    // Split the message into all segments based on the separator
-    const messageParts = transliteratedMessage.split('|VOICESWITCH|');
-    
-    let ssmlContent = "";
-    
-    // 💡 Dynamic SSML Construction Loop
-    for (let i = 0; i < messageParts.length; i++) {
-        const text = messageParts[i].trim();
-        if (text === "") continue; 
-
-        // Determine the voice for the current segment:
-        // Index 0, 2, 4... (even) uses Sonia (Voice 1)
-        // Index 1, 3, 5... (odd) uses Kunal (Voice 2)
-        const voiceName = (i % 2 === 0) ? voiceSonia : voiceKunal;
-        
-        // Add the segment to the SSML content
-        ssmlContent += `
-            <voice name='${voiceName}'>
-                <prosody volume="x-loud">
-                    ${text}
-                </prosody>
-            </voice>
-            <break time="500ms"/>
-        `;
-    }
+	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
+	const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
+	//const voiceName = "en-GB-SoniaNeural";
+	const voiceName = "en-IN-KunalNeural";
+	//const outputFormat = "audio-24khz-160kbitrate-mono-mp3";
+	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
 	const ssml = `
         <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
-            ${ssmlContent}
+            <voice name='${voiceName}'>
+            <prosody volume="x-loud">
+                ${transliteratedMessage}
+                </prosody>
+            </voice>
         </speak>
     `;
 
