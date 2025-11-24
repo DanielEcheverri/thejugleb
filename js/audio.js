@@ -221,8 +221,6 @@ async function speakMessage_coqui(fullMessage) {
 
 	// Use a global search (g flag) to remove all occurrences of |VS|
     const cleanedMessage = transliteratedMessage.replace(/\|VS\|/g, ''); 
-    console.log("Cleaned message (removed |VS|): " + cleanedMessage);
-
 	const encodedMessage = encodeURIComponent(cleanedMessage);
 	const url = `https://s4us-tts.fi.muni.cz:5002/api/tts?text=${encodedMessage}&speaker_id=&style_wav=&language=en`;
 

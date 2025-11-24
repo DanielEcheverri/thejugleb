@@ -243,11 +243,14 @@ function updateDisplay(displayMessage) {
 			console.error("messageDisplayDiv element not found");
 			return;
 		}
+
+		const cleanedDisplayMessage = displayMessage.replace(/\|VS\|/g, '').trim();
+		
 		if (timeoutID) {
 			clearTimeout(timeoutID);
 		}
-		if (displayMessage.trim() !== "") {
-			messageDisplayDiv.textContent = displayMessage;
+		if (cleanedDisplayMessage.trim() !== "") {
+			messageDisplayDiv.textContent = cleanedDisplayMessage;
 			messageDisplayDiv.classList.add("visible");
 		} else {
 			messageDisplayDiv.classList.remove("visible");
