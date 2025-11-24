@@ -105,8 +105,8 @@ async function speakMessage_azure(fullMessage) {
 	const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
 	const voiceName = "en-GB-SoniaNeural";
 	//const voiceName = "en-IN-KunalNeural";
-	//const outputFormat = "audio-24khz-160kbitrate-mono-mp3";
-	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
+	const outputFormat = "audio-24khz-160kbitrate-mono-mp3";
+	//const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
 	const ssml = `
         <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
