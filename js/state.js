@@ -65,7 +65,7 @@ let tagSource = 'data/tags.json';
 let checkpointsSource = 'data/points.json';
 let interactionMode = "_load";
 var noNarrative = true;
-var speakFancy = false;
+var speakFancy = true;
 
 // Tag State
 let tagID = 0;
