@@ -113,7 +113,7 @@ async function speakMessage_azure(fullMessage) {
     const voiceSonia = "en-GB-SoniaNeural";
     const voiceKunal = "en-IN-KunalNeural";
     
-    const messageParts = transliteratedMessage.split('|VOICESWITCH|');
+    const messageParts = transliteratedMessage.split('|VS|');
     
     let ssmlContent = "";
     
@@ -124,7 +124,7 @@ async function speakMessage_azure(fullMessage) {
         const text = messageParts[i].trim(); 
         if (text === "") continue; 
 
-        const voiceName = (i % 2 === 0) ? voiceSonia : voiceKunal;
+        const voiceName = (i % 2 === 0) ? voiceKunal : voiceSonia;
         
         ssmlContent += `
             <voice name='${voiceName}'>
