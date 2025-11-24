@@ -20,7 +20,7 @@ const database = getDatabase(app);
 // Initialize Firebase Auth
 const auth = getAuth(app);
 
-// --- Store previous values (no change here) ---
+// --- Store previous values ---
 let prevLatitude = null;
 let prevLongitude = null;
 let prevCurrentCheckpoint = null;
@@ -34,7 +34,7 @@ let prevPartMoving = null;
 let prevDirectionMoving = null;
 let prevBlueToothStatus = null;
 
-// --- Database Functions (no change here) ---
+// --- Database Functions ---
 function writeToDatabase() {
     if (latitude && longitude && currentCheckpoint) { // globals from state.js
         if (latitude !== prevLatitude ||
@@ -155,7 +155,7 @@ function readFromDatabase(deviceName) {
     });
 }
 
-// --- UI Functions (no change here) ---
+// --- UI Functions ---
 function toggleDeviceName2() {
     var checkbox = document.getElementById("hachiCheckbox");
     const databaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
@@ -224,7 +224,6 @@ function toggleListening() {
 
 // --- Application Start ---
 
-// We create a function to start the app logic
 function startApp() {
     console.log("Firebase user signed in anonymously.");
     
