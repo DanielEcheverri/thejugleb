@@ -91,7 +91,7 @@ function speakMessage(fullMessage) {
 }
 
 async function speakMessage_azure(fullMessage) {
-    const transliteratedMessage = transliterate(fullMessage);
+const transliteratedMessage = transliterate(fullMessage);
     console.log("Transliterated: " + transliteratedMessage);
     
     if (transliteratedMessage === lastSpokenMessage) {
@@ -138,86 +138,85 @@ async function speakMessage_azure(fullMessage) {
         `;
     }
 
-    // Final SSML structure wrapped around the dynamic content
-    const ssml = `
+	const ssml = `
         <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
             ${ssmlContent}
         </speak>
     `;
 
-    try {
-        const headers = {
-            "Ocp-Apim-Subscription-Key": subscriptionKey,
-            "Content-Type": "application/ssml+xml",
-            "X-Microsoft-OutputFormat": outputFormat,
-            "User-Agent": "Azure-TTS-JS",
-        };
+	try {
+		const headers = {
+			"Ocp-Apim-Subscription-Key": subscriptionKey,
+			"Content-Type": "application/ssml+xml",
+			"X-Microsoft-OutputFormat": outputFormat,
+			"User-Agent": "Azure-TTS-JS",
+		};
 
-        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
-            for (let attempt = 1; attempt <= retries; attempt++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.ok) return response;
-                    console.log(`Attempt ${attempt} failed. Retrying in ${delay / 1000} seconds...`);
-                } catch (error) {
-                    console.log(`Attempt ${attempt} encountered an error: ${error.message}`);
-                }
-                await new Promise((resolve) => setTimeout(resolve, delay));
-            }
-            throw new Error(`Failed to fetch after ${retries} attempts`);
-        }
+		async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+			for (let attempt = 1; attempt <= retries; attempt++) {
+				try {
+					const response = await fetch(url, options);
+					if (response.ok) return response;
+					console.log(`Attempt ${attempt} failed. Retrying in ${delay / 1000} seconds...`);
+				} catch (error) {
+					console.log(`Attempt ${attempt} encountered an error: ${error.message}`);
+				}
+				await new Promise((resolve) => setTimeout(resolve, delay));
+			}
+			throw new Error(`Failed to fetch after ${retries} attempts`);
+		}
 
-        const response = await fetchWithRetry(endpoint, { method: "POST", headers: headers, body: ssml });
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
+		const response = await fetchWithRetry(endpoint, { method: "POST", headers: headers, body: ssml });
+		const audioBlob = await response.blob();
+		const audioUrl = URL.createObjectURL(audioBlob);
 
-        if (currentSound) {
-            console.log("Stopping current text");
-            currentSound.stop();
-            currentSound.unload();
-        }
+		if (currentSound) {
+			console.log("Stopping current text");
+			currentSound.stop();
+			currentSound.unload();
+		}
 
-        const sound = new Howl({
-            src: [audioUrl],
-            format: ["mp3"],
-            html5: true,
-            onplay: () => {
-                console.log(deviceName + " currently speaking");
-                speaking = true;
-                messageID = messageID_tmp;
-                oldMessageID = messageID;
-                lastSpokenMessage = transliteratedMessage;
-                playAction = true;
-            },
-            onend: () => {
-                if (playAction) {
-                    setTimeout(() => {
-                        window.notification_Sound.play();
-                        console.log(deviceName + " end speaking");
-                        speaking = false;
-                        sound.unload();
-                        playAction = false;
-                    }, 500);
-                }
-                currentSound = null;
-            },
-            onloaderror: (id, err) => {
-                console.error("Audio playback error:", err);
-                speaking = false;
-                sound.unload();
-                currentSound = null;
-            },
-        });
+		const sound = new Howl({
+			src: [audioUrl],
+			format: ["mp3"],
+			html5: true,
+			onplay: () => {
+				console.log(deviceName + " currently speaking");
+				speaking = true;
+				messageID = messageID_tmp;
+				oldMessageID = messageID;
+				lastSpokenMessage = transliteratedMessage;
+				playAction = true;
+			},
+			onend: () => {
+				if (playAction) {
+					setTimeout(() => {
+						window.notification_Sound.play();
+						console.log(deviceName + " end speaking");
+						speaking = false;
+						sound.unload();
+						playAction = false;
+					}, 500);
+				}
+				currentSound = null;
+			},
+			onloaderror: (id, err) => {
+				console.error("Audio playback error:", err);
+				speaking = false;
+				sound.unload();
+				currentSound = null;
+			},
+		});
 
-        currentSound = sound;
-        sound.play();
-        if (Howler.ctx.state === "suspended") {
-            Howler.ctx.resume();
-        }
-    } catch (error) {
-        speaking = false;
-        console.error("Error with TTS API:", error);
-    }
+		currentSound = sound;
+		sound.play();
+		if (Howler.ctx.state === "suspended") {
+			Howler.ctx.resume();
+		}
+	} catch (error) {
+		speaking = false;
+		console.error("Error with TTS API:", error);
+	}
 }
 
 async function speakMessage_coqui(fullMessage) {
