@@ -123,7 +123,7 @@ async function speakMessage_azure(fullMessage) {
                 <prosody volume="x-loud">
                     ${text}
                 </prosody>
-			<break time="500ms"/>
+			<break time="300ms"/>
             </voice>
         `;
     }
