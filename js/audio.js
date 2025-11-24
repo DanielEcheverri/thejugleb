@@ -91,107 +91,137 @@ function speakMessage(fullMessage) {
 }
 
 async function speakMessage_azure(fullMessage) {
-	const transliteratedMessage = transliterate(fullMessage);
-	console.log("Transliterated:"+transliteratedMessage);
-	if (transliteratedMessage === lastSpokenMessage) {
-		console.log("Message already spoken.");
-		return;
-	}
-	if (transliteratedMessage === "") {
-		console.log("Empty text, message ignored.");
-		return;
-	}
+    
+    // Removed the escapeXml helper function
+    
+    const transliteratedMessage = transliterate(fullMessage);
+    console.log("Transliterated: " + transliteratedMessage);
+    
+    if (transliteratedMessage === lastSpokenMessage) {
+        console.log("Message already spoken.");
+        return;
+    }
+    if (transliteratedMessage.trim() === "") {
+        console.log("Empty text, message ignored.");
+        return;
+    }
 
-	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
-	const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
-	//const voiceName = "en-GB-SoniaNeural";
-	const voiceName = "en-IN-KunalNeural";
-	//const outputFormat = "audio-24khz-160kbitrate-mono-mp3";
-	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
+    const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
+    const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
+    const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
-	const ssml = `
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
+    const voiceSonia = "en-GB-SoniaNeural";
+    const voiceKunal = "en-IN-KunalNeural";
+    
+    const messageParts = transliteratedMessage.split('|VOICESWITCH|');
+    
+    let ssmlContent = "";
+    
+    for (let i = 0; i < messageParts.length; i++) {
+        // NOTE: Text is inserted directly without XML escaping. 
+        // Ensure that the original message does not contain characters 
+        // like <, >, or & that will break the SSML structure.
+        const text = messageParts[i].trim(); 
+        if (text === "") continue; 
+
+        const voiceName = (i % 2 === 0) ? voiceSonia : voiceKunal;
+        
+        ssmlContent += `
             <voice name='${voiceName}'>
-            <prosody volume="x-loud">
-                ${transliteratedMessage}
+                <prosody volume="x-loud">
+                    ${text}
                 </prosody>
             </voice>
+            <break time="500ms"/>
+        `;
+    }
+
+    const ssml = `
+        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-GB'>
+            ${ssmlContent}
         </speak>
     `;
 
-	try {
-		const headers = {
-			"Ocp-Apim-Subscription-Key": subscriptionKey,
-			"Content-Type": "application/ssml+xml",
-			"X-Microsoft-OutputFormat": outputFormat,
-			"User-Agent": "Azure-TTS-JS",
-		};
+    // 🛑 DEBUGGING STEP: Log the SSML payload
+    console.log("Generated SSML (Check this for syntax errors):", ssml);
 
-		async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
-			for (let attempt = 1; attempt <= retries; attempt++) {
-				try {
-					const response = await fetch(url, options);
-					if (response.ok) return response;
-					console.log(`Attempt ${attempt} failed. Retrying in ${delay / 1000} seconds...`);
-				} catch (error) {
-					console.log(`Attempt ${attempt} encountered an error: ${error.message}`);
-				}
-				await new Promise((resolve) => setTimeout(resolve, delay));
-			}
-			throw new Error(`Failed to fetch after ${retries} attempts`);
-		}
+    try {
+        const headers = {
+            "Ocp-Apim-Subscription-Key": subscriptionKey,
+            "Content-Type": "application/ssml+xml",
+            "X-Microsoft-OutputFormat": outputFormat,
+            "User-Agent": "Azure-TTS-JS",
+        };
 
-		const response = await fetchWithRetry(endpoint, { method: "POST", headers: headers, body: ssml });
-		const audioBlob = await response.blob();
-		const audioUrl = URL.createObjectURL(audioBlob);
+        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return response;
+                    // If response is not OK (e.g., 400), throw an error immediately
+                    // to show the status and message.
+                    throw new Error(`HTTP Error Status: ${response.status} - ${response.statusText}`);
+                } catch (error) {
+                    console.log(`Attempt ${attempt} encountered an error: ${error.message}`);
+                }
+                await new Promise((resolve) => setTimeout(resolve, delay));
+            }
+            throw new Error(`Failed to fetch after ${retries} attempts`);
+        }
 
-		if (currentSound) {
-			console.log("Stopping current text");
-			currentSound.stop();
-			currentSound.unload();
-		}
+        const response = await fetchWithRetry(endpoint, { method: "POST", headers: headers, body: ssml });
+        
+        // ... (The rest of your Howler.js and playback logic)
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
 
-		const sound = new Howl({
-			src: [audioUrl],
-			format: ["mp3"],
-			html5: true,
-			onplay: () => {
-				console.log(deviceName + " currently speaking");
-				speaking = true;
-				messageID = messageID_tmp;
-				oldMessageID = messageID;
-				lastSpokenMessage = transliteratedMessage;
-				playAction = true;
-			},
-			onend: () => {
-				if (playAction) {
-					setTimeout(() => {
-						window.notification_Sound.play();
-						console.log(deviceName + " end speaking");
-						speaking = false;
-						sound.unload();
-						playAction = false;
-					}, 500);
-				}
-				currentSound = null;
-			},
-			onloaderror: (id, err) => {
-				console.error("Audio playback error:", err);
-				speaking = false;
-				sound.unload();
-				currentSound = null;
-			},
-		});
+        if (currentSound) {
+            console.log("Stopping current text");
+            currentSound.stop();
+            currentSound.unload();
+        }
 
-		currentSound = sound;
-		sound.play();
-		if (Howler.ctx.state === "suspended") {
-			Howler.ctx.resume();
-		}
-	} catch (error) {
-		speaking = false;
-		console.error("Error with TTS API:", error);
-	}
+        const sound = new Howl({
+            src: [audioUrl],
+            format: ["mp3"],
+            html5: true,
+            onplay: () => {
+                console.log(deviceName + " currently speaking");
+                speaking = true;
+                messageID = messageID_tmp;
+                oldMessageID = messageID;
+                lastSpokenMessage = transliteratedMessage;
+                playAction = true;
+            },
+            onend: () => {
+                if (playAction) {
+                    setTimeout(() => {
+                        window.notification_Sound.play();
+                        console.log(deviceName + " end speaking");
+                        speaking = false;
+                        sound.unload();
+                        playAction = false;
+                    }, 500);
+                }
+                currentSound = null;
+            },
+            onloaderror: (id, err) => {
+                console.error("Audio playback error:", err);
+                speaking = false;
+                sound.unload();
+                currentSound = null;
+            },
+        });
+
+        currentSound = sound;
+        sound.play();
+        if (Howler.ctx.state === "suspended") {
+            Howler.ctx.resume();
+        }
+    } catch (error) {
+        speaking = false;
+        console.error("Error with TTS API:", error);
+    }
 }
 
 async function speakMessage_coqui(fullMessage) {
