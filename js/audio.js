@@ -92,7 +92,7 @@ function speakMessage(fullMessage) {
 
 async function speakMessage_azure(fullMessage) {
 	const transliteratedMessage = transliterate(fullMessage);
-	console.log(transliteratedMessage);
+	console.log("Transliterated: "+transliteratedMessage);
 	if (transliteratedMessage === lastSpokenMessage) {
 		console.log("Message already spoken.");
 		return;
