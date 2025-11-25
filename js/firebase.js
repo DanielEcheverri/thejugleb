@@ -113,9 +113,10 @@ function readFromDatabase(deviceName) {
     const myPassage = (deviceName === 'hachi_BT') ? 'hachi_passage' : 'avatar_passage';
     const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
-    const myAzure = (deviceName === 'hachi_BT') ? 'AzureTTs' : 'AzureTTS';
+    const myAzure = (deviceName === 'hachi_BT') ? 'hachi_tts' : 'avatar_tts';
 
-    onValue(ref(database, otherDatabaseName), (snapshot) => {
+    //this looks at the data of opposite character to measure distance
+    onValue(ref(database, otherDatabaseName), (snapshot) => { 
         const otherData = snapshot.val();
         if (otherData) {
             other_latitude = otherData[otherLatitudeVar];
