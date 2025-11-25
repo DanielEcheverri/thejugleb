@@ -1,9 +1,10 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'
 import { getDatabase, ref, set, onValue, off, update } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js'
-// Import the auth functions you need
+
+// Import the auth functions
 import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'
 
-// Your Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDuRvVnlDRGlQoDcWg6SlXR9lr4Xlz1PX4",
     authDomain: "thejungle-33676.firebaseapp.com",
@@ -17,6 +18,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
 // Initialize Firebase Auth
 const auth = getAuth(app);
 
@@ -115,7 +117,7 @@ function readFromDatabase(deviceName) {
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
     const myAzure = (deviceName === 'hachi_BT') ? 'hachi_tts' : 'avatar_tts';
 
-    //this looks at the data of opposite character to measure distance
+    //This looks at the data of opposite character to measure distance
     onValue(ref(database, otherDatabaseName), (snapshot) => { 
         const otherData = snapshot.val();
         if (otherData) {
