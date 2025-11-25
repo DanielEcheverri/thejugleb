@@ -230,7 +230,7 @@ function startApp() {
     console.log("Firebase user signed in anonymously.");
     
     let hasRun = false;
-    readFromDatabase(deviceName);
+    readFromDatabase(avatar_BT);
     setInterval(() => {
         if (listenClient === false) { // global
             writeToDatabase();
@@ -241,14 +241,14 @@ function startApp() {
         }
     }, 200);
     
-    var listenHachi = document.getElementById("hachiCheckbox");
-    if (listenHachi) {
-        listenHachi.addEventListener('click', function () {
-            toggleDeviceName2();
-        });
-    } else {
-        console.error("Could not find element 'hachiCheckbox'");
-    }
+    // var listenHachi = document.getElementById("hachiCheckbox");
+    // if (listenHachi) {
+    //     listenHachi.addEventListener('click', function () {
+    //         toggleDeviceName2();
+    //     });
+    // } else {
+    //     console.error("Could not find element 'hachiCheckbox'");
+    // }
 
     var listenCheckbox = document.getElementById("toggleSwitch");
     if (listenCheckbox) {
