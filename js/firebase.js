@@ -185,7 +185,6 @@ function toggleListening() {
             interactionMode = "_lst"; // global
             topSection.style.display = 'none';
             document.getElementById('currentLocation').style.display = 'none';
-            //document.getElementById('hachiCheckboxContainer').style.display = 'none';
 
             const avatarCanvas = document.getElementById('avatarCanvas');
             if (avatarCanvas) {
