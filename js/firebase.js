@@ -159,18 +159,6 @@ function readFromDatabase(deviceName) {
 }
 
 // --- UI Functions ---
-// function toggleDeviceName2() {
-//     var checkbox = document.getElementById("hachiCheckbox");
-//     const databaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
-//     if (checkbox.checked) {
-//         off(ref(database, databaseName));
-//         readFromDatabase(deviceName);
-//     } else {
-//         off(ref(database, databaseName));
-//         readFromDatabase(deviceName);
-//     }
-// }
-
 let hideTimeout;
 
 function toggleListening() {
@@ -182,6 +170,8 @@ function toggleListening() {
     let toggleState = toggleSwitch.checked;
     
     toggleSwitch.addEventListener('change', () => {
+        off(ref(database, databaseName));
+        readFromDatabase(deviceName);
         toggleState = toggleSwitch.checked;
     });
 
@@ -192,8 +182,8 @@ function toggleListening() {
     hideTimeout = setTimeout(() => {
         const topSection = document.querySelector('.top-section');
         if (topSection) {
-            off(ref(database, databaseName));
-            readFromDatabase(deviceName);
+            //off(ref(database, databaseName));
+            //readFromDatabase(deviceName);
             interactionMode = "_lst"; // global
             topSection.style.display = 'none';
             document.getElementById('currentLocation').style.display = 'none';
@@ -241,15 +231,6 @@ function startApp() {
         }
     }, 200);
     
-    // var listenHachi = document.getElementById("hachiCheckbox");
-    // if (listenHachi) {
-    //     listenHachi.addEventListener('click', function () {
-    //         toggleDeviceName2();
-    //     });
-    // } else {
-    //     console.error("Could not find element 'hachiCheckbox'");
-    // }
-
     var listenCheckbox = document.getElementById("toggleSwitch");
     if (listenCheckbox) {
         listenCheckbox.addEventListener('click', function () {
