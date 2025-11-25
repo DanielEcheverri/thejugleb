@@ -15,6 +15,11 @@ async function initializeAzureKey() {
     }
 }
 
+// Call this function once on script load, before any TTS calls are attempted.
+// You might want to call it within your application's initialization sequence
+// (e.g., in main.js or after Firebase signs in).
+initializeAzureKey();
+
 // --- Sound Definitions ---
 connecting_Sound = new Howl({
 	src: ['audio/ui_loading.mp3'],

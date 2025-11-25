@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 	console.log("Initializing resources.");
-	initializeAzureKey();
 	initializeSounds(); // from audio.js
 	checkVariables();
 	storeUserIP().then(() => {
