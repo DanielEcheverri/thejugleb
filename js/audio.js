@@ -1,5 +1,25 @@
 // js/audio.js
 
+import { getAzureApiKey } from './firebase.js';
+
+// Global variable to store the key after retrieval
+let azureSubscriptionKey = null;
+
+// Function to load the key once at the start
+async function initializeAzureKey() {
+    azureSubscriptionKey = await getAzureApiKey();
+    if (azureSubscriptionKey) {
+        console.log("Azure TTS key successfully loaded for use.");
+    } else {
+        console.error("CRITICAL: Azure TTS key not loaded. TTS will fail.");
+    }
+}
+
+// Call this function once on script load, before any TTS calls are attempted.
+// You might want to call it within your application's initialization sequence
+// (e.g., in main.js or after Firebase signs in).
+initializeAzureKey();
+
 // --- Sound Definitions ---
 connecting_Sound = new Howl({
 	src: ['audio/ui_loading.mp3'],
