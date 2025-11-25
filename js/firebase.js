@@ -182,12 +182,10 @@ function toggleListening() {
     hideTimeout = setTimeout(() => {
         const topSection = document.querySelector('.top-section');
         if (topSection) {
-            //off(ref(database, databaseName));
-            //readFromDatabase(deviceName);
             interactionMode = "_lst"; // global
             topSection.style.display = 'none';
             document.getElementById('currentLocation').style.display = 'none';
-            document.getElementById('hachiCheckboxContainer').style.display = 'none';
+            //document.getElementById('hachiCheckboxContainer').style.display = 'none';
 
             const avatarCanvas = document.getElementById('avatarCanvas');
             if (avatarCanvas) {
