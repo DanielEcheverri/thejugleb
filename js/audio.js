@@ -97,6 +97,10 @@ async function speakMessage_azure(fullMessage) {
         return;
     }
 
+	if (transliteratedMessage.trim().length === 0) {
+        return;
+    }
+
 	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
     const subscriptionKey = azureKey;
 
@@ -211,10 +215,9 @@ async function speakMessage_coqui(fullMessage) {
 		console.log("Message already spoken.");
 		return;
 	}
-	if (transliteratedMessage === "") {
-		console.log("Empty text, message ignored.");
-		return;
-	}
+	if (transliteratedMessage.trim().length === 0) {
+        return;
+    }
 
 	// Use a global search (g flag) to remove all occurrences of |VS|
     const cleanedMessage = transliteratedMessage.replace(/\|VS\|/g, ''); 
