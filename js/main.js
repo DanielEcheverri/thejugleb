@@ -4,6 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 	console.log("Initializing resources.");
+	initializeAzureKey();
 	initializeSounds(); // from audio.js
 	checkVariables();
 	storeUserIP().then(() => {
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	generateSessionId();
 	getCurrentLocation(); // from location.js
 	redirectConsoleToDiv();
+	
 
 	// --- Attach Event Listeners ---
 	document.getElementById('hachiCheckbox').addEventListener('click', toggleDeviceName);
