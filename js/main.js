@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 
 	// --- Attach Event Listeners ---
-	document.getElementById('hachiCheckbox').addEventListener('click', toggleDeviceName);
+	//document.getElementById('hachiCheckbox').addEventListener('click', toggleDeviceName);
 
 	document.getElementById('listenButton').addEventListener('click', () => {
 		forward_Sound.play();
