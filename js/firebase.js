@@ -230,7 +230,7 @@ function startApp() {
     console.log("Firebase user signed in anonymously.");
     
     let hasRun = false;
-    
+    readFromDatabase(deviceName);
     setInterval(() => {
         if (listenClient === false) { // global
             writeToDatabase();

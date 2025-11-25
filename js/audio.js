@@ -99,7 +99,7 @@ async function speakMessage_azure(fullMessage) {
 
 	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
     //const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
-    //const subscriptionKey = azureKey;
+    const subscriptionKey = azureKey;
 
 	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
@@ -132,7 +132,7 @@ async function speakMessage_azure(fullMessage) {
 
     try {
         const headers = {
-            "Ocp-Apim-Subscription-Key": azureKey,
+            "Ocp-Apim-Subscription-Key": subscriptionKey,
             "Content-Type": "application/ssml+xml",
             "X-Microsoft-OutputFormat": outputFormat,
             "User-Agent": "Azure-TTS-JS",
