@@ -20,26 +20,6 @@ const database = getDatabase(app);
 // Initialize Firebase Auth
 const auth = getAuth(app);
 
-// For Azure NEW
-export async function getAzureApiKey() {
-    try {
-        // Use the 'get' function for a single read
-        const snapshot = await get(ref(database, 'config/AzureTTS'));
-        if (snapshot.exists()) {
-            // Assuming the key is stored as a direct string value at this path
-            const apiKey = snapshot.val();
-            console.log("Azure API Key retrieved from Firebase.");
-            return apiKey;
-        } else {
-            console.error("Firebase path /config/AzureTTS does not exist.");
-            return null;
-        }
-    } catch (error) {
-        console.error("Error fetching Azure API key from Firebase:", error);
-        return null;
-    }
-}
-
 // --- Store previous values ---
 let prevLatitude = null;
 let prevLongitude = null;
@@ -133,7 +113,7 @@ function readFromDatabase(deviceName) {
     const myPassage = (deviceName === 'hachi_BT') ? 'hachi_passage' : 'avatar_passage';
     const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
-    const myAzure = 'config/AzureTTS';
+    const myAzure = (deviceName === 'hachi_BT') ? 'AzureTTs' : 'AzureTTS';
 
     onValue(ref(database, otherDatabaseName), (snapshot) => {
         const otherData = snapshot.val();
