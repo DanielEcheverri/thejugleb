@@ -159,17 +159,17 @@ function readFromDatabase(deviceName) {
 }
 
 // --- UI Functions ---
-function toggleDeviceName2() {
-    var checkbox = document.getElementById("hachiCheckbox");
-    const databaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
-    if (checkbox.checked) {
-        off(ref(database, databaseName));
-        readFromDatabase(deviceName);
-    } else {
-        off(ref(database, databaseName));
-        readFromDatabase(deviceName);
-    }
-}
+// function toggleDeviceName2() {
+//     var checkbox = document.getElementById("hachiCheckbox");
+//     const databaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
+//     if (checkbox.checked) {
+//         off(ref(database, databaseName));
+//         readFromDatabase(deviceName);
+//     } else {
+//         off(ref(database, databaseName));
+//         readFromDatabase(deviceName);
+//     }
+// }
 
 let hideTimeout;
 
