@@ -240,14 +240,14 @@ function startApp() {
         }
     }, 200);
     
-    // var listenHachi = document.getElementById("hachiCheckbox");
-    // if (listenHachi) {
-    //     listenHachi.addEventListener('click', function () {
-    //         toggleDeviceName2();
-    //     });
-    // } else {
-    //     console.error("Could not find element 'hachiCheckbox'");
-    // }
+    var listenHachi = document.getElementById("hachiCheckbox");
+    if (listenHachi) {
+        listenHachi.addEventListener('click', function () {
+            toggleDeviceName2();
+        });
+    } else {
+        console.error("Could not find element 'hachiCheckbox'");
+    }
 
     var listenCheckbox = document.getElementById("toggleSwitch");
     if (listenCheckbox) {
