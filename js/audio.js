@@ -97,7 +97,6 @@ async function speakMessage_azure(fullMessage) {
         return;
     }
 
-    //const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
 	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
     //const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
     const subscriptionKey = azureKey;
