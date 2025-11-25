@@ -1,25 +1,5 @@
 // js/audio.js
 
-import { getAzureApiKey } from './firebase.js';
-
-// Global variable to store the key after retrieval
-let azureSubscriptionKey = null;
-
-// Function to load the key once at the start
-async function initializeAzureKey() {
-    azureSubscriptionKey = await getAzureApiKey();
-    if (azureSubscriptionKey) {
-        console.log("Azure TTS key successfully loaded for use.");
-    } else {
-        console.error("CRITICAL: Azure TTS key not loaded. TTS will fail.");
-    }
-}
-
-// Call this function once on script load, before any TTS calls are attempted.
-// You might want to call it within your application's initialization sequence
-// (e.g., in main.js or after Firebase signs in).
-initializeAzureKey();
-
 // --- Sound Definitions ---
 connecting_Sound = new Howl({
 	src: ['audio/ui_loading.mp3'],
@@ -119,8 +99,10 @@ async function speakMessage_azure(fullMessage) {
 
     //const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
 	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
-    const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
-    const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
+    //const subscriptionKey = "9PhQZhVP3ZRybebW3qaOiHU0EZc6eKmZGbP74vpuM2wqradXDdc2JQQJ99BDACPV0roXJ3w3AAAYACOGCcy5";
+    subscriptionKey = azureKey;
+
+	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
 
     const voiceSonia = "en-GB-SoniaNeural";
     const voiceKunal = "en-IN-KunalNeural";

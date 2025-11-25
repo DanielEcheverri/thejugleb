@@ -133,6 +133,7 @@ function readFromDatabase(deviceName) {
     const myPassage = (deviceName === 'hachi_BT') ? 'hachi_passage' : 'avatar_passage';
     const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
+    const myAzure = 'config/AzureTTS';
 
     onValue(ref(database, otherDatabaseName), (snapshot) => {
         const otherData = snapshot.val();
@@ -169,6 +170,7 @@ function readFromDatabase(deviceName) {
                     previousTagID_fb = tag;
                 }
             }
+            azureKey = myData[myAzure]; //global
         } else {
             console.log("No data found in the own database.");
         }
@@ -249,7 +251,6 @@ function startApp() {
     
     let hasRun = false;
     
-    // This interval will now only start AFTER successful sign-in
     setInterval(() => {
         if (listenClient === false) { // global
             writeToDatabase();

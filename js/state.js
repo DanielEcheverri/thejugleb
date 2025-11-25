@@ -40,6 +40,7 @@ var connecting_Sound;
 var bgm_Sound;
 let currentSound = null;
 let speaking = false;
+let azureKey = null;
 
 // Messaging State
 var message;
