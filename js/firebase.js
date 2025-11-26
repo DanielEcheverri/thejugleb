@@ -249,5 +249,4 @@ signInAnonymously(auth)
     })
     .catch((error) => {
         console.error("Anonymous sign-in failed:", error);
-        // Handle the error (e.g., show a message to the user)
     });
