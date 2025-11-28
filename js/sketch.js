@@ -67,6 +67,8 @@ const sketch = (p) => {
 	window.receiveDataFromSerial = (data) => {
 		let cleanData = data.trim();
 		let values = cleanData.split(",");
+		tagID = parseInt(values.pop(), 10);
+		readTag();
 		if (values.length === numPotentiometers) {
 			for (let i = 0; i < values.length; i++) {
 				potValues[i] = parseFloat(lowPassFilter(potValues[i] || parseFloat(values[i]), parseFloat(values[i])).toFixed(1));
