@@ -52,6 +52,7 @@ var oldMessageID = "";
 var messageID_tmp = "";
 var playAction = false;
 let lastSpokenMessage = '';
+var backText ="";
 
 // Session / User State
 let sessionId = '';

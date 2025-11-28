@@ -116,6 +116,8 @@ function readFromDatabase(deviceName) {
     const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
     const myAzure = (deviceName === 'hachi_BT') ? 'hachi_tts' : 'avatar_tts';
+    const myBackText = (deviceName === 'hachi_BT') ? 'hachi_backtext' : 'avatar_backtext';
+
 
     //This looks at the data of opposite character to measure distance
     onValue(ref(database, otherDatabaseName), (snapshot) => { 
@@ -152,6 +154,10 @@ function readFromDatabase(deviceName) {
                     }
                     previousTagID_fb = tag;
                 }
+            }
+            if (myBackText !== "") {
+                sendData();// from bluetooth.js
+                previousPassage = passage;
             }
             azureKey = myData[myAzure]; //global
         } else {
