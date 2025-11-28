@@ -156,8 +156,8 @@ function readFromDatabase(deviceName) {
                 }
             }
             if (myBackText !== "") {
+                backText = myData[myBackText]; // global
                 sendData();// from bluetooth.js
-                previousPassage = passage;
             }
             azureKey = myData[myAzure]; //global
         } else {
