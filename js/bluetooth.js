@@ -86,19 +86,12 @@ function receiveData(data) {
 
 async function sendData() {
     if (isConnected && characteristic) {
-        // 1. Get the value of the variable you want to send.
-        // Assuming 'backText' is a global or accessible variable in your script.
         const textToSend = window.backText; 
-        
-        // 2. Format the message with the required prefix.
         const formattedMessage = "TXT:" + textToSend;
-        
-        // 3. Convert the string to a byte array (Uint8Array) for BLE transmission.
         const encoder = new TextEncoder();
         const dataToSend = encoder.encode(formattedMessage + '\n'); // Add newline for clean termination
 
         try {
-            // 4. Send the data by writing to the characteristic.
             await characteristic.writeValue(dataToSend);
             console.log("Sent TXT command to ESP32:", formattedMessage);
         } catch (error) {
