@@ -67,9 +67,8 @@ const sketch = (p) => {
 	window.receiveDataFromSerial = (data) => {
 		let cleanData = data.trim();
 		let values = cleanData.split(",");
-		console.log("Values data: "+values);
 		tagID = parseInt(values.pop(), 10);
-		console.log("TagID: "+tagID);
+		console.log("--Tag read: "+tagID);
 		readTag();
 		if (values.length === numPotentiometers) {
 			for (let i = 0; i < values.length; i++) {
