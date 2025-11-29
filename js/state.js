@@ -53,6 +53,7 @@ var messageID_tmp = "";
 var playAction = false;
 let lastSpokenMessage = '';
 var backText ="";
+let lastBackText = "";
 
 // Session / User State
 let sessionId = '';

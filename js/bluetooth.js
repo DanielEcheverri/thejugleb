@@ -54,8 +54,6 @@ async function connectToDevice() {
 			
 			setTimeout(function () {
 				startDetectMovement = false;
-				// potValues is in sketch.js, this is tricky.
-				// We need to message the sketch.
 				if (window.resetPotValues) {
 					window.resetPotValues();
 				}
@@ -85,17 +83,29 @@ function receiveData(data) {
 }
 
 async function sendData() {
+    // 1. Check if the current message is a duplicate of the last one sent
+    if (window.backText === lastSentText) {
+        console.log("Duplicate message (" + window.backText + "). Skipping send.");
+        return; // Exit the function, preventing the write operation
+    }
+    
+    // 2. Proceed with send only if connection and data are ready
     if (isConnected && characteristic && window.backText != "") {
         const textToSend = window.backText; 
         const formattedMessage = "TXT:" + textToSend;
         const encoder = new TextEncoder();
-        const dataToSend = encoder.encode(formattedMessage + '\n'); // Add newline for clean termination
+        const dataToSend = encoder.encode(formattedMessage + '\n');
 
         try {
             await characteristic.writeValue(dataToSend);
             console.log("--Backpack message: ", formattedMessage);
+            
+            // 3. Update the tracking variable ONLY upon successful transmission
+            lastSentText = textToSend; 
+            
         } catch (error) {
             console.error("Error writing characteristic for TXT command:", error);
+            // Optionally, reset lastSentText here if the write fails
         }
     } else {
         console.warn("Cannot send data: Bluetooth device is not connected or characteristic is empty.");

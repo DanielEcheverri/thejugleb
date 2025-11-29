@@ -66,11 +66,10 @@ const sketch = (p) => {
 	// This function is exposed to the global window, called by bluetooth.js
 	window.receiveDataFromSerial = (data) => {
 		let cleanData = data.trim();
-		console.log("Clean data: "+cleanData);
 		let values = cleanData.split(",");
 		console.log("Values data: "+values);
 		tagID = parseInt(values.pop(), 10);
-		
+	
 		readTag();
 		if (values.length === numPotentiometers) {
 			for (let i = 0; i < values.length; i++) {
