@@ -69,7 +69,7 @@ const sketch = (p) => {
 		let values = cleanData.split(",");
 		console.log("Values data: "+values);
 		tagID = parseInt(values.pop(), 10);
-	
+		console.log("TagID: "+tagID);
 		readTag();
 		if (values.length === numPotentiometers) {
 			for (let i = 0; i < values.length; i++) {
