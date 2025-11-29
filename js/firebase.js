@@ -156,7 +156,7 @@ function readFromDatabase(deviceName) {
                     previousTagID_fb = tag;
                 }
             }
-            if (myBackText !== "" && backText !== previousBackText) {
+            if (myBackText !== "" && myBackText !== previousBackText) {
                 backText = myData[myBackText]; // global
                 previousBackText = backText;
                 sendData();// from bluetooth.js
