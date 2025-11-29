@@ -24,37 +24,27 @@
 			"function": "console.log('Azure TTS in avatar mode.');"
 		},
 		"16": {
-			"function": "if(noNarrative){displayText('What a beautiful flower.');window.f_aha_Sound.play();}"
+			"function": "backText='This is page 2';sendData();}"
 		},
 		"22": {
-			"function": "if(noNarrative){displayText('This is Buro.');window.m_aha_Sound.play();}"
 		},
 		"21": {
-			"function": "if(noNarrative){displayText('This is Hachi.');window.barking2_Sound.play();}"
 		},
 		"23": {
-			"function": "if(noNarrative){displayText('This is Ms. Suarez, the bank teller.');window.f_sing_Sound.play();}"
 		},
 		"24": {
-			"function": "if(noNarrative){displayText('This is Ms. Novakova, the ballerina.');window.ballet_Sound.play();}"
 		},
 		"25": {
-			"function": "if(noNarrative){displayText('This is Mr. Al-mansouri, the sailor.');window.gulls_Sound.play();}"
 		},
 		"26": {
-			"function": "if(noNarrative){displayText('This is Father Kent.');window.church2_Sound.play();}"
 		},
 		"27": {
-			"function": "if(noNarrative){displayText('This is Ms. Lopez, the Baker.');window.meow_Sound.play();}"
 		},
 		"28": {
-			"function": "if(noNarrative){displayText('This is Mr. Wei, the merchant of spices');window.f_aha_Sound.play();}"
 		},
 		"29": {
-			"function": "if(noNarrative){displayText('This is Leo, the tram conductor.');window.tram_Sound.play();}"
 		},
 		"31": {
-			"function": "var replayMessage = lastSpokenMessage; previousTagID = 0; console.log(replayMessage); lastSpokenMessage = ''; displayText(replayMessage);"
 		}
 	}
 }
