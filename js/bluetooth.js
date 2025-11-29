@@ -93,7 +93,7 @@ async function sendData() {
 
         try {
             await characteristic.writeValue(dataToSend);
-            console.log("Sent TXT command to ESP32:", formattedMessage);
+            console.log("--Backpack message: ", formattedMessage);
         } catch (error) {
             console.error("Error writing characteristic for TXT command:", error);
         }
