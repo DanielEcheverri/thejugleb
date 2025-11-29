@@ -24,7 +24,7 @@
 			"function": "console.log('Azure TTS in avatar mode.');"
 		},
 		"16": {
-			"function": "backText='This is page 2';sendData();}"
+			"function": "backText='This is page 2';sendData();"
 		},
 		"22": {
 		},
