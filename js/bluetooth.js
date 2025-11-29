@@ -85,7 +85,7 @@ function receiveData(data) {
 }
 
 async function sendData() {
-    if (isConnected && characteristic) {
+    if (isConnected && characteristic && window.backText != "") {
         const textToSend = window.backText; 
         const formattedMessage = "TXT:" + textToSend;
         const encoder = new TextEncoder();
@@ -98,6 +98,6 @@ async function sendData() {
             console.error("Error writing characteristic for TXT command:", error);
         }
     } else {
-        console.warn("Cannot send data: Bluetooth device is not connected.");
+        console.warn("Cannot send data: Bluetooth device is not connected or characteristic is empty.");
     }
 }
