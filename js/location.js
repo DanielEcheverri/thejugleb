@@ -88,7 +88,7 @@ async function readTag() {
 			if (tagInfo && tagInfo.tags.hasOwnProperty(tagID)) {
 				previousTagID = tagID;
 				window.success_Sound.play();
-				console.log("Tag " + tagID + " read.");
+				console.log("--Tag read: " +tagID);
 
 				const tagData = tagInfo.tags[tagID];
 
