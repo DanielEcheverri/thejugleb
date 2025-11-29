@@ -84,7 +84,7 @@ function receiveData(data) {
 
 async function sendData() {
     // 1. Check if the current message is a duplicate of the last one sent
-    if (window.backText === lastSentText) {
+    if (window.backText === lastBackText) {
         console.log("Duplicate message (" + window.backText + "). Skipping send.");
         return; // Exit the function, preventing the write operation
     }
@@ -101,7 +101,7 @@ async function sendData() {
             console.log("--Backpack message: ", formattedMessage);
             
             // 3. Update the tracking variable ONLY upon successful transmission
-            lastSentText = textToSend; 
+            lastBackText = textToSend; 
             
         } catch (error) {
             console.error("Error writing characteristic for TXT command:", error);
