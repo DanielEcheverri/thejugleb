@@ -105,6 +105,7 @@ function writeToDatabase() {
 var other_latitude = null;
 var other_longitude = null;
 let previousPassage = '';
+let previousBackText = '';
 let previousTagID_fb = ''; // Renamed to avoid conflict with global previousTagID
 
 function readFromDatabase(deviceName) {
@@ -155,8 +156,9 @@ function readFromDatabase(deviceName) {
                     previousTagID_fb = tag;
                 }
             }
-            if (myBackText !== "") {
+            if (myBackText !== "" && backText !== previousBackText) {
                 backText = myData[myBackText]; // global
+                previousBackText = backText;
                 sendData();// from bluetooth.js
             }
             azureKey = myData[myAzure]; //global
