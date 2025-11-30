@@ -24,7 +24,9 @@
 			"function": "console.log('Azure TTS in avatar mode.');"
 		},
 		"16": {
-			"function": "backText='▓▓▓▓▓▓ PAGE 2 ▓▓▓▓▓▓▓|Once upon a time|there was bear|living in a forest.';sendData();"
+			"variable": "backText",
+			"value": "'▓▓▓▓▓▓ PAGE 2 ▓▓▓▓▓▓▓|Once upon a time|there was bear|living in a forest.'",
+			"function": "sendData();"
 		},
 		"22": {
 		},
