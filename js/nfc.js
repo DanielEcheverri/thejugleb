@@ -27,6 +27,6 @@ async function readTag() {
 			}
 		}
 	} catch (err) {
-		console.error('Error reading tag', err);
+		//console.error('Error reading tag', err);
 	}
 }
