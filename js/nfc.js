@@ -18,8 +18,8 @@ async function readTag() {
 				if (tagData.variable && typeof tagData.boolean === 'boolean') {
 					window[tagData.variable] = tagData.boolean;
 				}
-				if (tagData.variable && typeof tagData.value === 'string') {
-					window[tagData.variable] = tagData.value;
+				if (tagData.variable && typeof tagData.string === 'string') {
+					window[tagData.variable] = tagData.string;
 				}
 				displayText(tagData.displayText); // from main.js
 
