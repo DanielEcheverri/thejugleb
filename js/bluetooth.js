@@ -92,6 +92,7 @@ async function sendData() {
         const formattedMessage = "TXT:" + textToSend;
         const encoder = new TextEncoder();
         const dataToSend = encoder.encode(formattedMessage + '\n');
+		console.log(dataToSend);
 
         try {
             await characteristic.writeValue(dataToSend);
