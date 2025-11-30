@@ -12,14 +12,14 @@ async function readTag() {
 
 				const tagData = tagInfo.tags[tagID];
 
-				if (tagInfo.tags[tagID].function) {
-					eval(tagInfo.tags[tagID].function);
-				}
 				if (tagData.variable && typeof tagData.boolean === 'boolean') {
 					window[tagData.variable] = tagData.boolean;
 				}
 				if (tagData.variable && typeof tagData.string === 'string') {
 					window[tagData.variable] = tagData.string;
+				}
+				if (tagInfo.tags[tagID].function) {
+					eval(tagInfo.tags[tagID].function);
 				}
 				displayText(tagData.displayText); // from main.js
 
