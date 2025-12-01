@@ -25,7 +25,7 @@
 		},
 		"16": {
 			"variable": "backText",
-			"string": "▓▓▓▓▓▓ PAGE 2 ▓▓▓▓▓▓▓|Once upon a time|there was bear|living in a forest.",
+			"string": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|Once upon a time|there was bear|living in a forest.",
 			"function": "sendData();"
 		},
 		"22": {
