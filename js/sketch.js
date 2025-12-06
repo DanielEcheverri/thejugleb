@@ -315,7 +315,7 @@ const sketch = (p) => {
             console.log("Raw:"+rawMessage);
 			const wrappedText = wordWrapAndFormat(rawMessage);
 			console.log("Wrapped:"+wrappedText);
-			backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${matchedPattern.patternName}`;
+			backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${wrappedText}`;
 			sendData();
 
 			patternMovement = matchedPattern.patternName; // global
