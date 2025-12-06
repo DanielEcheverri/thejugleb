@@ -82,6 +82,47 @@ function receiveData(data) {
 	}
 }
 
+function wordWrapAndFormat(text) {
+    const MAX_CHARS_PER_LINE = 18;
+    let result = [];
+    let currentText = text.trim(); // Start by removing whitespace
+
+    while (currentText.length > 0) {
+        // 1. Check if the remaining text fits on one line
+        if (currentText.length <= MAX_CHARS_PER_LINE) {
+            result.push(currentText);
+            break; // Done processing
+        }
+
+        // 2. Find the best place to wrap (the last space before the limit)
+        let slice = currentText.substring(0, MAX_CHARS_PER_LINE + 1); // Get up to 1 extra char
+        let lastSpaceIndex = slice.lastIndexOf(' ');
+
+        if (lastSpaceIndex > 0) {
+            // Case A: Found a space before the limit (ideal wrap)
+
+            let line = currentText.substring(0, lastSpaceIndex);
+            result.push(line);
+            
+            // Move the starting point past the space for the next iteration
+            currentText = currentText.substring(lastSpaceIndex).trim();
+
+        } else {
+            // Case B: No space found, or only a space at the beginning.
+            
+            // Take the line exactly at the character limit
+            let line = currentText.substring(0, MAX_CHARS_PER_LINE);
+            result.push(line);
+            
+            // Start the next line from the character limit
+            currentText = currentText.substring(MAX_CHARS_PER_LINE).trim();
+        }
+    }
+
+    // 3. Join the lines with the delimiter '|'
+    return result.join('|');
+}
+
 async function sendData() {
     if (window.backText === lastBackText) {
         return;
