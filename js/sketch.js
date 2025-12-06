@@ -311,7 +311,7 @@ const sketch = (p) => {
 		if (matchedPattern) {
 			window.complete_Sound.play();
 			console.log(`--Pattern matched: ${matchedPattern.patternName}`);
-			backText = `Pattern:|${matchedPattern.patternName}`;
+			backText = `▓▓ ✓ PATTERN ▓▓:|Baloo is|${matchedPattern.patternName}`;
 			sendData();
 
 			patternMovement = matchedPattern.patternName; // global
