@@ -1,34 +1,34 @@
 [
 	{
-		"patternName": "Guiding the left hand up",
+		"patternName": "guiding the left hand up",
 		"pattern": [
 			{ "partMoving": "left arm", "directionMoving": "up" },
 			{ "partMoving": "left hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Guiding the right hand up",
+		"patternName": "guiding the right hand up",
 		"pattern": [
 			{ "partMoving": "right arm", "directionMoving": "up" },
 			{ "partMoving": "right hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Guiding the left hand down",
+		"patternName": "guiding the left hand down",
 		"pattern": [
 			{ "partMoving": "left arm", "directionMoving": "down" },
 			{ "partMoving": "left hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Guiding the right hand down",
+		"patternName": "guiding the right hand down",
 		"pattern": [
 			{ "partMoving": "right arm", "directionMoving": "down" },
 			{ "partMoving": "right hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Walking",
+		"patternName": "walking",
 		"pattern": [
 			{ "partMoving": "left leg", "directionMoving": "up" },
 			{ "partMoving": "right leg", "directionMoving": "down" },
@@ -36,7 +36,7 @@
 		]
 	},
 		{
-		"patternName": "Walking",
+		"patternName": "walking",
 		"pattern": [
 			{ "partMoving": "right leg", "directionMoving": "up" },
 			{ "partMoving": "left leg", "directionMoving": "down" },
@@ -44,35 +44,35 @@
 		]
 	},
 	{
-		"patternName": "Standing right leg",
+		"patternName": "standing right leg",
 		"pattern": [
 			{ "partMoving": "left leg", "directionMoving": "up" },
 			{ "partMoving": "right foot", "directionMoving": "pressed" }
 		]
 	},
 	{
-		"patternName": "Standing left leg",
+		"patternName": "standing left leg",
 		"pattern": [
 			{ "partMoving": "right leg", "directionMoving": "up" },
 			{ "partMoving": "left foot", "directionMoving": "pressed" }
 		]
 	},
 	{
-		"patternName": "Looking left",
+		"patternName": "looking left",
 		"pattern": [
 			{ "partMoving": "head", "directionMoving": "left" },
 			{ "partMoving": "eyes", "directionMoving": "touched" }
 		]
 	},
 		{
-		"patternName": "Looking right",
+		"patternName": "looking right",
 		"pattern": [
 			{ "partMoving": "head", "directionMoving": "right" },
 			{ "partMoving": "eyes", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Talking",
+		"patternName": "talking",
 		"pattern": [
 			{ "partMoving": "mouth", "directionMoving": "touched" },
 			{ "partMoving": "mouth", "directionMoving": "released" },
