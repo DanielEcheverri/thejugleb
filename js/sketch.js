@@ -311,9 +311,9 @@ const sketch = (p) => {
 		if (matchedPattern) {
 			window.complete_Sound.play();
 			console.log(`--Pattern matched: ${matchedPattern.patternName}`);
-			backText = '${matchedPattern.patternName}';
-			sendData;
-			
+			backText = `${matchedPattern.patternName}`;
+			sendData();
+
 			patternMovement = matchedPattern.patternName; // global
 			if (matchedStartIndex >= 0) {
 				movementBuffer.splice(matchedStartIndex, maxPatternLength);
