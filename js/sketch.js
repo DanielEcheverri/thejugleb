@@ -311,10 +311,9 @@ const sketch = (p) => {
 		if (matchedPattern) {
 			window.complete_Sound.play();
 			console.log(`--Pattern matched: ${matchedPattern.patternName}`);
+			//This is for temprary debug of the movements and displaying them on the screen. 
 			const rawMessage = `${matchedPattern.patternName}`; 
-            console.log("Raw:"+rawMessage);
 			const wrappedText = wordWrapAndFormat(rawMessage);
-			console.log("Wrapped:"+wrappedText);
 			backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${wrappedText}`;
 			sendData();
 
