@@ -311,11 +311,15 @@ const sketch = (p) => {
 		if (matchedPattern) {
 			window.complete_Sound.play();
 			console.log(`--Pattern matched: ${matchedPattern.patternName}`);
-			//This is for temprary debug of the movements and displaying them on the screen. 
-			const rawMessage = `${matchedPattern.patternName}`; 
-			const wrappedText = wordWrapAndFormat(rawMessage);
-			backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${wrappedText}`;
-			sendData();
+			
+			if (noNarrative) { 
+				//This is for debug of the movements and displaying them on the screen and audio. 
+				const rawMessage = `${matchedPattern.patternName}`; 
+				displayText(characterName+" is "+rawMessage+".");
+				const wrappedText = wordWrapAndFormat(rawMessage);
+				backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${wrappedText}`;
+				sendData();
+			}
 
 			patternMovement = matchedPattern.patternName; // global
 			if (matchedStartIndex >= 0) {
