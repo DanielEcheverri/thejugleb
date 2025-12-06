@@ -317,7 +317,7 @@ const sketch = (p) => {
 				const rawMessage = `${matchedPattern.patternName}`; 
 				displayText(characterName+" is "+rawMessage+".");
 				const wrappedText = wordWrapAndFormat(rawMessage);
-				backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${wrappedText}`;
+				backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|${characterName} is|${wrappedText}`;
 				sendData();
 			}
 
