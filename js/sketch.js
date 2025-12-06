@@ -312,7 +312,9 @@ const sketch = (p) => {
 			window.complete_Sound.play();
 			console.log(`--Pattern matched: ${matchedPattern.patternName}`);
 			const rawMessage = `${matchedPattern.patternName}`; 
-            const wrappedText = wordWrapAndFormat(rawMessage);
+            console.log("Raw:"+rawMessage);
+			const wrappedText = wordWrapAndFormat(rawMessage);
+			console.log("Wrapped:"+wrappedText);
 			backText = `▓▓▓▓ ✓ PATTERN ▓▓▓|Baloo is|${matchedPattern.patternName}`;
 			sendData();
 
