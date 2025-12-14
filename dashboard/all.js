@@ -1,5 +1,70 @@
 console.log("Loaded");
 
+var avatar_street = "none";
+var street_radious = 100;
+window.fetchStreetName = function (latitude, longitude) {
+    return new Promise((resolve, reject) => {
+        const checkCoordinates = () => {
+            if (
+                typeof latitude !== "undefined" &&
+                typeof longitude !== "undefined" &&
+                latitude !== 0 &&
+                longitude !== 0
+            ) {
+                resolve();
+            } else {
+                setTimeout(checkCoordinates, 300); // Check again after 300 milliseconds
+            }
+        };
+        checkCoordinates();
+    })
+    .then(() => {
+        // Construct the Nominatim API query URL
+        const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`;
+
+        // Fetch data from Nominatim API
+        return fetch(nominatimUrl);
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        // Extract the street name from the Nominatim response
+        if (data.address && data.address.road) {
+            avatar_street = data.address.road;
+            return data.address.road; // Return the road/street name
+        } else if (data.address && data.address.street) {
+            avatar_street = data.address.street;
+            return data.address.street; // Fallback if 'street' is used
+        } else {
+            throw new Error("Street name not found");
+        }
+    })
+    .catch((error) => {
+        console.error("Error fetching street name:", error);
+        return "an unknown";
+    });
+};
+
+window.fetchSpeed = function(speed) {
+    if (speed <= 0.1) {
+        return "very slowly";
+    } else if (speed <= 0.3) {
+        return " slowly";
+    } else if (speed <= 0.6) {
+        return " moderatly pace";
+    } else if (speed <= 1.0) {
+        return " briskly";
+    } else if (speed <= 1.5) {
+        return " quickly";
+    } else {
+        return " very fast";
+    }
+}
+
 var weatherDescription = null;
 
 window.fetchWeather=function(latitude, longitude) {
