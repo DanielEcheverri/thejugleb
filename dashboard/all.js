@@ -1,5 +1,125 @@
 console.log("Loaded");
 
+var weatherDescription = null;
+
+window.fetchWeather=function(latitude, longitude) {
+    // Define a promise to fetch weather description
+    const weatherPromise = new Promise((resolve, reject) => {
+      const checkCoordinates = () => {
+        if (typeof latitude !== "undefined" && typeof longitude !== "undefined" && latitude !== 0 && longitude !== 0) {
+          resolve();
+        } else {
+          console.log("Fetching location");
+          setTimeout(checkCoordinates, 100); // Check again after 100 milliseconds
+        }
+      };
+      checkCoordinates();
+    })
+    .then(() => {
+      const apiKey = '21b99074efb73ba35f476f78f1b018ec';
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+      // Fetch data from OpenWeather API
+      return fetch(apiUrl);
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch weather data');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Extract the weather description and store it globally
+      weatherDescription = data.weather[0].description;
+      return weatherDescription;
+    })
+    .catch(error => {
+      console.error('Error fetching weather data:', error);
+      throw error; // Rethrow the error to be caught by the caller if needed
+    });
+
+    // Log the weather promise to the console
+    console.log("Fetching weather data...");
+
+    // Use the weather promise elsewhere in your code if needed
+    weatherPromise.then((weatherDescription) => {
+      console.log("Weather description:", weatherDescription);
+    });
+
+    // Return the weather promise
+    return weatherPromise;
+}
+
+var airPollutionData = null;
+
+window.fetchPollution = function(latitude, longitude) {
+  return new Promise((resolve, reject) => {
+    const apiKey = '21b99074efb73ba35f476f78f1b018ec';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+
+    // Fetch data from OpenWeather API
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch air pollution data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Extract the AQI value
+        const aqiValue = data.list[0].main.aqi;
+
+        // Map the AQI value to a qualitative description
+        let qualitativeDescription;
+        switch (aqiValue) {
+          case 1:
+            qualitativeDescription = 'fresh air';
+            break;
+          case 2:
+            qualitativeDescription = 'clean air';
+            break;
+          case 3:
+            qualitativeDescription = 'slightly hazy air';
+            break;
+          case 4:
+            qualitativeDescription = 'smokey air';
+            break;
+          case 5:
+            qualitativeDescription = 'thick polluted air';
+            break;
+          default:
+            qualitativeDescription = 'air';
+        }
+
+        // Resolve the promise with the qualitative description
+		console.log(qualitativeDescription);
+        resolve(qualitativeDescription);
+      })
+      .catch(error => {
+        console.error('Error fetching air pollution data:', error);
+        reject(error); // Reject the promise if there's an error
+      });
+  });
+}
+  
+// Function to determine if it's day or night
+window.getTimeOfDay=function() {
+    var currentTime = new Date().getHours();
+    if (currentTime >= 6 && currentTime < 9) {
+    return "early morning";
+    } else if (currentTime >= 9 && currentTime < 12) {
+    return "morning";
+    } else if (currentTime >= 12 && currentTime < 15) {
+    return "noon";
+    } else if (currentTime >= 15 && currentTime < 18) {
+    return "afternoon";
+    } else if (currentTime >= 18 && currentTime < 21) {
+    return "evening";
+    } else {
+    return "night";
+    }
+}
+  
+
 var tripHeadSign;
 var routeShortName;
 var departureTime;
