@@ -1,4 +1,4 @@
-console.log("Loaded");
+console.log("Loading Fetch Functions");
 
 window.fetchAmenity = function(latitude, longitude) {
     return new Promise((resolve, reject) => {
