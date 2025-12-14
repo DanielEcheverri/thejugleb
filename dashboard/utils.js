@@ -36,3 +36,125 @@ window.fetchJSONFile = async function(filename, cachedVariable) {
         return null;
     }
 }
+
+let sentencesSource = 'https://danielecheverri.github.io/dashboard/sentences.json';
+let cachedSentences;
+let characterData = {}; // Object to store data for each character
+let storyComment;
+
+// Function to start making comments for a character
+window.makeComments = async function(character, key) {
+    // Fetch JSON data
+    const jsonData = await fetchJSONFile(sentencesSource, cachedSentences);
+  	console.log("This is makeComments:"+character+key);
+
+    // Extract data based on the character parameter
+    const observes = jsonData[`${character}_${key}`];
+    const soundscape = jsonData.soundscape;
+    const approaching = jsonData.approaching;
+
+    // Function to generate random sentences upfront and store them in an object
+    const generateRandomSentences = (obj, count) => {
+        let sentences = [];
+        let keys = Object.keys(obj);
+        while (sentences.length < count) {
+            let key = keys[Math.floor(Math.random() * keys.length)];
+            let sentence = obj[key];
+            if (!sentences.includes(sentence)) {
+                sentences.push(sentence);
+            }
+        }
+        return sentences;
+    };
+
+    // Clear any existing interval timer and reset character data
+    if (characterData[character]) {
+        clearInterval(characterData[character].intervalId);
+        delete characterData[character];
+    }
+  
+    const approachingSentences = Object.values(approaching);
+    const approachingFinal = approachingSentences[Math.floor(Math.random() * approachingSentences.length)];
+
+    // Initialize character data
+    characterData[character] = {};
+    characterData[character].randomSentences = {};
+    characterData[character].randomSentences.observes = generateRandomSentences(observes, 10);
+    characterData[character].randomSentences.soundscape = generateRandomSentences(soundscape, 10);
+
+    // Shuffle the arrays to ensure randomness
+    characterData[character].randomSentences.observes = characterData[character].randomSentences.observes.sort(() => Math.random() - 0.5);
+    characterData[character].randomSentences.soundscape = characterData[character].randomSentences.soundscape.sort(() => Math.random() - 0.5);
+
+    // Initialize indices to track current position in arrays
+    characterData[character].currentIndex = { observes: 0, soundscape: 0 };
+
+    // Helper function to get the next sentence without repetition
+    const getNextSentence = (type) => {
+        let sentence;
+        if (type === 'observes') {
+            sentence = characterData[character].randomSentences.observes[characterData[character].currentIndex.observes];
+            characterData[character].currentIndex.observes = (characterData[character].currentIndex.observes + 1) % characterData[character].randomSentences.observes.length;
+        } else {
+            sentence = characterData[character].randomSentences.soundscape[characterData[character].currentIndex.soundscape];
+            characterData[character].currentIndex.soundscape = (characterData[character].currentIndex.soundscape + 1) % characterData[character].randomSentences.soundscape.length;
+        }
+        return sentence;
+    };
+
+  // Set up a timer to display a random sentence every 15 seconds
+  characterData[character].intervalId = setInterval(() => {
+      let randomSentence;
+      if (variables()[`${character}_arriving`]) {
+          randomSentence = approachingFinal;
+        	stopComments(`${character}`);
+      } else {
+          const randomType = Math.random() < 0.5 ? 'observes' : 'soundscape';
+          randomSentence = getNextSentence(randomType);
+      }
+      variables()[`${character}_comment`] = randomSentence;
+  }, 15000); // 15000 milliseconds = 15 seconds
+};
+
+// Function to stop making comments for a character
+window.stopComments = function(character) {
+    if (characterData[character]) {
+        clearInterval(characterData[character].intervalId);
+        delete characterData[character];
+    }
+  	console.log("Stopping comments");
+};
+
+let cachedShortSentences;
+
+// Simplified function to get a random sentence that is not the last one used
+window.makeShortComments = async function(character, key) {
+    try {
+        // Fetch JSON data
+        const jsonData = await fetchJSONFile(sentencesSource, cachedShortSentences);
+
+        // Extract sentences based on character and key
+        const observes = jsonData[`${character}_${key}`];
+        if (!observes) {
+            console.error(`No sentences found for ${character}_${key}`);
+            return;
+        }
+
+        // Get all sentence keys and choose a random one
+        const sentenceKeys = Object.keys(observes);
+        let newSentence;
+        
+        // Repeat until a different sentence is chosen
+        do {
+            const randomKey = sentenceKeys[Math.floor(Math.random() * sentenceKeys.length)];
+            newSentence = observes[randomKey];
+        } while (newSentence === variables()[`${character}_shortComment`]);
+
+        // Store the selected sentence
+        variables()[`${character}_shortComment`] = newSentence;
+        console.log(`Selected new comment for ${character}:`, newSentence);
+
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+};
