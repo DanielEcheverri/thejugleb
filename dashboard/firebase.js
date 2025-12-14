@@ -25,5 +25,4 @@ window.writeToHachi = function(databaseNode, hachiData) {
         });
 }
   
- 
 })();
