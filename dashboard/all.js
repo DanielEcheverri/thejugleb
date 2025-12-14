@@ -1,7 +1,110 @@
 console.log("Loaded");
 
+window.fetchAmenity = function(latitude, longitude) {
+    return new Promise((resolve, reject) => {
+        const checkCoordinates = () => {
+            if (typeof latitude !== "undefined" && typeof longitude !== "undefined" && latitude !== 0 && longitude !== 0) {
+                resolve();
+            } else {
+                setTimeout(checkCoordinates, 300); // Check again after 300 milliseconds
+            }
+        };
+        checkCoordinates();
+    })
+    .then(() => {
+        // Construct Overpass API query to find the first amenity within 100 meters
+        var overpassQuery = "https://overpass-api.de/api/interpreter?data=[out:json];node(around:100," + latitude + "," + longitude + ")[amenity];out body qt 1;";
+        // Fetch data from Overpass API
+        return fetch(overpassQuery);
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        // Loop through elements to find the first amenity
+        for (let i = 0; i < data.elements.length; i++) {
+            const element = data.elements[i];
+            if (element.tags && element.tags['amenity']) {
+                return element.tags['amenity']; // Found, return amenity type
+            }
+        }
+        // If no amenity is found, throw an error.
+        //throw new Error("No amenity found nearby");
+    	return "an odd window";
+    })
+    .catch((error) => {
+        // Handle errors
+        console.error("Error fetching amenity:", error);
+    });
+};
+
+  
+window.fetchCity = function(latitude, longitude) {
+  const format = "json"; // You can specify the format as json
+
+  // Construct the URL for the Nominatim reverse geocoding API
+  const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=${format}&lat=${latitude}&lon=${longitude}`;
+
+  // Make a GET request to the Nominatim reverse geocoding API
+  return fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+    	let city = "the city";
+    	let neighborhood = "the neighborhood";
+      // Check if the response contains any results
+      if (data && data.address) {
+        city = data.address.city || data.address.town ||data.address.county || data.address.village || data.address.hamlet;
+        neighborhood = data.address.neighbourhood || data.address.suburb || data.address.quarter || data.address.locality;
+        return { city, neighborhood }; // Return an object containing city and neighborhood 
+        
+      } else {
+        return { city: "the city", neighborhood: "the neighborhood" };
+        console.error("No results found");
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching data: " + error.message);
+    });
+};
+
+window.fetchJSONFile = async function(filename, cachedVariable) {
+    const baseURL = 'https://danielecheverri.github.io/dashboard/'; // Specify the base URL for the fallback
+    const fallbackFilename = baseURL + filename; // Create the fallback URL dynamically
+
+    try {
+        if (!cachedVariable) {
+            const response = await fetch(filename);
+            if (!response.ok) {
+                throw new Error('Primary fetch failed'); // Throw error if the response is not ok
+            }
+            let jsonData = await response.json(); // Fetch JSON data
+            
+            // Check if jsonData is null
+            if (jsonData === null) {
+                console.warn(`Primary file fetched but jsonData is null. Trying fallback: ${fallbackFilename}`);
+                const fallbackResponse = await fetch(fallbackFilename);
+                if (!fallbackResponse.ok) {
+                    throw new Error('Fallback file also not found');
+                }
+                jsonData = await fallbackResponse.json(); // Fetch JSON data from fallback
+                
+                // Check again if jsonData is null
+                if (jsonData === null) {
+                    throw new TypeError('jsonData is null from both primary and fallback');
+                }
+            }
+            cachedVariable = jsonData; // Cache the fetched JSON data in the specified variable
+            return jsonData;
+        } else {
+            return cachedVariable; // Return cached data if available
+        }
+    } catch (err) {
+        console.error('Error fetching JSON file:', err);
+        return null;
+    }
+}
+
 var avatar_street = "none";
 var street_radious = 100;
+
 window.fetchStreetName = function (latitude, longitude) {
     return new Promise((resolve, reject) => {
         const checkCoordinates = () => {
