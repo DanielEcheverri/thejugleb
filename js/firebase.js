@@ -10,7 +10,7 @@ const firebaseConfig = {
     authDomain: "thejungle-33676.firebaseapp.com",
     databaseURL: "https://thejungle-33676-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "thejungle-33676",
-    storageBucket: "sthejungle-33676.firebasestorage.app",
+    storageBucket: "thejungle-33676.firebasestorage.app",
     messagingSenderId: "1078745256439",
     appId: "1:1078745256439:web:6bb68e64e3a526fb061ef2"
 };
@@ -78,7 +78,7 @@ function writeToDatabase() {
             const speedVar = (deviceName === 'hachi_BT') ? 'hachi_speed' : 'avatar_speed';
             const speakingVar = (deviceName === 'hachi_BT') ? 'hachi_narrating' : 'avatar_narrating';
             const currentPsgVar = (deviceName === 'hachi_BT') ? 'hachi_current_passage' : 'avatar_current_passage';
-            const nameVar = (deviceName === 'hachi_BT') ? 'story_name' : 'story_name';
+            const nameVar = (deviceName === 'hachi_BT') ? 'hachi_name' : 'avatar_name';
 
             update(ref(database, databaseName), {
                 [latitudeVar]: latitude,
