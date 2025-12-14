@@ -54,3 +54,8 @@ setup.aScriptImport
       }
     }
   });
+
+function stopAllAvatarListeners() {
+  avatarRef.off();
+  console.log("All listeners on avatarRef stopped.");
+}
