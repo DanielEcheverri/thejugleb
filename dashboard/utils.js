@@ -1,3 +1,5 @@
+console.log("Loading Utilities Functions...");
+
 window.fetchJSONFile = async function(filename, cachedVariable) {
     const baseURL = 'https://danielecheverri.github.io/dashboard/'; // Specify the base URL for the fallback
     const fallbackFilename = baseURL + filename; // Create the fallback URL dynamically

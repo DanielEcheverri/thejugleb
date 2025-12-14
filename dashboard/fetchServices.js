@@ -1,4 +1,4 @@
-console.log("Loading Fetch Functions");
+console.log("Loading Fetch Functions...");
 
 window.fetchAmenity = function(latitude, longitude) {
     return new Promise((resolve, reject) => {
@@ -250,7 +250,6 @@ window.getTimeOfDay=function() {
     }
 }
   
-
 var tripHeadSign;
 var routeShortName;
 var departureTime;
