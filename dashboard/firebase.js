@@ -1,6 +1,6 @@
-setup.aScriptImport
-  .then(function () {
+(function() {
   console.log('Starting Firebase');
+  
   const firebaseConfig = {
     apiKey: "AIzaSyDuRvVnlDRGlQoDcWg6SlXR9lr4Xlz1PX4",
     authDomain: "thejungle-33676.firebaseapp.com",
@@ -10,9 +10,9 @@ setup.aScriptImport
     messagingSenderId: "1078745256439",
     appId: "1:1078745256439:web:6bb68e64e3a526fb061ef2"
   };
-
+  
   // Initialize Firebase
-  const app =firebase.initializeApp(firebaseConfig);  
+  const app = firebase.initializeApp(firebaseConfig);  
   const auth = firebase.auth(app);
   const database = firebase.database(app);
   
@@ -37,7 +37,7 @@ setup.aScriptImport
       }
     } 
   });
-
+  
   var hachiRef = firebase.database().ref(hachiDatabase);
   hachiRef.on('value', (snapshot) => {
     const hachiData = snapshot.val();
@@ -47,10 +47,11 @@ setup.aScriptImport
       }
     }
   });
-
-function stopAllAvatarListeners() {
-  avatarRef.off();
-  console.log("All listeners on avatarRef stopped.");
-}
   
-window.stopAllAvatarListeners = stopAllAvatarListeners;
+  function stopAllAvatarListeners() {
+    avatarRef.off();
+    console.log("All listeners on avatarRef stopped.");
+  }
+  
+  window.stopAllAvatarListeners = stopAllAvatarListeners;
+})();
