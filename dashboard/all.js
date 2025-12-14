@@ -1,5 +1,11 @@
 console.log("Loaded");
 
+var tripHeadSign;
+var routeShortName;
+var departureTime;
+var stopName;
+var stopRadius = 400;
+
 // 8. Function to fetch transit stop information
 async function fetchStops(latitude, longitude) {
     const apiKey = 'gYW4HBUHK9kB5j8wDxwxGglMKrWl9P9J';
