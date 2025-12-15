@@ -240,8 +240,8 @@ async function callGPTApi(prompt, apiKey) {
 window.makeShortComments = async function(character, key) {
     try {
         const apiKey = avatar_GPT; 
-        const avatarName = avatar_name || 'The character'; 
-        const movement = avatar_movement || 'an unknown movement';
+        const avatarName = avatar_name;
+        const movement = avatar_movement;
                 
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
