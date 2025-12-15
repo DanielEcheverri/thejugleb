@@ -159,10 +159,10 @@ window.stopComments = function(character) {
 //     }
 // };
 
-// --- GPT API Constants ---
+// --- GPT API Constants (kept here for context) ---
 const GPT_MODEL_ENDPOINT = 'https://chat.ai.e-infra.cz/api/v1/chat/completions'; 
 const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 100; // Limit response length for short comments
+const MAX_TOKENS = 100;
 
 /**
  * Handles the GPT API call to the e-infra.cz endpoint.
@@ -221,14 +221,16 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
-
 // The main function, kept as an async function with the window prefix
 window.makeShortComments = async function(character, key) {
+    // Helper to reference the Twine variable access function safely
+    const variablesAccessor = window.variables;
+    
     try {
-        // 1. Retrieve required variables
-        const apiKey = variables().avatar_GPT; // <-- Gets the key from $avatar_GPT
-        const avatarName = variables().avatar_name || 'The character'; 
-        const movement = variables().avatar_movement || 'an unknown movement';
+        // 1. Retrieve required variables using the explicit accessor
+        const apiKey = variablesAccessor().avatar_GPT; // FIXED: using window.variables()
+        const avatarName = variablesAccessor().avatar_name || 'The character'; // FIXED
+        const movement = variablesAccessor().avatar_movement || 'an unknown movement'; // FIXED
         
         if (!apiKey) {
              console.error("GPT API key ($avatar_GPT) is missing. Using fallback comment.");
@@ -236,21 +238,20 @@ window.makeShortComments = async function(character, key) {
         }
         
         // 2. Construct the specific prompt for the GPT model
-        // The system message in callGPTApi provides structure; this user prompt provides content.
         const prompt = `${avatarName} just performed the movement "${movement}". Generate the short narrative sentence.`;
 
-        // 3. Call the external GPT API (asynchronous operation)
+        // 3. Call the external GPT API (assuming callGPTApi is defined and works)
         const gptResponse = await callGPTApi(prompt, apiKey);
 
         // 4. Store the response in the target Twine variable
-        variables()[`${character}_shortComment`] = gptResponse;
+        variablesAccessor()[`${character}_shortComment`] = gptResponse; // FIXED
         console.log(`[GPT] Generated comment for ${character}:`, gptResponse);
 
     } catch (error) {
         console.error("An error occurred during GPT API call:", error);
         
         // Provide a safe fallback comment on error
-        const fallbackMessage = `${variables().avatar_name || 'The character'} tried to ${variables().avatar_movement || 'move'}, but the comment system failed. Try a different movement.`;
-        variables()[`${character}_shortComment`] = fallbackMessage;
+        const fallbackMessage = `${variablesAccessor().avatar_name || 'The character'} tried to ${variablesAccessor().avatar_movement || 'move'}, but the comment system failed. Try a different movement.`; // FIXED
+        variablesAccessor()[`${character}_shortComment`] = fallbackMessage; // FIXED
     }
 };
