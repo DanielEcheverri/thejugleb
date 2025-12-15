@@ -168,10 +168,16 @@ const MAX_TOKENS = 100;
  * Handles the GPT API call to the e-infra.cz endpoint.
  * This function is now fully implemented with fetch logic.
  */
+/**
+ * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
+ */
 async function callGPTApi(prompt, apiKey) {
+    // We assume the user has placed the fix for window.variables elsewhere
+    
     try {
         const response = await fetch(GPT_MODEL_ENDPOINT, {
             method: 'POST',
+            mode: 'cors', // Ensure CORS is explicitly set
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}` // Using the key from $avatar_GPT
@@ -180,35 +186,45 @@ async function callGPTApi(prompt, apiKey) {
             body: JSON.stringify({
                 model: GPT_MODEL_NAME,
                 messages: [
-                    {
-                        // System instruction to guide the AI's persona
-                        role: "system",
-                        content: "You are a concise, third-person narrator for a Twine game. Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt."
-                    },
-                    {
-                        // User message contains the dynamically generated prompt
-                        role: "user",
-                        content: prompt
-                    }
+                    { role: "system", content: "You are a concise, third-person narrator for a Twine game. Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt." },
+                    { role: "user", content: prompt }
                 ],
                 max_tokens: MAX_TOKENS,
-                temperature: 0.7 // Set a moderate temperature for creative but reliable output
+                temperature: 0.7 
             })
         });
-
-        // Check for HTTP errors (e.g., 401 Unauthorized, 404 Not Found)
+        
+        // --- CRITICAL DEBUGGING STEP ---
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'No error message available' }));
-            console.error('API Error Response:', errorData);
-            throw new Error(`GPT API HTTP error: ${response.status} (${response.statusText}). Details: ${errorData.message}`);
+            let status = response.status;
+            let statusText = response.statusText;
+            let errorData = `Status ${status}: ${statusText}`;
+
+            try {
+                // Try to read JSON data for detailed error messages (common with APIs)
+                const jsonError = await response.json();
+                errorData = jsonError.detail || jsonError.error?.message || JSON.stringify(jsonError);
+                console.error(`API FAIL (${status}): Received detailed JSON error.`, jsonError);
+            } catch (e) {
+                // If it's not JSON, read it as text
+                const textError = await response.text();
+                errorData = textError || `No readable body content.`;
+                console.error(`API FAIL (${status}): Received non-JSON body.`, textError);
+            }
+
+            // Throw the specific error details
+            throw new Error(`GPT API HTTP error: ${status}. Details: ${errorData}`);
         }
+        // --- END CRITICAL DEBUGGING STEP ---
 
         const data = await response.json();
         
-        // Extract the generated text from the standard chat API response structure
+        // Extract the generated text
         const gptResponseText = data.choices[0]?.message?.content?.trim();
-
+        
         if (!gptResponseText) {
+            // This catches a 200 OK response with an empty content field
+            console.error("GPT API returned 200 OK but content was empty or unreadable:", data);
             throw new Error("GPT API response was empty or incorrectly formatted.");
         }
 
