@@ -237,29 +237,33 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
-window.makeShortComments = async function(character, key) {
+window.makeShortComments = async function() { 
     try {
+        // Variables are accessed directly from the global scope (as confirmed by you)
         const apiKey = avatar_GPT; 
-        const avatarName = avatar_name;
-        const movement = avatar_movement;
-                
+        const avatarName = avatar_name; // Use the name for the prompt
+        const movement = avatar_mov_track;
+        
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
              throw new Error("GPT API key is required to use this function.");
         }
         
-        const prompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
+        // Prepare the user prompt based on the variables.
+        const userPrompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
         
         RULES:
         - The sentence must include the character's name ("${avatarName}") and the movement ("${movement}").
         - The tone must be narrative, short, and suggest the movement failed.
         - Example output: '${avatarName} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
 
-        const gptResponse = await callGPTApi(prompt, apiKey);
+        // Call the API
+        const gptResponse = await callGPTApi(userPrompt, apiKey);
 
-        const targetVarName = `${character}_shortComment`;
+        // Target variable is hardcoded to 'avatar_shortComment' since we are only dealing with the avatar now.
+        const targetVarName = `avatar_shortComment`; 
         window[targetVarName] = gptResponse; 
-        console.log(`[GPT] Generated comment for ${character}:`, gptResponse);
+        console.log(`[GPT] Generated comment for ${avatarName}:`, gptResponse);
 
     } catch (error) {
         console.error("An error occurred during GPT API call:", error);
@@ -269,7 +273,8 @@ window.makeShortComments = async function(character, key) {
         
         const fallbackMessage = `${safeName} tried to ${safeMovement}, but nothing happened. Maybe you should try something.`;
         
-        const targetVarName = `${character}_shortComment`;
+        // Target variable for fallback is also hardcoded to 'avatar_shortComment'
+        const targetVarName = `avatar_shortComment`; 
         window[targetVarName] = fallbackMessage;
     }
 };
