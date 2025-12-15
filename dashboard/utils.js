@@ -125,36 +125,132 @@ window.stopComments = function(character) {
   	console.log("Stopping comments");
 };
 
-let cachedShortSentences;
+// let cachedShortSentences;
 
-// Simplified function to get a random sentence that is not the last one used
-window.makeShortComments = async function(character, key) {
+// // Simplified function to get a random sentence that is not the last one used
+// window.makeShortComments = async function(character, key) {
+//     try {
+//         // Fetch JSON data
+//         const jsonData = await fetchJSONFile(sentencesSource, cachedShortSentences);
+
+//         // Extract sentences based on character and key
+//         const observes = jsonData[`${character}_${key}`];
+//         if (!observes) {
+//             console.error(`No sentences found for ${character}_${key}`);
+//             return;
+//         }
+
+//         // Get all sentence keys and choose a random one
+//         const sentenceKeys = Object.keys(observes);
+//         let newSentence;
+        
+//         // Repeat until a different sentence is chosen
+//         do {
+//             const randomKey = sentenceKeys[Math.floor(Math.random() * sentenceKeys.length)];
+//             newSentence = observes[randomKey];
+//         } while (newSentence === variables()[`${character}_shortComment`]);
+
+//         // Store the selected sentence
+//         variables()[`${character}_shortComment`] = newSentence;
+//         console.log(`Selected new comment for ${character}:`, newSentence);
+
+//     } catch (error) {
+//         console.error("An error occurred:", error);
+//     }
+// };
+
+// --- GPT API Constants ---
+const GPT_MODEL_ENDPOINT = 'https://chat.ai.e-infra.cz/api/v1/chat/completions'; 
+const GPT_MODEL_NAME = 'gpt-oss-120b';
+const MAX_TOKENS = 100; // Limit response length for short comments
+
+/**
+ * Handles the GPT API call to the e-infra.cz endpoint.
+ * This function is now fully implemented with fetch logic.
+ */
+async function callGPTApi(prompt, apiKey) {
     try {
-        // Fetch JSON data
-        const jsonData = await fetchJSONFile(sentencesSource, cachedShortSentences);
+        const response = await fetch(GPT_MODEL_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}` // Using the key from $avatar_GPT
+            },
+            // Using the standard Chat Completions API payload structure
+            body: JSON.stringify({
+                model: GPT_MODEL_NAME,
+                messages: [
+                    {
+                        // System instruction to guide the AI's persona
+                        role: "system",
+                        content: "You are a concise, third-person narrator for a Twine game. Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt."
+                    },
+                    {
+                        // User message contains the dynamically generated prompt
+                        role: "user",
+                        content: prompt
+                    }
+                ],
+                max_tokens: MAX_TOKENS,
+                temperature: 0.7 // Set a moderate temperature for creative but reliable output
+            })
+        });
 
-        // Extract sentences based on character and key
-        const observes = jsonData[`${character}_${key}`];
-        if (!observes) {
-            console.error(`No sentences found for ${character}_${key}`);
-            return;
+        // Check for HTTP errors (e.g., 401 Unauthorized, 404 Not Found)
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'No error message available' }));
+            console.error('API Error Response:', errorData);
+            throw new Error(`GPT API HTTP error: ${response.status} (${response.statusText}). Details: ${errorData.message}`);
         }
 
-        // Get all sentence keys and choose a random one
-        const sentenceKeys = Object.keys(observes);
-        let newSentence;
+        const data = await response.json();
         
-        // Repeat until a different sentence is chosen
-        do {
-            const randomKey = sentenceKeys[Math.floor(Math.random() * sentenceKeys.length)];
-            newSentence = observes[randomKey];
-        } while (newSentence === variables()[`${character}_shortComment`]);
+        // Extract the generated text from the standard chat API response structure
+        const gptResponseText = data.choices[0]?.message?.content?.trim();
 
-        // Store the selected sentence
-        variables()[`${character}_shortComment`] = newSentence;
-        console.log(`Selected new comment for ${character}:`, newSentence);
+        if (!gptResponseText) {
+            throw new Error("GPT API response was empty or incorrectly formatted.");
+        }
+
+        return gptResponseText;
 
     } catch (error) {
-        console.error("An error occurred:", error);
+        // Re-throw the error to be caught by the makeShortComments function
+        console.error("Error in callGPTApi:", error);
+        throw error;
+    }
+}
+
+
+// The main function, kept as an async function with the window prefix
+window.makeShortComments = async function(character, key) {
+    try {
+        // 1. Retrieve required variables
+        const apiKey = variables().avatar_GPT; // <-- Gets the key from $avatar_GPT
+        const avatarName = variables().avatar_name || 'The character'; 
+        const movement = variables().avatar_movement || 'an unknown movement';
+        
+        if (!apiKey) {
+             console.error("GPT API key ($avatar_GPT) is missing. Using fallback comment.");
+             throw new Error("GPT API key is required to use this function.");
+        }
+        
+        // 2. Construct the specific prompt for the GPT model
+        // The system message in callGPTApi provides structure; this user prompt provides content.
+        const prompt = `${avatarName} just performed the movement "${movement}". Generate the short narrative sentence.`;
+
+        // 3. Call the external GPT API (asynchronous operation)
+        const gptResponse = await callGPTApi(prompt, apiKey);
+
+        // 4. Store the response in the target Twine variable
+        variables()[`${character}_shortComment`] = gptResponse;
+        console.log(`[GPT] Generated comment for ${character}:`, gptResponse);
+
+    } catch (error) {
+        console.error("An error occurred during GPT API call:", error);
+        
+        // Provide a safe fallback comment on error
+        const fallbackMessage = `${variables().avatar_name || 'The character'} tried to ${variables().avatar_movement || 'move'}, but the comment system failed. Try a different movement.`;
+        variables()[`${character}_shortComment`] = fallbackMessage;
     }
 };
