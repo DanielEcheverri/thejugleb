@@ -231,6 +231,7 @@ window.makeShortComments = async function(character, key) {
         const apiKey = variablesAccessor().avatar_GPT; // FIXED: using window.variables()
         const avatarName = variablesAccessor().avatar_name || 'The character'; // FIXED
         const movement = variablesAccessor().avatar_movement || 'an unknown movement'; // FIXED
+        console.log(apiKey+" "+avatarName+" "+movement)
         
         if (!apiKey) {
              console.error("GPT API key ($avatar_GPT) is missing. Using fallback comment.");
@@ -239,6 +240,7 @@ window.makeShortComments = async function(character, key) {
         
         // 2. Construct the specific prompt for the GPT model
         const prompt = `${avatarName} just performed the movement "${movement}". Generate the short narrative sentence.`;
+        console.log(prompt);
 
         // 3. Call the external GPT API (assuming callGPTApi is defined and works)
         const gptResponse = await callGPTApi(prompt, apiKey);
