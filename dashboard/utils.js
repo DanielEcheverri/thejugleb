@@ -237,36 +237,21 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
-// The Final, Minimalist Function (Trusting Direct Variable Access)
 window.makeShortComments = async function(character, key) {
-    // NOTE: This version relies on the user's report that avatar_GPT, avatar_name, etc.,
-    // are automatically exposed to the global scope without the need for variables().
-
-    console.log("Entering GPT (Trusting Global Scope)");
     try {
-        // 1. Retrieve required variables using the reported working method (direct access)
-        // Note: The variables in the Twine story are $avatar_GPT, $avatar_name, etc.
-        // If the JS names (avatar_GPT, avatar_name) work, we use them.
         const apiKey = avatar_GPT; 
         const avatarName = avatar_name || 'The character'; 
         const movement = avatar_movement || 'an unknown movement';
-        
-        console.log("Twine Variables Retrieved. Key presence:", !!apiKey);
-        
+                
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
              throw new Error("GPT API key is required to use this function.");
         }
         
-        // 2. Construct the prompt
         const prompt = `${avatarName} just performed the movement "${movement}". Generate the short narrative sentence.`;
 
-        // 3. Call the external GPT API 
         const gptResponse = await callGPTApi(prompt, apiKey);
 
-        // 4. Store the response: 
-        // We must now rely on setting the property on the global window object.
-        // Twine variables are usually global properties.
         const targetVarName = `${character}_shortComment`;
         window[targetVarName] = gptResponse; 
         console.log(`[GPT] Generated comment for ${character}:`, gptResponse);
@@ -274,13 +259,11 @@ window.makeShortComments = async function(character, key) {
     } catch (error) {
         console.error("An error occurred during GPT API call:", error);
         
-        // Use the direct variables for the fallback message, as reported.
         const safeName = avatar_name || 'The character';
         const safeMovement = avatar_movement || 'move';
         
-        const fallbackMessage = `${safeName} tried to ${safeMovement}, but the comment system failed. Try a different movement.`;
+        const fallbackMessage = `${safeName} tried to ${safeMovement}, but nothing happened. Maybe you should try something.`;
         
-        // Store the fallback message globally
         const targetVarName = `${character}_shortComment`;
         window[targetVarName] = fallbackMessage;
     }
