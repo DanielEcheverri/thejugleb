@@ -248,7 +248,7 @@ window.makeShortComments = async function(character, key) {
              throw new Error("GPT API key is required to use this function.");
         }
         
-        const prompt = `You are a narrative AI for a Twine game. The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence, third-person narrative comment with a discouraging but encouraging tone.
+        const prompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
         
         RULES:
         - The sentence must include the character's name ("${avatarName}") and the movement ("${movement}").
