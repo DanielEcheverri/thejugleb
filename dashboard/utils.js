@@ -225,24 +225,17 @@ async function callGPTApi(prompt, apiKey) {
 // The main function with explicit debug logs
 window.makeShortComments = async function(character, key) {
     console.log("Entering GPT - Debug Start");
-    
-    // Debug Check: Check if the variables function is even available on the global object
-    if (typeof window.variables === 'function') {
-        console.log("DEBUG: window.variables() is available.");
-    } else {
-        console.error("DEBUG FATAL: window.variables() is NOT available. This is the source of the 'ReferenceError'.");
-    }
 
     try {
         console.log("Before apiKey fetch: Starting variable retrieval.");
         
         // The likely problematic line if 'variables' is not recognized
-        const apiKey = variables().avatar_GPT; 
+        const apiKey = avatar_GPT; 
         
         console.log("After apiKey fetch. Key presence:", !!apiKey); // This line will NOT run if the line above throws the ReferenceError
         
-        const avatarName = variables().avatar_name || 'The character'; 
-        const movement = variables().avatar_movement || 'an unknown movement';
+        const avatarName = avatar_name || 'The character'; 
+        const movement = avatar_movement || 'an unknown movement';
         
         if (!apiKey) {
              console.error("GPT API key ($avatar_GPT) is missing. Using fallback comment.");
