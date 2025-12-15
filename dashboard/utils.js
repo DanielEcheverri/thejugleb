@@ -242,7 +242,7 @@ window.makeShortComments = async function() {
         // Variables are accessed directly from the global scope (as confirmed by you)
         const apiKey = avatar_GPT; 
         const avatarName = avatar_name; // Use the name for the prompt
-        const movement = avatar_mov_track;
+        const movement = avatar_movement;
         
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
