@@ -221,39 +221,51 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
-// The main function, kept as an async function with the window prefix
+
+// The main function with explicit debug logs
 window.makeShortComments = async function(character, key) {
-    // Helper to reference the Twine variable access function safely
-    const variablesAccessor = window.variables;
+    console.log("Entering GPT - Debug Start");
     
+    // Debug Check: Check if the variables function is even available on the global object
+    if (typeof window.variables === 'function') {
+        console.log("DEBUG: window.variables() is available.");
+    } else {
+        console.error("DEBUG FATAL: window.variables() is NOT available. This is the source of the 'ReferenceError'.");
+    }
+
     try {
-        // 1. Retrieve required variables using the explicit accessor
-        const apiKey = variablesAccessor().avatar_GPT; // FIXED: using window.variables()
-        const avatarName = variablesAccessor().avatar_name || 'The character'; // FIXED
-        const movement = variablesAccessor().avatar_movement || 'an unknown movement'; // FIXED
-        console.log(apiKey+" "+avatarName+" "+movement)
+        console.log("Before apiKey fetch: Starting variable retrieval.");
+        
+        // The likely problematic line if 'variables' is not recognized
+        const apiKey = variables().avatar_GPT; 
+        
+        console.log("After apiKey fetch. Key presence:", !!apiKey); // This line will NOT run if the line above throws the ReferenceError
+        
+        const avatarName = variables().avatar_name || 'The character'; 
+        const movement = variables().avatar_movement || 'an unknown movement';
         
         if (!apiKey) {
              console.error("GPT API key ($avatar_GPT) is missing. Using fallback comment.");
              throw new Error("GPT API key is required to use this function.");
         }
         
-        // 2. Construct the specific prompt for the GPT model
+        // ... rest of the logic ...
         const prompt = `${avatarName} just performed the movement "${movement}". Generate the short narrative sentence.`;
-        console.log(prompt);
-
-        // 3. Call the external GPT API (assuming callGPTApi is defined and works)
         const gptResponse = await callGPTApi(prompt, apiKey);
 
-        // 4. Store the response in the target Twine variable
-        variablesAccessor()[`${character}_shortComment`] = gptResponse; // FIXED
+        variables()[`${character}_shortComment`] = gptResponse;
         console.log(`[GPT] Generated comment for ${character}:`, gptResponse);
 
     } catch (error) {
         console.error("An error occurred during GPT API call:", error);
         
-        // Provide a safe fallback comment on error
-        const fallbackMessage = `${variablesAccessor().avatar_name || 'The character'} tried to ${variablesAccessor().avatar_movement || 'move'}, but the comment system failed. Try a different movement.`; // FIXED
-        variablesAccessor()[`${character}_shortComment`] = fallbackMessage; // FIXED
+        // We MUST use window.variables() in the error handler if the function is undefined
+        const safeVariables = typeof window.variables === 'function' ? window.variables() : {};
+        const fallbackMessage = `${safeVariables.avatar_name || 'The character'} tried to ${safeVariables.avatar_movement || 'move'}, but the comment system failed. Try a different movement.`;
+        
+        // This line would also need the explicit prefix if the error is a ReferenceError
+        if (typeof window.variables === 'function') {
+            window.variables()[`${character}_shortComment`] = fallbackMessage;
+        }
     }
 };
