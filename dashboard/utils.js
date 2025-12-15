@@ -162,7 +162,7 @@ window.stopComments = function(character) {
 // --- GPT API Constants (kept here for context) ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 100;
+const MAX_TOKENS = 200;
 
 /**
  * Handles the GPT API call to the e-infra.cz endpoint.
