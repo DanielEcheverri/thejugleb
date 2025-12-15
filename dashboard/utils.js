@@ -160,7 +160,7 @@ window.stopComments = function(character) {
 // };
 
 // --- GPT API Constants (kept here for context) ---
-const GPT_MODEL_ENDPOINT = 'https://chat.ai.e-infra.cz/';
+const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
 const MAX_TOKENS = 100;
 
