@@ -237,39 +237,42 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
-window.makeShortComments = async function() { 
+window.makeShortComments = async function(charname, movement) {
     try {
-        // Variables are accessed directly from the global scope (as confirmed by you)
+        // The API key is still accessed from the global scope (avatar_GPT)
         const apiKey = avatar_GPT; 
-        const avatarName = avatar_name; // Use the name for the prompt
-        const movement = avatar_movement;
+        
+        // charname and movement are now passed as arguments!
+        // const charname = avatar_name; // REMOVED: No longer reading from global
+        // const movement = avatar_movement; // REMOVED: No longer reading from global
         
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
              throw new Error("GPT API key is required to use this function.");
         }
         
-        // Prepare the user prompt based on the variables.
-        const userPrompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
+        // Prepare the user prompt based on the arguments.
+        const userPrompt = `The character, named "${charname}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
         
         RULES:
-        - The sentence must include the character's name ("${avatarName}") and the movement ("${movement}").
+        - The sentence must include the character's name ("${charname}") and the movement ("${movement}").
         - The tone must be narrative, short, and suggest the movement failed.
-        - Example output: '${avatarName} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
+        - Example output: '${charname} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
 
-        // Target variable is hardcoded to 'avatar_shortComment' since we are only dealing with the avatar now.
+        // Target variable is hardcoded to 'avatar_shortComment'
         const targetVarName = `avatar_shortComment`; 
         window[targetVarName] = gptResponse; 
-        console.log(`[GPT] Generated comment for ${avatarName}:`, gptResponse);
+        console.log(`[GPT] Generated comment for ${charname}:`, gptResponse);
 
     } catch (error) {
         console.error("An error occurred during GPT API call:", error);
         
-        const safeName = avatar_name || 'The character';
-        const safeMovement = avatar_movement || 'move';
+        // Use the arguments for the fallback message
+        const safeName = charname || 'The character';
+        const safeMovement = movement || 'move';
         
         const fallbackMessage = `${safeName} tried to ${safeMovement}, but nothing happened. Maybe you should try something.`;
         
