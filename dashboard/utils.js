@@ -219,12 +219,12 @@ window.makeShortComments = async function(charname, movement) {
         RULES:
         - Do NOT start the narration with "${charname} tried to".
         - Focus on the move being the wrong choice for the situation.
+        - Tone: Recognition that the move was the wrong choice for the moment.
 
         EXAMPLES:
-        - "'Not this move...' |VS| said ${charname} when noticing that current path didn't suit ${movement}."
+        - "|VS|'Not this move...' |VS| said ${charname} when noticing that current path didn't suit ${movement}."
         - "A different approach would serve ${charname} better than that ${movement}."
-        - "Wrong timing! |VS| screamed ${charname} since ${movement} wasn't the answer needed."
-        - Tone: Recognition that the move was the wrong choice for the moment.
+        - |VS| "Wrong timing! |VS| screamed ${charname} since ${movement} wasn't the answer needed."
         `;
 
         // Call the API
