@@ -1,114 +1,5 @@
 console.log("Loading Utilities Functions...");
 
-window.fetchJSONFile = async function(filename, cachedVariable) {
-    const baseURL = 'https://danielecheverri.github.io/dashboard/'; // Specify the base URL for the fallback
-    const fallbackFilename = baseURL + filename; // Create the fallback URL dynamically
-
-    try {
-        if (!cachedVariable) {
-            const response = await fetch(filename);
-            if (!response.ok) {
-                throw new Error('Primary fetch failed'); // Throw error if the response is not ok
-            }
-            let jsonData = await response.json(); // Fetch JSON data
-            
-            // Check if jsonData is null
-            if (jsonData === null) {
-                console.warn(`Primary file fetched but jsonData is null. Trying fallback: ${fallbackFilename}`);
-                const fallbackResponse = await fetch(fallbackFilename);
-                if (!fallbackResponse.ok) {
-                    throw new Error('Fallback file also not found');
-                }
-                jsonData = await fallbackResponse.json(); // Fetch JSON data from fallback
-                
-                // Check again if jsonData is null
-                if (jsonData === null) {
-                    throw new TypeError('jsonData is null from both primary and fallback');
-                }
-            }
-            cachedVariable = jsonData; // Cache the fetched JSON data in the specified variable
-            return jsonData;
-        } else {
-            return cachedVariable; // Return cached data if available
-        }
-    } catch (err) {
-        console.error('Error fetching JSON file:', err);
-        return null;
-    }
-}
-
-let sentencesSource = 'https://danielecheverri.github.io/dashboard/sentences.json';
-let cachedSentences;
-let characterData = {}; // Object to store data for each character
-let storyComment;
-
-window.makeComments = async function(charname) {
-    try {
-        const apiKey = avatar_GPT;
-        if (!apiKey) throw new Error("GPT API key missing.");
-
-        // 1. Gather the data from your game state
-        // This assumes your variables() and other getters are globally accessible
-        const data = {
-            weather: variables().storyWeather,
-            time: variables().storyTime,
-            city: variables().storyCity,
-            neighborhood: variables().storyNeighborhood,
-            pollution: variables().storyPollution,
-            // Dynamic character-specific data
-            speed: charname === 'Baloo' ? variables().avatar_walking_speed : variables().hachi_walking_speed,
-            amenity: charname === 'Baloo' ? variables().avatar_amenity : variables().hachi_amenity,
-            t_stop: charname === 'Baloo' ? variables().avatar_t_stop : variables().hachi_t_stop,
-            t_route: charname === 'Baloo' ? variables().avatar_t_route : variables().hachi_t_route,
-            t_heading: charname === 'Baloo' ? variables().avatar_t_heading : variables().hachi_t_heading,
-            t_type: charname === 'Baloo' ? variables().avatar_t_type : variables().hachi_t_type,
-            street: charname === 'Baloo' ? window.avatar_street : window.hachi_street
-        };
-
-        // 2. Build the immersive prompt
-        const userPrompt = `
-            Context: Describe a short background scene for ${charname} based on these current settings:
-            - Location: ${data.neighborhood}, ${data.city} (Street: ${data.street})
-            - Environment: ${data.weather}, ${data.time}, Pollution level: ${data.pollution}
-            - Current Transit: At ${data.t_stop} (${data.t_type}), Route ${data.t_route} heading to ${data.t_heading}
-            - Status: Moving at ${data.speed} speed, near a ${data.amenity}.
-
-            TASK: Generate a 3-sentence max background scene using the |VS| format.
-            - Part 1 (First-person): ${charname}'s internal thought about the environment or transit.
-            - Part 2 (Third-person): A narrative description of the atmosphere surrounding ${charname}.
-
-            RULES:
-            - Format as: |VS| [Thought] |VS| [Narration]
-            - Do not mention all data points; pick the most atmospheric ones to weave together.
-            - The narration must include "${charname}".
-        `;
-
-        const gptResponse = await callGPTApi(userPrompt, apiKey);
-        
-        // Save to a different variable to avoid overwriting movement feedback
-        window.avatar_backgroundScene = gptResponse;
-        console.log(`[GPT Scene] for ${charname}:`, gptResponse);
-
-    } catch (error) {
-        console.error("Error generating scene:", error);
-        window.avatar_backgroundScene = `|VS| "Another day in ${variables().storyCity}." |VS| ${charname} continues moving through the streets.`;
-    }
-};
-
-// Function to stop making comments for a character
-window.stopComments = function(character) {
-    if (characterData[character]) {
-        clearInterval(characterData[character].intervalId);
-        delete characterData[character];
-    }
-  	console.log("Stopping comments");
-};
-
-// --- GPT API Constants (kept here for context) ---
-const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
-const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 250;
-
 /**
  * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
  */
@@ -177,6 +68,93 @@ async function callGPTApi(prompt, apiKey) {
         throw error;
     }
 }
+
+window.makeComments = async function(character) {
+    const apiKey = avatar_GPT;
+    if (!apiKey) return;
+
+    const sVar = SugarCube.State.variables;
+
+    // Clear existing timer for this specific character
+    if (characterData[character]?.intervalId) {
+        clearInterval(characterData[character].intervalId);
+    }
+
+    characterData[character] = {
+        intervalId: setInterval(async () => {
+            
+            // 1. Check Arrival Status
+            if (sVar[`${character}_arriving`]) {
+                if (typeof stopComments === "function") stopComments(character);
+                return;
+            }
+
+            // 2. Map Character Logic
+            const isBaloo = (character.toLowerCase() === 'avatar' || character === 'baloo');
+            const prefix = isBaloo ? 'avatar' : 'hachi';
+            
+            // 3. Extract Actual Values for Realism
+            const context = {
+                char: character,
+                street: window[`${prefix}_street`] || "the current path",
+                neighborhood: sVar.storyNeighborhood || "this district",
+                city: sVar.storyCity || "the city",
+                weather: sVar.storyWeather || "changing",
+                time: sVar.storyTime || "now",
+                pollution: sVar.storyPollution || "variable",
+                speed: sVar[`${prefix}_walking_speed`] || "normal",
+                amenity: sVar[`${prefix}_amenity`] || "the surroundings",
+                // Transit Specifics
+                stop: sVar[`${prefix}_t_stop`],
+                route: sVar[`${prefix}_t_route`],
+                heading: sVar[`${prefix}_t_heading`],
+                type: sVar[`${prefix}_t_type`]
+            };
+
+            // 4. The Realism Prompt
+            const userPrompt = `
+                ACTUAL DATA:
+                - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
+                - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
+                - Movement: Moving ${context.speed} past a ${context.amenity}.
+                - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
+
+                TASK:
+                Generate ONE immersive narrative comment (max 3 sentences). 
+                The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
+
+                STYLES (Randomly apply one):
+                - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
+                - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
+
+                Output raw text only. No "tried to" or "attempted to".
+            `;
+
+            try {
+                const gptResponse = await callGPTApi(userPrompt, apiKey);
+                sVar[`${character}_comment`] = gptResponse;
+                console.log(`[Realism Update] ${character}:`, gptResponse);
+            } catch (error) {
+                console.error("GPT Error:", error);
+            }
+
+        }, 15000)
+    };
+};
+
+// Function to stop making comments for a character
+window.stopComments = function(character) {
+    if (characterData[character]) {
+        clearInterval(characterData[character].intervalId);
+        delete characterData[character];
+    }
+  	console.log("Stopping comments");
+};
+
+// --- GPT API Constants (kept here for context) ---
+const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
+const GPT_MODEL_NAME = 'gpt-oss-120b';
+const MAX_TOKENS = 250;
 
 window.makeShortComments = async function(charname, movement) {
     try {
