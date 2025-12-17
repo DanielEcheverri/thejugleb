@@ -83,17 +83,14 @@ window.makeComments = async function(character) {
     characterData[character] = {
         intervalId: setInterval(async () => {
             
-            // 1. Check Arrival Status
             if (sVar[`${character}_arriving`]) {
                 if (typeof stopComments === "function") stopComments(character);
                 return;
             }
 
-            // 2. Map Character Logic
             const isBaloo = (character.toLowerCase() === 'avatar' || character === 'baloo');
             const prefix = isBaloo ? 'avatar' : 'hachi';
             
-            // 3. Extract Actual Values for Realism
             const context = {
                 char: character,
                 street: window[`${prefix}_street`] || "the current path",
@@ -111,7 +108,6 @@ window.makeComments = async function(character) {
                 type: sVar[`${prefix}_t_type`]
             };
 
-            // 4. The Realism Prompt
             const userPrompt = `
                 ACTUAL DATA:
                 - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
