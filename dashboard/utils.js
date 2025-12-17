@@ -125,49 +125,11 @@ window.stopComments = function(character) {
   	console.log("Stopping comments");
 };
 
-// let cachedShortSentences;
-
-// // Simplified function to get a random sentence that is not the last one used
-// window.makeShortComments = async function(character, key) {
-//     try {
-//         // Fetch JSON data
-//         const jsonData = await fetchJSONFile(sentencesSource, cachedShortSentences);
-
-//         // Extract sentences based on character and key
-//         const observes = jsonData[`${character}_${key}`];
-//         if (!observes) {
-//             console.error(`No sentences found for ${character}_${key}`);
-//             return;
-//         }
-
-//         // Get all sentence keys and choose a random one
-//         const sentenceKeys = Object.keys(observes);
-//         let newSentence;
-        
-//         // Repeat until a different sentence is chosen
-//         do {
-//             const randomKey = sentenceKeys[Math.floor(Math.random() * sentenceKeys.length)];
-//             newSentence = observes[randomKey];
-//         } while (newSentence === variables()[`${character}_shortComment`]);
-
-//         // Store the selected sentence
-//         variables()[`${character}_shortComment`] = newSentence;
-//         console.log(`Selected new comment for ${character}:`, newSentence);
-
-//     } catch (error) {
-//         console.error("An error occurred:", error);
-//     }
-// };
-
 // --- GPT API Constants (kept here for context) ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
 const MAX_TOKENS = 200;
 
-/**
- * Handles the GPT API call to the e-infra.cz endpoint.
- * This function is now fully implemented with fetch logic.
- */
 /**
  * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
  */
@@ -239,12 +201,7 @@ async function callGPTApi(prompt, apiKey) {
 
 window.makeShortComments = async function(charname, movement) {
     try {
-        // The API key is still accessed from the global scope (avatar_GPT)
         const apiKey = avatar_GPT; 
-        
-        // charname and movement are now passed as arguments!
-        // const charname = avatar_name; // REMOVED: No longer reading from global
-        // const movement = avatar_movement; // REMOVED: No longer reading from global
         
         if (!apiKey) {
              console.error("GPT API key (avatar_GPT) is missing. Using fallback comment.");
@@ -252,12 +209,23 @@ window.makeShortComments = async function(charname, movement) {
         }
         
         // Prepare the user prompt based on the arguments.
-        const userPrompt = `The character, named "${charname}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
-        
+        const userPrompt = `Task: Narrate a tactical mistake where ${charname} used "${movement}" at the wrong time.
+    
+        CHOOSE ONE STYLE RANDOMLY:
+        Style A (Internal): A first-person thought from ${charname} + " |VS| " + a third-person narrative note. 
+        Style B (Narrative): A single, direct third-person narrative sentence.
+
         RULES:
-        - The sentence must include the character's name ("${charname}") and the movement ("${movement}").
-        - The tone must be narrative, short, and suggest the movement failed.
-        - Example output: '${charname} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
+        - Length: Under 18 words total.
+        - Content: Must include "${charname}" and "${movement}".
+        - Variety: Never start the narrative text with "${charname} tried to" or "${charname} attempted to".
+        - Tone: Recognition that the move was the wrong choice for the moment.
+
+        EXAMPLES:
+        - "Not the right moment... |VS| That ${movement} left ${charname} wide open."
+        - "A ${movement} was a poor choice for ${charname} in this specific situation."
+        - "Wrong tool for this job! |VS| The situation didn't suit ${charname}'s ${movement}."
+        - "That ${movement} failed to solve the problem ${charname} is facing."`;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
