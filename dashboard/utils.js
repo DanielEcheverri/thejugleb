@@ -209,12 +209,12 @@ window.makeShortComments = async function(charname, movement) {
         }
         
         // Prepare the user prompt based on the arguments.
-        const userPrompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
+        const userPrompt = `The character, named "${charname}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
         
         RULES:
-        - The sentence must include the character's name ("${avatarName}") and the movement ("${movement}").
+        - The sentence must include the character's name ("${charname}") and the movement ("${movement}").
         - The tone must be narrative, short, and suggest the movement failed.
-        - Example output: '${avatarName} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
+        - Example output: '${charname} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
