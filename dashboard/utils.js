@@ -239,10 +239,10 @@ window.makeShortComments = async function(charname, movement) {
         console.error("An error occurred during GPT API call:", error);
         
         // Use the arguments for the fallback message
-        const safeName = charname || 'The character';
-        const safeMovement = movement || 'move';
+        const safeName = charname;
+        const safeMovement = movement;
         
-        const fallbackMessage = `${safeName} tried to ${safeMovement}, but nothing happened. Maybe you should try something.`;
+        const fallbackMessage = `${safeName} tried ${safeMovement}, but nothing happened. Maybe you should try something else.`;
         
         // Target variable for fallback is also hardcoded to 'avatar_shortComment'
         const targetVarName = `avatar_shortComment`; 
