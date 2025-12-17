@@ -219,7 +219,6 @@ window.makeShortComments = async function(charname, movement) {
         RULES:
         - Do NOT start the narration with "${charname} tried to".
         - Focus on the move being the wrong choice for the situation.
-        - Total length: under 20 words.
         - Output raw text only.
 
         EXAMPLES:
