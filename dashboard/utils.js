@@ -210,20 +210,26 @@ window.makeShortComments = async function(charname, movement) {
         
         // Prepare the user prompt based on the arguments.
         const userPrompt = `
-Return a short (max 15 words) narrative comment about ${charname} doing a "${movement}" that was the wrong tactical choice.
+        Context: ${charname} performed "${movement}". It was the wrong choice for this obstacle.
+            
+            TASK: Provide a brief failure message using ONE of the following two templates:
 
-OUTPUT FORMAT (Randomly provide one):
-Format 1: "[Short first-person thought] |VS| [Third-person observation]"
-Format 2: "[Single third-person observation]"
+            TEMPLATE 1 (Dual-Voice): [First-person thought] |VS| [Third-person narration]
+            TEMPLATE 2 (Narrative): [A single third-person narration sentence]
 
-REQUIREMENTS:
-- Include "${charname}" and "${movement}" exactly.
-- Never start the narrative with "${charname} tried to".
-- Output the raw text only. No explanations.
+            RULES:
+            - If using TEMPLATE 1: Place " |VS| " between the thought and the narration.
+            - If using TEMPLATE 2: Do NOT use the "|VS|" separator.
+            - Requirements: Include "${charname}" and "${movement}" in the narration.
+            - Constraint: Do NOT start the narration with "${charname} tried to" or "${charname} attempted to".
+            - Tone: Short, atmospheric, and hints that a different move is needed.
 
-EXAMPLES:
-- Not now! |VS| That ${movement} wasn't the solution ${charname} needed.
-- A ${movement} was the wrong tool for the job ${charname} is facing.
+            EXAMPLES:
+            - "Not the right fit... |VS| That ${movement} wasn't what ${charname} needed here."
+            - "The path remains blocked; a ${movement} was the wrong tool for ${charname}."
+            - "That didn't work. |VS| The situation calls for something other than ${charname}'s ${movement}."
+
+            Output the raw text only. No explanations.
 `;
 
         // Call the API
