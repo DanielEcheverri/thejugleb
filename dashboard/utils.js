@@ -42,78 +42,74 @@ let cachedSentences;
 let characterData = {}; // Object to store data for each character
 let storyComment;
 
-// Function to start making comments for a character
-window.makeComments = async function(character, key) {
-    // Fetch JSON data
-    const jsonData = await fetchJSONFile(sentencesSource, cachedSentences);
-  	console.log("This is makeComments:"+character+key);
+window.makeComments = async function(character) {
+    const apiKey = avatar_GPT;
+    if (!apiKey) return console.error("API Key missing");
 
-    // Extract data based on the character parameter
-    const observes = jsonData[`${character}_${key}`];
-    const soundscape = jsonData.soundscape;
-    const approaching = jsonData.approaching;
-
-    // Function to generate random sentences upfront and store them in an object
-    const generateRandomSentences = (obj, count) => {
-        let sentences = [];
-        let keys = Object.keys(obj);
-        while (sentences.length < count) {
-            let key = keys[Math.floor(Math.random() * keys.length)];
-            let sentence = obj[key];
-            if (!sentences.includes(sentence)) {
-                sentences.push(sentence);
-            }
-        }
-        return sentences;
-    };
-
-    // Clear any existing interval timer and reset character data
+    // 1. Clear any existing timer for this character
     if (characterData[character]) {
         clearInterval(characterData[character].intervalId);
         delete characterData[character];
     }
-  
-    const approachingSentences = Object.values(approaching);
-    const approachingFinal = approachingSentences[Math.floor(Math.random() * approachingSentences.length)];
 
-    // Initialize character data
+    // Initialize character state
     characterData[character] = {};
-    characterData[character].randomSentences = {};
-    characterData[character].randomSentences.observes = generateRandomSentences(observes, 10);
-    characterData[character].randomSentences.soundscape = generateRandomSentences(soundscape, 10);
 
-    // Shuffle the arrays to ensure randomness
-    characterData[character].randomSentences.observes = characterData[character].randomSentences.observes.sort(() => Math.random() - 0.5);
-    characterData[character].randomSentences.soundscape = characterData[character].randomSentences.soundscape.sort(() => Math.random() - 0.5);
-
-    // Initialize indices to track current position in arrays
-    characterData[character].currentIndex = { observes: 0, soundscape: 0 };
-
-    // Helper function to get the next sentence without repetition
-    const getNextSentence = (type) => {
-        let sentence;
-        if (type === 'observes') {
-            sentence = characterData[character].randomSentences.observes[characterData[character].currentIndex.observes];
-            characterData[character].currentIndex.observes = (characterData[character].currentIndex.observes + 1) % characterData[character].randomSentences.observes.length;
-        } else {
-            sentence = characterData[character].randomSentences.soundscape[characterData[character].currentIndex.soundscape];
-            characterData[character].currentIndex.soundscape = (characterData[character].currentIndex.soundscape + 1) % characterData[character].randomSentences.soundscape.length;
+    // 2. The Main Loop (Every 15 Seconds)
+    characterData[character].intervalId = setInterval(async () => {
+        
+        // 3. Check for Arrival State (Matches your original logic)
+        if (variables()[`${character}_arriving`]) {
+            stopComments(character); 
+            return;
         }
-        return sentence;
-    };
 
-  // Set up a timer to display a random sentence every 15 seconds
-  characterData[character].intervalId = setInterval(() => {
-      let randomSentence;
-      if (variables()[`${character}_arriving`]) {
-          randomSentence = approachingFinal;
-        	stopComments(`${character}`);
-      } else {
-          const randomType = Math.random() < 0.5 ? 'observes' : 'soundscape';
-          randomSentence = getNextSentence(randomType);
-      }
-      variables()[`${character}_comment`] = randomSentence;
-  }, 15000); // 15000 milliseconds = 15 seconds
+        // 4. Dynamic Data Extraction
+        const charPrefix = (character.toLowerCase() === 'avatar' || character === 'baloo') ? 'avatar' : 'hachi';
+        
+        const sceneData = {
+            weather: variables().storyWeather,
+            time: variables().storyTime,
+            pollution: variables().storyPollution,
+            city: variables().storyCity,
+            neighborhood: variables().storyNeighborhood,
+            street: window[`${charPrefix}_street`],
+            speed: variables()[`${charPrefix}_walking_speed`],
+            amenity: variables()[`${charPrefix}_amenity`],
+            transit: `${variables()[`${charPrefix}_t_type`]} ${variables()[`${charPrefix}_t_route`]} at ${variables()[`${charPrefix}_t_stop`]} heading to ${variables()[`${charPrefix}_t_heading`]}`
+        };
+
+        // 5. The Flexible Background Prompt
+        const userPrompt = `
+            Context: ${character} is currently at ${sceneData.street} in ${sceneData.neighborhood}.
+            Settings: ${sceneData.weather}, ${sceneData.time}, Pollution: ${sceneData.pollution}.
+            Activity: Moving at ${sceneData.speed} speed near ${sceneData.amenity}.
+            Transit: ${sceneData.transit}.
+
+            TASK: Generate ONE brief atmosphere comment (max 3 sentences). 
+            
+            CHOOSE ONE STYLE RANDOMLY:
+            Style A: |VS| [First-person thought] |VS| [Third-person narration including "${character}"]
+            Style B: [Single third-person narration sentence including "${character}"]
+
+            RULES:
+            - Focus on environmental immersion and the character's progress.
+            - If Style A: wrap the thought in |VS| delimiters as shown.
+            - If Style B: do NOT use |VS|.
+            - Output raw text only. No "tried to" phrasing.
+        `;
+
+        try {
+            const gptResponse = await callGPTApi(userPrompt, apiKey);
+            variables()[`${character}_comment`] = gptResponse;
+            console.log(`[Timer] ${character} Scene:`, gptResponse);
+        } catch (error) {
+            console.error("GPT Loop Error:", error);
+            // Simple fallback
+            variables()[`${character}_comment`] = `${character} continues through the streets of ${sceneData.city}.`;
+        }
+
+    }, 15000); 
 };
 
 // Function to stop making comments for a character
@@ -142,7 +138,7 @@ async function callGPTApi(prompt, apiKey) {
             mode: 'cors', // Ensure CORS is explicitly set
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}` // Using the key from $avatar_GPT
+                'Authorization': `Bearer ${apiKey}` 
             },
             // Using the standard Chat Completions API payload structure
             body: JSON.stringify({
