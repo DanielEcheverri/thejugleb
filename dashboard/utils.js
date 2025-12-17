@@ -209,30 +209,12 @@ window.makeShortComments = async function(charname, movement) {
         }
         
         // Prepare the user prompt based on the arguments.
-        const userPrompt = `
-        Context: ${charname} performed "${movement}". It was the wrong choice for this obstacle.
-            
-            TASK: Provide a brief failure message using ONE of the following two templates:
-
-            TEMPLATE 1 (Dual-Voice): [First-person thought] |VS| [Third-person narration]
-            TEMPLATE 2 (Narrative): [A single third-person narration sentence]
-
-            Output the raw text only. No explanations.
-
-
-            RULES:
-            - If using TEMPLATE 1: Place " |VS| " between the thought and the narration.
-            - If using TEMPLATE 2: Do NOT use the "|VS|" separator.
-            - Requirements: Include "${charname}" and "${movement}" in the narration.
-            - Constraint: Do NOT start the narration with "${charname} tried to" or "${charname} attempted to".
-            - Tone: Short, atmospheric, and hints that a different move is needed.
-
-            EXAMPLES:
-            - "Not the right fit... |VS| That ${movement} wasn't what ${charname} needed here."
-            - "The path remains blocked; a ${movement} was the wrong tool for ${charname}."
-            - "That didn't work. |VS| The situation calls for something other than ${charname}'s ${movement}."
-
-`;
+        const userPrompt = `The character, named "${avatarName}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
+        
+        RULES:
+        - The sentence must include the character's name ("${avatarName}") and the movement ("${movement}").
+        - The tone must be narrative, short, and suggest the movement failed.
+        - Example output: '${avatarName} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
