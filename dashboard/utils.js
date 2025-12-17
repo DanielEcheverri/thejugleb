@@ -209,12 +209,24 @@ window.makeShortComments = async function(charname, movement) {
         }
         
         // Prepare the user prompt based on the arguments.
-        const userPrompt = `The character, named "${charname}", just performed the movement "${movement}". This movement was NOT successful for the current situation. Generate a short, one-sentence or two-sentence third-person narrative comment with a discouraging but encouraging tone.
-        
+       const userPrompt = `
+        Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
+
+        Choose ONE style for the output:
+        Style 1: [Short first-person thought] |VS| [Third-person narration including "${charname}" and "${movement}"]
+        Style 2: [A single third-person narration including "${charname}" and "${movement}"]
+
         RULES:
-        - The sentence must include the character's name ("${charname}") and the movement ("${movement}").
-        - The tone must be narrative, short, and suggest the movement failed.
-        - Example output: '${charname} tried to ${movement} but it wasn't high enough. Maybe try with another movement?'`;
+        - Do NOT start the narration with "${charname} tried to".
+        - Focus on the move being the wrong choice for the situation.
+        - Total length: under 20 words.
+        - Output raw text only.
+
+        EXAMPLES:
+        - "Not this move... |VS| The current path didn't suit ${charname}'s ${movement}."
+        - "A different approach would serve ${charname} better than that ${movement}."
+        - "Wrong timing! |VS| That ${movement} wasn't the answer ${charname} needed."
+        `;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
