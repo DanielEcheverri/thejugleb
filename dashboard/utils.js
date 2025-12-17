@@ -211,7 +211,7 @@ window.makeShortComments = async function(charname, movement) {
         // Prepare the user prompt based on the arguments.
         const userPrompt = `Task: Narrate a tactical mistake where ${charname} used "${movement}" at the wrong time.
     
-        CHOOSE ONE STYLE RANDOMLY:
+        CHOOSE ONE STYLE:
         Style A (Internal): A first-person thought from ${charname} + " |VS| " + a third-person narrative note. 
         Style B (Narrative): A single, direct third-person narrative sentence.
 
