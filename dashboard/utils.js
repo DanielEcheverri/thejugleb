@@ -209,23 +209,22 @@ window.makeShortComments = async function(charname, movement) {
         }
         
         // Prepare the user prompt based on the arguments.
-        const userPrompt = `Task: Narrate a tactical mistake where ${charname} used "${movement}" at the wrong time.
-    
-        CHOOSE ONE STYLE:
-        Style A (Internal): A first-person thought from ${charname} + " |VS| " + a third-person narrative note. 
-        Style B (Narrative): A single, direct third-person narrative sentence.
+        const userPrompt = `
+Return a short (max 15 words) narrative comment about ${charname} doing a "${movement}" that was the wrong tactical choice.
 
-        RULES:
-        - Length: Under 18 words total.
-        - Content: Must include "${charname}" and "${movement}".
-        - Variety: Never start the narrative text with "${charname} tried to" or "${charname} attempted to".
-        - Tone: Recognition that the move was the wrong choice for the moment.
+OUTPUT FORMAT (Randomly provide one):
+Format 1: "[Short first-person thought] |VS| [Third-person observation]"
+Format 2: "[Single third-person observation]"
 
-        EXAMPLES:
-        - "Not the right moment... |VS| That ${movement} left ${charname} wide open."
-        - "A ${movement} was a poor choice for ${charname} in this specific situation."
-        - "Wrong tool for this job! |VS| The situation didn't suit ${charname}'s ${movement}."
-        - "That ${movement} failed to solve the problem ${charname} is facing."`;
+REQUIREMENTS:
+- Include "${charname}" and "${movement}" exactly.
+- Never start the narrative with "${charname} tried to".
+- Output the raw text only. No explanations.
+
+EXAMPLES:
+- Not now! |VS| That ${movement} wasn't the solution ${charname} needed.
+- A ${movement} was the wrong tool for the job ${charname} is facing.
+`;
 
         // Call the API
         const gptResponse = await callGPTApi(userPrompt, apiKey);
