@@ -217,6 +217,9 @@ window.makeShortComments = async function(charname, movement) {
             TEMPLATE 1 (Dual-Voice): [First-person thought] |VS| [Third-person narration]
             TEMPLATE 2 (Narrative): [A single third-person narration sentence]
 
+            Output the raw text only. No explanations.
+
+
             RULES:
             - If using TEMPLATE 1: Place " |VS| " between the thought and the narration.
             - If using TEMPLATE 2: Do NOT use the "|VS|" separator.
@@ -229,7 +232,6 @@ window.makeShortComments = async function(charname, movement) {
             - "The path remains blocked; a ${movement} was the wrong tool for ${charname}."
             - "That didn't work. |VS| The situation calls for something other than ${charname}'s ${movement}."
 
-            Output the raw text only. No explanations.
 `;
 
         // Call the API
