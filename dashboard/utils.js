@@ -213,18 +213,18 @@ window.makeShortComments = async function(charname, movement) {
         Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
 
         Choose ONE style for the output:
-        Style 1: [Short first-person thought] |VS| [Third-person narration including "${charname}" and "${movement}"]
+        Style 1: |VS| [Short first-person thought] |VS| [ followeed by a Third-person narration including "${charname}" and "${movement}" that concludes the first-person thought.]
         Style 2: [A single third-person narration including "${charname}" and "${movement}"]
 
         RULES:
         - Do NOT start the narration with "${charname} tried to".
         - Focus on the move being the wrong choice for the situation.
-        - Output raw text only.
 
         EXAMPLES:
-        - "Not this move... |VS| The current path didn't suit ${charname}'s ${movement}."
+        - "'Not this move...' |VS| said ${charname} when noticing that current path didn't suit ${movement}."
         - "A different approach would serve ${charname} better than that ${movement}."
-        - "Wrong timing! |VS| That ${movement} wasn't the answer ${charname} needed."
+        - "Wrong timing! |VS| screamed ${charname} since ${movement} wasn't the answer needed."
+        - Tone: Recognition that the move was the wrong choice for the moment.
         `;
 
         // Call the API
