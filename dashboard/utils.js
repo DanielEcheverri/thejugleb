@@ -224,7 +224,7 @@ window.makeShortComments = async function(charname, movement) {
         EXAMPLES:
         - "|VS|'Not this move...' |VS| said ${charname} when noticing that current path didn't suit ${movement}."
         - "A different approach would serve ${charname} better than that ${movement}."
-        - |VS| "Wrong timing! |VS| screamed ${charname} since ${movement} wasn't the answer needed."
+        - "|VS| 'Wrong timing!' |VS| screamed ${charname} since ${movement} wasn't the answer needed."
         `;
 
         // Call the API
