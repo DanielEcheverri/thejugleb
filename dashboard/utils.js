@@ -42,74 +42,57 @@ let cachedSentences;
 let characterData = {}; // Object to store data for each character
 let storyComment;
 
-window.makeComments = async function(character) {
-    const apiKey = avatar_GPT;
-    if (!apiKey) return console.error("API Key missing");
+window.makeComments = async function(charname) {
+    try {
+        const apiKey = avatar_GPT;
+        if (!apiKey) throw new Error("GPT API key missing.");
 
-    // 1. Clear any existing timer for this character
-    if (characterData[character]) {
-        clearInterval(characterData[character].intervalId);
-        delete characterData[character];
-    }
-
-    // Initialize character state
-    characterData[character] = {};
-
-    // 2. The Main Loop (Every 15 Seconds)
-    characterData[character].intervalId = setInterval(async () => {
-        
-        // 3. Check for Arrival State (Matches your original logic)
-        if (variables()[`${character}_arriving`]) {
-            stopComments(character); 
-            return;
-        }
-
-        // 4. Dynamic Data Extraction
-        const charPrefix = (character.toLowerCase() === 'avatar' || character === 'baloo') ? 'avatar' : 'hachi';
-        
-        const sceneData = {
+        // 1. Gather the data from your game state
+        // This assumes your variables() and other getters are globally accessible
+        const data = {
             weather: variables().storyWeather,
             time: variables().storyTime,
-            pollution: variables().storyPollution,
             city: variables().storyCity,
             neighborhood: variables().storyNeighborhood,
-            street: window[`${charPrefix}_street`],
-            speed: variables()[`${charPrefix}_walking_speed`],
-            amenity: variables()[`${charPrefix}_amenity`],
-            transit: `${variables()[`${charPrefix}_t_type`]} ${variables()[`${charPrefix}_t_route`]} at ${variables()[`${charPrefix}_t_stop`]} heading to ${variables()[`${charPrefix}_t_heading`]}`
+            pollution: variables().storyPollution,
+            // Dynamic character-specific data
+            speed: charname === 'Baloo' ? variables().avatar_walking_speed : variables().hachi_walking_speed,
+            amenity: charname === 'Baloo' ? variables().avatar_amenity : variables().hachi_amenity,
+            t_stop: charname === 'Baloo' ? variables().avatar_t_stop : variables().hachi_t_stop,
+            t_route: charname === 'Baloo' ? variables().avatar_t_route : variables().hachi_t_route,
+            t_heading: charname === 'Baloo' ? variables().avatar_t_heading : variables().hachi_t_heading,
+            t_type: charname === 'Baloo' ? variables().avatar_t_type : variables().hachi_t_type,
+            street: charname === 'Baloo' ? window.avatar_street : window.hachi_street
         };
 
-        // 5. The Flexible Background Prompt
+        // 2. Build the immersive prompt
         const userPrompt = `
-            Context: ${character} is currently at ${sceneData.street} in ${sceneData.neighborhood}.
-            Settings: ${sceneData.weather}, ${sceneData.time}, Pollution: ${sceneData.pollution}.
-            Activity: Moving at ${sceneData.speed} speed near ${sceneData.amenity}.
-            Transit: ${sceneData.transit}.
+            Context: Describe a short background scene for ${charname} based on these current settings:
+            - Location: ${data.neighborhood}, ${data.city} (Street: ${data.street})
+            - Environment: ${data.weather}, ${data.time}, Pollution level: ${data.pollution}
+            - Current Transit: At ${data.t_stop} (${data.t_type}), Route ${data.t_route} heading to ${data.t_heading}
+            - Status: Moving at ${data.speed} speed, near a ${data.amenity}.
 
-            TASK: Generate ONE brief atmosphere comment (max 3 sentences). 
-            
-            CHOOSE ONE STYLE RANDOMLY:
-            Style A: |VS| [First-person thought] |VS| [Third-person narration including "${character}"]
-            Style B: [Single third-person narration sentence including "${character}"]
+            TASK: Generate a 3-sentence max background scene using the |VS| format.
+            - Part 1 (First-person): ${charname}'s internal thought about the environment or transit.
+            - Part 2 (Third-person): A narrative description of the atmosphere surrounding ${charname}.
 
             RULES:
-            - Focus on environmental immersion and the character's progress.
-            - If Style A: wrap the thought in |VS| delimiters as shown.
-            - If Style B: do NOT use |VS|.
-            - Output raw text only. No "tried to" phrasing.
+            - Format as: |VS| [Thought] |VS| [Narration]
+            - Do not mention all data points; pick the most atmospheric ones to weave together.
+            - The narration must include "${charname}".
         `;
 
-        try {
-            const gptResponse = await callGPTApi(userPrompt, apiKey);
-            variables()[`${character}_comment`] = gptResponse;
-            console.log(`[Timer] ${character} Scene:`, gptResponse);
-        } catch (error) {
-            console.error("GPT Loop Error:", error);
-            // Simple fallback
-            variables()[`${character}_comment`] = `${character} continues through the streets of ${sceneData.city}.`;
-        }
+        const gptResponse = await callGPTApi(userPrompt, apiKey);
+        
+        // Save to a different variable to avoid overwriting movement feedback
+        window.avatar_backgroundScene = gptResponse;
+        console.log(`[GPT Scene] for ${charname}:`, gptResponse);
 
-    }, 15000); 
+    } catch (error) {
+        console.error("Error generating scene:", error);
+        window.avatar_backgroundScene = `|VS| "Another day in ${variables().storyCity}." |VS| ${charname} continues moving through the streets.`;
+    }
 };
 
 // Function to stop making comments for a character
