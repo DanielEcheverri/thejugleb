@@ -69,6 +69,7 @@ async function callGPTApi(prompt, apiKey) {
     }
 }
 
+window.characterData = window.characterData || {};
 window.makeComments = async function(character) {
     const apiKey = avatar_GPT;
     if (!apiKey) return;
@@ -147,7 +148,7 @@ window.stopComments = function(character) {
   	console.log("Stopping comments");
 };
 
-// --- GPT API Constants (kept here for context) ---
+// --- GPT API Constants ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
 const MAX_TOKENS = 250;
@@ -166,12 +167,13 @@ window.makeShortComments = async function(charname, movement) {
         Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
 
         Choose ONE style for the output:
-        Style 1: |VS| [Short first-person thought] |VS| [ followeed by a Third-person narration including "${charname}" and "${movement}" that concludes the first-person thought.]
+        Style 1: |VS| [Short first-person thought] |VS| [ followed by a Third-person narration including "${charname}" and "${movement}" that concludes the first-person thought.]
         Style 2: [A single third-person narration including "${charname}" and "${movement}"]
 
         RULES:
         - Do NOT start the narration with "${charname} tried to".
         - Focus on the move being the wrong choice for the situation.
+        - Although using a narrative tone, keep the language simple.
         - Tone: Recognition that the move was the wrong choice for the moment.
 
         EXAMPLES:
