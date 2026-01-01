@@ -18,7 +18,7 @@ async function callGPTApi(prompt, apiKey) {
             body: JSON.stringify({
                 model: GPT_MODEL_NAME,
                 messages: [
-                    { role: "system", content: "You are a concise, third-person narrator for a Twine game. Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt." },
+                    { role: "system", content: "You are a concise, third-person narrator for a Twine game." },
                     { role: "user", content: prompt }
                 ],
                 max_tokens: MAX_TOKENS,
@@ -103,6 +103,7 @@ window.makeComments = async function(character) {
     };
 
     const userPrompt = `
+        The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
         ACTUAL DATA:
         - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
         - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
@@ -110,8 +111,7 @@ window.makeComments = async function(character) {
         - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
 
         TASK:
-        Generate ONE immersive narrative comment (max 3 sentences). 
-        The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
+        Generate ONE immersive narrative comment (max 2 sentences). 
 
         STYLES (Randomly apply one):
         - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
@@ -154,7 +154,8 @@ window.makeShortComments = async function(charname, movement) {
         
         // Prepare the user prompt based on the arguments.
        const userPrompt = `
-        Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
+       Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt. 
+       Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
 
         Choose ONE style for the output:
         Style 1: |VS| [Short first-person thought] |VS| [ followed by a Third-person narration including "${charname}" and "${movement}" that concludes the first-person thought.]
