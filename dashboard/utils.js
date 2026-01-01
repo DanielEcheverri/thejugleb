@@ -99,7 +99,6 @@ window.makeComments = async function(character) {
         type: sVar[`${prefix}_t_type`]
     };
 
-    // --- NEW: Add Randomness to force a fresh response ---
     // This ensures the prompt text is different every single time you run the function.
     const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
     const randomFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
@@ -115,13 +114,13 @@ window.makeComments = async function(character) {
         - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
 
         TASK:
-        Generate ONE immersive narrative comment (max 3 sentences) for ${context.char}.
+        Generate ONE immersive narrative comment (max 2 sentences) for ${context.char}.
         The comment MUST reference at least two specific details from the ACTUAL DATA.
         
         VARIATION REQUIREMENT:
-        In this specific response, prioritize describing the **${randomFocus}** of the scene.
+        Prioritize describing the **${randomFocus}** of the scene.
 
-        STYLES (Randomly apply one):
+        STYLES (Select one):
         - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
         - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
 
