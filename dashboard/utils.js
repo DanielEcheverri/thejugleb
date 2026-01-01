@@ -99,11 +99,10 @@ window.makeComments = async function(character) {
         type: sVar[`${prefix}_t_type`]
     };
 
-    // --- NEW: Add Randomness to force a fresh response ---
-    // This ensures the prompt text is different every single time you run the function.
+    // Entropy setup (keep this from previous step)
     const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
     const randomFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
-    const uniqueID = Date.now(); // A timestamp to break any API caching
+    const uniqueID = Date.now(); 
 
     const userPrompt = `
         [Request ID: ${uniqueID}] 
@@ -112,30 +111,62 @@ window.makeComments = async function(character) {
         - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
         - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
         - Movement: Moving ${context.speed} past a ${context.amenity}.
-        - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
+        - Transit: Standing at ${context.stop} for ${context.type} ${context.route} toward ${context.heading}.
 
         TASK:
         Generate ONE immersive narrative comment (max 3 sentences) for ${context.char}.
-        The comment MUST reference at least two specific details from the ACTUAL DATA.
+        - Reference at least two specific details from ACTUAL DATA.
+        - Prioritize describing the **${randomFocus}**.
         
-        VARIATION REQUIREMENT:
-        In this specific response, prioritize describing the **${randomFocus}** of the scene.
+        STYLES (Pick one):
+        - Internal thought.
+        - Narrator observation.
+        - Descriptive sentence.
 
-        STYLES (Randomly apply one):
-        - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
-        - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
-
-        Output raw text only. No "tried to" or "attempted to".
+        IMPORTANT OUTPUT RULES:
+        1. Do NOT output your internal reasoning, thinking process, or "reasoning_content".
+        2. If you cannot hide your reasoning, you MUST output the final result starting with "FINAL TEXT:".
+        3. Output only the story text.
     `;
 
     try {
-        const gptResponse = await callGPTApi(userPrompt, apiKey);
+        let gptResponse = await callGPTApi(userPrompt, apiKey);
+
+        // --- NEW: CLEANING FUNCTION ---
+        // This strips out reasoning garbage, <think> tags, and parses JSON if the API messed up.
+        gptResponse = cleanGPTResponse(gptResponse);
+
         sVar[`${character}_comment`] = gptResponse;
-        console.log(`[Realism Update] ${character} (Focus: ${randomFocus}):`, gptResponse);
+        console.log(`[Realism Update] ${character}:`, gptResponse);
+
     } catch (error) {
         console.error("GPT Error:", error);
     }
 };
+
+// --- HELPER FUNCTION TO STRIP REASONING ---
+function cleanGPTResponse(text) {
+    if (!text) return "";
+
+    // 1. If it's an object, try to find the content string
+    if (typeof text === 'object') {
+        text = text.content || text.message?.content || JSON.stringify(text);
+    }
+
+    // 2. Remove "Reasoning" blocks (Common in DeepSeek/R1 models)
+    // Removes <think>...</think>
+    text = text.replace(/<think>[\s\S]*?<\/think>/gi, "");
+    // Removes lines starting with "reasoning_content:"
+    text = text.replace(/reasoning_content:[\s\S]*?(?=\n\n|Final Answer:|FINAL TEXT:|$)/gi, "");
+
+    // 3. Look for our manual anchor "FINAL TEXT:"
+    if (text.includes("FINAL TEXT:")) {
+        text = text.split("FINAL TEXT:")[1];
+    }
+
+    // 4. Clean up quotes and whitespace
+    return text.trim().replace(/^["']|["']$/g, '');
+}
 
 // Function to stop making comments for a character
 window.stopComments = function(character) {
