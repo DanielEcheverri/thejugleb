@@ -115,7 +115,7 @@ window.makeComments = async function(character) {
 
         TASK:
         Generate ONE immersive narrative comment (max 2 sentences) for ${context.char}.
-        The comment MUST reference at least two specific details from the ACTUAL DATA.
+        The comment MUST reference two specific details from the ACTUAL DATA.
         
         VARIATION REQUIREMENT:
         Prioritize describing the **${randomFocus}** of the scene.
@@ -124,7 +124,6 @@ window.makeComments = async function(character) {
         - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
         - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
 
-        Output raw text only. No "tried to" or "attempted to".
     `;
 
     try {
