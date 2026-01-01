@@ -94,7 +94,7 @@ const GPT_MODEL_NAME = 'gpt-oss-120b';
 //  speakMessage_oss – generate speech with GPT‑OSS‑120‑b TTS
 //  – now uses the ChatGPT voices: alloy (male) & coral (female)
 // ---------------------------------------------------------------------------
-async function speakMessage_azure(fullMessage) {
+async function speakMessage_oss(fullMessage) {
     // --------------------------------------------------------------
     // 1️⃣  Prepare the text (transliteration, duplicate guard, etc.)
     // --------------------------------------------------------------
@@ -244,7 +244,7 @@ async function speakMessage_azure(fullMessage) {
     }
 }
 
-async function speakMessage_azure_out(fullMessage) {
+async function speakMessage_azure(fullMessage) {
     const transliteratedMessage = transliterate(fullMessage);
     
     if (transliteratedMessage === lastSpokenMessage) {
