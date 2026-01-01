@@ -147,7 +147,7 @@ window.stopComments = function(character) {
 // --- GPT API Constants ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 250;
+const MAX_TOKENS = 350;
 
 window.makeShortComments = async function(charname, movement) {
     try {
