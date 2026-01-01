@@ -76,67 +76,57 @@ window.makeComments = async function(character) {
 
     const sVar = SugarCube.State.variables;
 
-    // Clear existing timer for this specific character
-    if (characterData[character]?.intervalId) {
-        clearInterval(characterData[character].intervalId);
+    // Check if character is arriving (abort if so)
+    if (sVar[`${character}_arriving`]) {
+        return; 
     }
 
-    characterData[character] = {
-        intervalId: setInterval(async () => {
-            
-            if (sVar[`${character}_arriving`]) {
-                if (typeof stopComments === "function") stopComments(character);
-                return;
-            }
-
-            const isBaloo = (character.toLowerCase() === 'avatar' || character === 'baloo');
-            const prefix = isBaloo ? 'avatar' : 'hachi';
-            
-            const context = {
-                char: character,
-                street: window[`${prefix}_street`] || "the current path",
-                neighborhood: sVar.storyNeighborhood || "this district",
-                city: sVar.storyCity || "the city",
-                weather: sVar.storyWeather || "changing",
-                time: sVar.storyTime || "now",
-                pollution: sVar.storyPollution || "variable",
-                speed: sVar[`${prefix}_walking_speed`] || "normal",
-                amenity: sVar[`${prefix}_amenity`] || "the surroundings",
-                // Transit Specifics
-                stop: sVar[`${prefix}_t_stop`],
-                route: sVar[`${prefix}_t_route`],
-                heading: sVar[`${prefix}_t_heading`],
-                type: sVar[`${prefix}_t_type`]
-            };
-
-            const userPrompt = `
-                ACTUAL DATA:
-                - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
-                - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
-                - Movement: Moving ${context.speed} past a ${context.amenity}.
-                - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
-
-                TASK:
-                Generate ONE immersive narrative comment (max 3 sentences). 
-                The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
-
-                STYLES (Randomly apply one):
-                - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
-                - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
-
-                Output raw text only. No "tried to" or "attempted to".
-            `;
-
-            try {
-                const gptResponse = await callGPTApi(userPrompt, apiKey);
-                sVar[`${character}_comment`] = gptResponse;
-                console.log(`[Realism Update] ${character}:`, gptResponse);
-            } catch (error) {
-                console.error("GPT Error:", error);
-            }
-
-        }, 15000)
+    const isBaloo = (character.toLowerCase() === 'avatar' || character === 'baloo');
+    const prefix = isBaloo ? 'avatar' : 'hachi';
+    
+    // Build Context
+    const context = {
+        char: character,
+        street: window[`${prefix}_street`] || "the current path",
+        neighborhood: sVar.storyNeighborhood || "this district",
+        city: sVar.storyCity || "the city",
+        weather: sVar.storyWeather || "changing",
+        time: sVar.storyTime || "now",
+        pollution: sVar.storyPollution || "variable",
+        speed: sVar[`${prefix}_walking_speed`] || "normal",
+        amenity: sVar[`${prefix}_amenity`] || "the surroundings",
+        // Transit Specifics
+        stop: sVar[`${prefix}_t_stop`],
+        route: sVar[`${prefix}_t_route`],
+        heading: sVar[`${prefix}_t_heading`],
+        type: sVar[`${prefix}_t_type`]
     };
+
+    const userPrompt = `
+        ACTUAL DATA:
+        - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
+        - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
+        - Movement: Moving ${context.speed} past a ${context.amenity}.
+        - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
+
+        TASK:
+        Generate ONE immersive narrative comment (max 3 sentences). 
+        The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
+
+        STYLES (Randomly apply one):
+        - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
+        - Style 2: [A single descriptive sentence about ${context.char} and the surroundings]
+
+        Output raw text only. No "tried to" or "attempted to".
+    `;
+
+    try {
+        const gptResponse = await callGPTApi(userPrompt, apiKey);
+        sVar[`${character}_comment`] = gptResponse;
+        console.log(`[Realism Update] ${character}:`, gptResponse);
+    } catch (error) {
+        console.error("GPT Error:", error);
+    }
 };
 
 // Function to stop making comments for a character
