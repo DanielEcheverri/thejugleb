@@ -100,7 +100,7 @@ window.makeComments = async function(character) {
     };
 
     // Entropy setup (keep this from previous step)
-    const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
+    const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'atmosphere'];
     const randomFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
     const uniqueID = Date.now(); 
 
@@ -114,7 +114,7 @@ window.makeComments = async function(character) {
         - Transit: Standing at ${context.stop} for ${context.type} ${context.route} toward ${context.heading}.
 
         TASK:
-        Generate ONE immersive narrative comment (max 3 sentences) for ${context.char}.
+        Generate ONE immersive narrative comment (max 2 sentences) for ${context.char}.
         - Reference at least two specific details from ACTUAL DATA.
         - Prioritize describing the **${randomFocus}**.
         
