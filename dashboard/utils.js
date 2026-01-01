@@ -76,15 +76,13 @@ window.makeComments = async function(character) {
 
     const sVar = SugarCube.State.variables;
 
-    // Check if character is arriving (abort if so)
     if (sVar[`${character}_arriving`]) {
-        return; 
+        return;
     }
 
     const isBaloo = (character.toLowerCase() === 'avatar' || character === 'baloo');
     const prefix = isBaloo ? 'avatar' : 'hachi';
     
-    // Build Context
     const context = {
         char: character,
         street: window[`${prefix}_street`] || "the current path",
@@ -95,15 +93,21 @@ window.makeComments = async function(character) {
         pollution: sVar.storyPollution || "variable",
         speed: sVar[`${prefix}_walking_speed`] || "normal",
         amenity: sVar[`${prefix}_amenity`] || "the surroundings",
-        // Transit Specifics
         stop: sVar[`${prefix}_t_stop`],
         route: sVar[`${prefix}_t_route`],
         heading: sVar[`${prefix}_t_heading`],
         type: sVar[`${prefix}_t_type`]
     };
 
+    // --- NEW: Add Randomness to force a fresh response ---
+    // This ensures the prompt text is different every single time you run the function.
+    const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
+    const randomFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
+    const uniqueID = Date.now(); // A timestamp to break any API caching
+
     const userPrompt = `
-        The comment MUST reference at least two specific details from the ACTUAL DATA above to feel grounded in the game world.
+        [Request ID: ${uniqueID}] 
+
         ACTUAL DATA:
         - Location: ${context.street} in ${context.neighborhood}, ${context.city}.
         - Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}.
@@ -111,7 +115,11 @@ window.makeComments = async function(character) {
         - Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}.
 
         TASK:
-        Generate ONE immersive narrative comment (max 2 sentences). 
+        Generate ONE immersive narrative comment (max 3 sentences) for ${context.char}.
+        The comment MUST reference at least two specific details from the ACTUAL DATA.
+        
+        VARIATION REQUIREMENT:
+        In this specific response, prioritize describing the **${randomFocus}** of the scene.
 
         STYLES (Randomly apply one):
         - Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
@@ -123,7 +131,7 @@ window.makeComments = async function(character) {
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
         sVar[`${character}_comment`] = gptResponse;
-        console.log(`[Realism Update] ${character}:`, gptResponse);
+        console.log(`[Realism Update] ${character} (Focus: ${randomFocus}):`, gptResponse);
     } catch (error) {
         console.error("GPT Error:", error);
     }
