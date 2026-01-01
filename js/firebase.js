@@ -117,6 +117,7 @@ function readFromDatabase(deviceName) {
     const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
     const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
     const myAzure = (deviceName === 'hachi_BT') ? 'hachi_tts' : 'avatar_tts';
+    const myOSS = (deviceName === 'hachi_BT') ? 'hachi_GPT' : 'avatar_GPT';
     const myBackText = (deviceName === 'hachi_BT') ? 'hachi_backtext' : 'avatar_backtext';
 
 
@@ -162,6 +163,7 @@ function readFromDatabase(deviceName) {
                 sendData();// from bluetooth.js
             }
             azureKey = myData[myAzure]; //global
+            ossKey = myData[myOSS]; //global
         } else {
             console.log("No data found in the own database.");
         }

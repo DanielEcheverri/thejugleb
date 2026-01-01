@@ -41,6 +41,7 @@ var bgm_Sound;
 let currentSound = null;
 let speaking = false;
 let azureKey = null;
+let ossKey = null;
 
 // Messaging State
 var message;
