@@ -134,9 +134,9 @@ You can write it as:
 - Or just describe the scene around ${context.char}
 
 Like these:
-"|VS| 'Smells like rain.' |VS| Steam rises from warm asphalt near ${context.char}."
+"|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
 "Neon signs flicker in puddles by ${context.char}'s feet."
-"|VS| 'Too many people.' |VS| ${context.char} watches the crowd surge toward the platform."
+"|VS| 'Too many people,' |VS| observer ${context.char} watching the crowd surge"
 "Distant traffic hum blends with conversations around ${context.char}."`
 
     try {
