@@ -113,7 +113,7 @@ window.makeComments = async function(character) {
     };
     
     // Vary the sensory focus to ensure diverse outputs
-    const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'crowd density', 'traffic noise', 'buildings', 'exhaust fumes', 'sidewalk activity','interesting architecture', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'advertisement and signs', 'construction sites', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
+    const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'crowd density', 'traffic noise', 'buildings', 'sidewalk activity','interesting architecture', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'advertisement and signs', 'construction sites', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
     const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
     const uniqueID = Date.now();
     
@@ -125,14 +125,14 @@ It's ${context.time}, the air feels ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
-Write one very short atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
+Write one **VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
 You can write it as:
 - An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
 - Or just describe the scene around ${context.char}
 
-Like these:
+Consider these examples and their lenght:
 "|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
 "Neon signs flicker in puddles by ${context.char}'s feet."
 "|VS| 'Too many people,' |VS| observes ${context.char} watching the crowd surge"
