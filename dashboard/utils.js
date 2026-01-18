@@ -1,5 +1,10 @@
 console.log("Loading Utilities Functions...");
 
+// --- GPT API Constants ---
+const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
+const GPT_MODEL_NAME = 'gpt-oss-120b';
+const MAX_TOKENS = 350;
+
 /**
  * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
  */
@@ -9,7 +14,7 @@ async function callGPTApi(prompt, apiKey) {
     try {
         const response = await fetch(GPT_MODEL_ENDPOINT, {
             method: 'POST',
-            mode: 'cors', // Ensure CORS is explicitly set
+            //mode: 'cors', // Ensure CORS is explicitly set
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}` 
@@ -144,10 +149,6 @@ window.stopComments = function(character) {
   	console.log("Stopping comments");
 };
 
-// --- GPT API Constants ---
-const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
-const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 350;
 
 window.makeShortComments = async function(charname, movement) {
     try {
