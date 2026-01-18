@@ -129,7 +129,6 @@ CONTEXT:
 TASK:
 Generate ONE brief environmental observation (max 2 sentences) describing what's happening AROUND ${context.char}.
 ${context.char} is NOT interacting with the environment - only observing it.
-//Use EXACTLY TWO details from the CONTEXT above.
 
 SENSORY FOCUS:
 Prioritize the **${randomFocus}** of the scene.
