@@ -113,7 +113,7 @@ window.makeComments = async function(character) {
     };
     
     // Vary the sensory focus to ensure diverse outputs
-    const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
+    const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'pavement texture', 'crowd density', 'traffic noise', 'building shadows', 'exhaust fumes', 'sidewalk activity', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'neon signs', 'construction noise', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
     const contextFocus = ['Location', 'Environment', 'Near', 'Transit'];
     const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
     const randomCFocus = contextFocus[Math.floor(Math.random() * contextFocus.length)];
@@ -128,6 +128,7 @@ The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
 Write one very short atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
+Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
 You can write it as:
 - An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
