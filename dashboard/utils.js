@@ -121,24 +121,23 @@ window.makeComments = async function(character) {
     
     const userPrompt = `[Request ID: ${uniqueID}]
 
-CONTEXT:
-Location: ${context.street}, ${context.neighborhood}, ${context.city}
-Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollution}
-Near: ${context.amenity}
-Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
+${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in th city of ${context.city} . 
+The ${context.weather} sky hangs over ${context.street}. 
+It's ${context.time}, the air feels ${context.pollution}.
+The ${context.type} Route ${context.route} heads toward ${context.heading}.
+${context.char} is walking ${context.speed}.
 
-Imagine a brief environmental observation (1 short sentence) about what's happening around ${context.char}.
-Focus only on the **${randomCFocus}** context.
-${context.char} observes but does not interact.
+Write one short atmospheric moment focusing on **${randomFocus}**. ${context.char} observes, doesn't act.
 
-Choose one style:
-Style 1: |VS| [Brief thought from ${context.char}'s perspective] |VS| [Environmental description]
-Style 2: [Single environmental sentence]
+You can write it as:
+- An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
+- Or just describe the scene around ${context.char}
 
-Examples:
-"|VS| 'Thick smog today.' |VS| said {context.char} looking how the Haze obscures the street near ${context.char}."
-"Bus fumes mix with rain where ${context.char} waits."
-"|VS| 'Rush hour.' |VS| thought ${context.char} looking at the Commuters brush past."`;
+Like these:
+"|VS| 'Smells like rain.' |VS| Steam rises from warm asphalt near ${context.char}."
+"Neon signs flicker in puddles by ${context.char}'s feet."
+"|VS| 'Too many people.' |VS| ${context.char} watches the crowd surge toward the platform."
+"Distant traffic hum blends with conversations around ${context.char}."`
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
