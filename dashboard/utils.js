@@ -127,7 +127,7 @@ It's ${context.time}, the air feels ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
-Write one short atmospheric moment focusing on **${randomFocus}**. ${context.char} observes, doesn't act.
+Write one short atmospheric moment focusing on **${randomSFocus}**. ${context.char} observes, doesn't act.
 
 You can write it as:
 - An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
