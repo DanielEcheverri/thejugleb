@@ -89,6 +89,7 @@ function generateFallbackComment(character, context = {}) {
  */
 window.makeComments = async function(character) {
     const apiKey = window.avatar_GPT;
+    const sVar = SugarCube.State.variables;
     
     // Determine character prefix for variable names
     const isBaloo = (character.toLowerCase() === 'avatar' || character.toLowerCase() === 'baloo');
