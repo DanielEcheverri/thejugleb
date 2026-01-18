@@ -119,22 +119,29 @@ window.makeComments = async function(character) {
     
     const userPrompt = `[Request ID: ${uniqueID}]
 
-ACTUAL DATA:
+CONTEXT:
 - Location: ${context.street} in ${context.neighborhood}, ${context.city}
-- Environment: ${context.weather} sky, ${context.time}, Pollution Index: ${context.pollution}
-- Movement: Moving ${context.speed} past a ${context.amenity}
-- Transit Context: Standing at ${context.stop} for the ${context.type} (Route ${context.route}) heading toward ${context.heading}
+- Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollution}
+- Speed: ${context.speed}
+- Near: ${context.amenity}
+- Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
 
 TASK:
-Generate ONE immersive narrative comment (max 2 sentences) for ${context.char}.
-The comment MUST reference only two specific details from the ACTUAL DATA.
+Generate ONE brief environmental observation (max 2 sentences) describing what's happening AROUND ${context.char}.
+${context.char} is NOT interacting with the environment - only observing it.
+Use EXACTLY TWO details from the CONTEXT above.
 
-VARIATION REQUIREMENT:
-Prioritize describing the **${randomFocus}** of the scene.
+SENSORY FOCUS:
+Prioritize the **${randomFocus}** of the scene.
 
-STYLES (Select one):
-- Style 1: |VS| [Internal thought about the data] |VS| [Narrator observation of ${context.char}]
-- Style 2: [A single descriptive sentence about ${context.char} and the surroundings]`;
+OUTPUT STYLES (choose one):
+- Style 1: |VS| [${context.char}'s brief internal observation] |VS| [Third-person environmental description mentioning ${context.char}]
+- Style 2: [Single environmental description with ${context.char} as a reference point]
+
+EXAMPLES:
+- "|VS| 'The haze is thick today.' |VS| A layer of smog hung over the street where ${context.char} waited."
+- "Bus exhaust mingles with food smells near ${context.char} at the busy stop."
+- "|VS| 'Rush hour chaos.' |VS| Commuters hurried past ${context.char} under the evening sky."`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
