@@ -120,27 +120,23 @@ window.makeComments = async function(character) {
     const userPrompt = `[Request ID: ${uniqueID}]
 
 CONTEXT:
-- Location: ${context.street} in ${context.neighborhood}, ${context.city}
-- Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollution}
-- Speed: ${context.speed}
-- Near: ${context.amenity}
-- Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
+Location: ${context.street}, ${context.neighborhood}, ${context.city}
+Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollution}
+Near: ${context.amenity}
+Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
 
-TASK:
-Generate ONE brief environmental observation (max 2 sentences) describing what's happening AROUND ${context.char}.
-${context.char} is NOT interacting with the environment - only observing it.
+Generate a brief environmental observation (1-2 short sentences, max 20 words total) about what's happening around ${context.char}.
+Focus on **${randomFocus}**.
+${context.char} observes but does not interact.
 
-SENSORY FOCUS:
-Prioritize the **${randomFocus}** of the scene.
+Choose one style:
+Style 1: |VS| [Brief thought] |VS| [Environmental description]
+Style 2: [Single environmental sentence]
 
-OUTPUT STYLES (choose one):
-- Style 1: |VS| [${context.char}'s brief internal observation] |VS| [Third-person environmental description mentioning ${context.char}]
-- Style 2: [Single environmental description with ${context.char} as a reference point]
-
-EXAMPLES:
-- "|VS| 'The haze is thick today.' |VS| A layer of smog hung over the street where ${context.char} waited."
-- "Bus exhaust mingles with food smells near ${context.char} at the busy stop."
-- "|VS| 'Rush hour chaos.' |VS| Commuters hurried past ${context.char} under the evening sky."`;
+Examples:
+"|VS| 'Thick smog today.' |VS| Haze obscures the street near ${context.char}."
+"Bus fumes mix with rain where ${context.char} waits."
+"|VS| 'Rush hour.' |VS| Commuters brush past ${context.char} at the stop."`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
