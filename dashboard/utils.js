@@ -121,22 +121,22 @@ window.makeComments = async function(character) {
 
 ${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
 The ${context.weather} sky hangs over ${context.street}. 
-It's ${context.time}, the air feels ${context.pollution}.
+It's ${context.time}, there is ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
 Write one **VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
-You can write it as:
+You can write it either as:
 - An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
 - Or just describe the scene around ${context.char}
 
 Consider these examples and their lenght:
-"|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
-"Neon signs flicker in puddles by ${context.char}'s feet."
-"|VS| 'Too many people,' |VS| observes ${context.char} watching the crowd surge"
-"Distant traffic hum blends with conversations around ${context.char}."`
+-"|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
+-"Neon signs flicker in puddles by ${context.char}'s feet."
+-As the crowd surges, ${context.char} observes, "|VS| 'Too many people,' |VS|".
+-Around ${context.char}, conversations blend with the distant hum of traffic.`
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
