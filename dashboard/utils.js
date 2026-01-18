@@ -143,7 +143,7 @@ Examples:
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
         window[`${character}_comment`] = gptResponse;
-        console.log(`[Realism Update] ${character} (Focus: ${randomFocus}):`, gptResponse);
+        console.log(`[Realism Update] ${character} (Focus: ${randomCFocus} and ${randomSFocus}):`, gptResponse);
     } catch (error) {
         console.error(`GPT Error for ${character}:`, error);
         const fallback = generateFallbackComment(character, context);
