@@ -97,18 +97,18 @@ window.makeComments = async function(character) {
     // Build context from window variables
     const context = {
         char: character,
-        street: getWindowVar(`${prefix}_street`, "the current path"),
-        neighborhood: getWindowVar('storyNeighborhood', "this district"),
-        city: getWindowVar('storyCity', "the city"),
-        weather: getWindowVar('storyWeather', "changing"),
-        time: getWindowVar('storyTime', "now"),
-        pollution: getWindowVar('storyPollution', "variable"),
-        speed: getWindowVar(`${prefix}_walking_speed`, "normal"),
-        amenity: getWindowVar(`${prefix}_amenity`, "the surroundings"),
-        stop: getWindowVar(`${prefix}_t_stop`),
-        route: getWindowVar(`${prefix}_t_route`),
-        heading: getWindowVar(`${prefix}_t_heading`),
-        type: getWindowVar(`${prefix}_t_type`)
+        street: window[`${prefix}_street`] || "the current path",
+        neighborhood: sVar.storyNeighborhood || "this district",
+        city: sVar.storyCity || "the city",
+        weather: sVar.storyWeather || "changing",
+        time: sVar.storyTime || "now",
+        pollution: sVar.storyPollution || "variable",
+        speed: sVar[`${prefix}_walking_speed`] || "normal",
+        amenity: sVar[`${prefix}_amenity`] || "the surroundings",
+        stop: sVar[`${prefix}_t_stop`],
+        route: sVar[`${prefix}_t_route`],
+        heading: sVar[`${prefix}_t_heading`],
+        type: sVar[`${prefix}_t_type`]
     };
     
     // Vary the sensory focus to ensure diverse outputs
