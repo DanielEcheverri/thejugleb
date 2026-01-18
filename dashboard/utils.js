@@ -114,7 +114,9 @@ window.makeComments = async function(character) {
     
     // Vary the sensory focus to ensure diverse outputs
     const sensoryFocus = ['sounds', 'smells', 'lighting', 'temperature', 'physical movement', 'atmosphere'];
-    const randomFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
+    const contextFocus = ['Location', 'Environment', 'Near', 'Transit'];
+    const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
+    const randomCFocus = contextFocus[Math.floor(Math.random() * contextFocus.length)];
     const uniqueID = Date.now();
     
     const userPrompt = `[Request ID: ${uniqueID}]
@@ -126,7 +128,7 @@ Near: ${context.amenity}
 Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
 
 Generate a brief environmental observation (1-2 short sentences) about what's happening around ${context.char}.
-Focus on **${randomFocus}**.
+Focus on **${randomSFocus}** and **${randomCFocus}**.
 ${context.char} observes but does not interact.
 
 Choose one style:
