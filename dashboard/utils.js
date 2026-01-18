@@ -151,6 +151,7 @@ window.stopComments = function(character) {
 
 
 window.makeShortComments = async function(charname, movement) {
+    const uniqueID = Date.now(); // A timestamp to break any API caching
     try {
         const apiKey = avatar_GPT; 
         
@@ -161,6 +162,7 @@ window.makeShortComments = async function(charname, movement) {
         
         // Prepare the user prompt based on the arguments.
        const userPrompt = `
+       [Request ID: ${uniqueID}] 
        Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt. 
        Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
 
