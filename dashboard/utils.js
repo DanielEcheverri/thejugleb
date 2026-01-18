@@ -22,7 +22,7 @@ async function callGPTApi(prompt, apiKey) {
             body: JSON.stringify({
                 model: GPT_MODEL_NAME,
                 messages: [
-                    { role: "system", content: "You are a concise, third-person narrator for a Twine game." },
+                    { role: "system", content: "You are a concise, third-person narrator for a Twine game. Use simple, everyday language - not poetic or literary. Keep it casual and direct. Think like a regular person, not a writer" },
                     { role: "user", content: prompt }
                 ],
                 max_tokens: MAX_TOKENS,
@@ -121,7 +121,7 @@ window.makeComments = async function(character) {
     
     const userPrompt = `[Request ID: ${uniqueID}]
 
-${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in th city of ${context.city} . 
+${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
 The ${context.weather} sky hangs over ${context.street}. 
 It's ${context.time}, the air feels ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
@@ -136,7 +136,7 @@ You can write it as:
 Like these:
 "|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
 "Neon signs flicker in puddles by ${context.char}'s feet."
-"|VS| 'Too many people,' |VS| observer ${context.char} watching the crowd surge"
+"|VS| 'Too many people,' |VS| observes ${context.char} watching the crowd surge"
 "Distant traffic hum blends with conversations around ${context.char}."`
 
     try {
