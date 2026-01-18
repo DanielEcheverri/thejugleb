@@ -127,8 +127,8 @@ Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollu
 Near: ${context.amenity}
 Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
 
-Generate a brief environmental observation (1 short sentence) about what's happening around ${context.char}.
-Focus on **${randomCFocus}** CONTEXT.
+Imagine a brief environmental observation (1 short sentence) about what's happening around ${context.char}.
+Focus only on the **${randomCFocus}** context.
 ${context.char} observes but does not interact.
 
 Choose one style:
