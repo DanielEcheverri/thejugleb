@@ -125,18 +125,18 @@ Environment: ${context.weather} sky, ${context.time}, Pollution: ${context.pollu
 Near: ${context.amenity}
 Transit: ${context.stop}, ${context.type} Route ${context.route} toward ${context.heading}
 
-Generate a brief environmental observation (1-2 short sentences, max 20 words total) about what's happening around ${context.char}.
+Generate a brief environmental observation (1-2 short sentences) about what's happening around ${context.char}.
 Focus on **${randomFocus}**.
 ${context.char} observes but does not interact.
 
 Choose one style:
-Style 1: |VS| [Brief thought] |VS| [Environmental description]
+Style 1: |VS| [Brief thought from ${context.char}'s perspective] |VS| [Environmental description]
 Style 2: [Single environmental sentence]
 
 Examples:
-"|VS| 'Thick smog today.' |VS| Haze obscures the street near ${context.char}."
+"|VS| 'Thick smog today.' |VS| said {context.char} looking how the Haze obscures the street near ${context.char}."
 "Bus fumes mix with rain where ${context.char} waits."
-"|VS| 'Rush hour.' |VS| Commuters brush past ${context.char} at the stop."`;
+"|VS| 'Rush hour.' |VS| thought ${context.char} looking at the Commuters brush past."`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
