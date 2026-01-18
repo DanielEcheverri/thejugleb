@@ -113,7 +113,7 @@ window.makeComments = async function(character) {
     };
     
     // Vary the sensory focus to ensure diverse outputs
-    const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'pavement texture', 'crowd density', 'traffic noise', 'building shadows', 'exhaust fumes', 'sidewalk activity', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'neon signs', 'construction noise', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
+    const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'crowd density', 'traffic noise', 'buildings', 'exhaust fumes', 'sidewalk activity','interesting architecture', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'advertisement and signs', 'construction sites', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
     const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
     const uniqueID = Date.now();
     
