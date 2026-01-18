@@ -114,9 +114,7 @@ window.makeComments = async function(character) {
     
     // Vary the sensory focus to ensure diverse outputs
     const sensoryFocus = ['street sounds', 'urban smells', 'street lighting', 'pavement texture', 'crowd density', 'traffic noise', 'building shadows', 'exhaust fumes', 'sidewalk activity', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'neon signs', 'construction noise', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
-    const contextFocus = ['Location', 'Environment', 'Near', 'Transit'];
     const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
-    const randomCFocus = contextFocus[Math.floor(Math.random() * contextFocus.length)];
     const uniqueID = Date.now();
     
     const userPrompt = `[Request ID: ${uniqueID}]
