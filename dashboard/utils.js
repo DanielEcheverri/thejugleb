@@ -127,7 +127,7 @@ It's ${context.time}, the air feels ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
-Write one short atmospheric moment focusing on **${randomSFocus}**. ${context.char} observes, doesn't act.
+Write one very short atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 
 You can write it as:
 - An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
@@ -142,7 +142,7 @@ Like these:
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
         window[`${character}_comment`] = gptResponse;
-        console.log(`[Realism Update] ${character} (Focus: ${randomCFocus} and ${randomSFocus}):`, gptResponse);
+        console.log(`[Realism Update] ${character} (Focus: ${randomSFocus}):`, gptResponse);
     } catch (error) {
         console.error(`GPT Error for ${character}:`, error);
         const fallback = generateFallbackComment(character, context);
