@@ -129,14 +129,14 @@ Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFo
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
 You can write it in two possible ways:
-- Or just describe the scene around ${context.char}
-- An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
+1. Just describe the scene around ${context.char}
+2. An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
 
-Consider these examples and their lenght:
--"|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
--"Neon signs flicker in puddles by ${context.char}'s feet."
--As the crowd surges, ${context.char} observes, "|VS| 'Too many people,' |VS|".
--Around ${context.char}, conversations blend with the distant hum of traffic.`
+Consider these four examples and their lenght:
+1. "|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
+2. "Neon signs flicker in puddles by ${context.char}'s feet."
+3. As the crowd surges, ${context.char} observes, "|VS| 'Too many people,' |VS|".
+4. Around ${context.char}, conversations blend with the distant hum of traffic.`
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
