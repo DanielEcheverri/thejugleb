@@ -164,8 +164,9 @@ window.makeShortComments = async function(charname, movement) {
     const userPrompt = `[Request ID: ${uniqueID}]
 
 Your goal is to provide short, discouraging yet encouraging feedback on a failed movement attempt.
+Dont forget to use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
 
-Context: ${charname} performed "${movement}", but it was the wrong tactical choice.
+Context: ${charname} performed "${movement}", but it was the wrong choice.
 
 Choose ONE style for the output:
 - Style 1: |VS| [Short first-person thought] |VS| [Third-person narration including "${charname}" and "${movement}" that concludes the first-person thought]
@@ -178,8 +179,8 @@ RULES:
 - Tone: Recognition that the move was the wrong choice for the moment
 
 EXAMPLES:
-- "|VS|'Not this move...' |VS| said ${charname} when noticing that current path didn't suit ${movement}."
-- "A different approach would serve ${charname} better than that ${movement}."
+- "|VS|'Not this move...' |VS| said ${charname} when noticing that ${movement} didnt do much."
+- "A different approach would serve ${charname} better than ${movement}."
 - "|VS| 'Wrong timing!' |VS| screamed ${charname} since ${movement} wasn't the answer needed."`;
 
     try {
