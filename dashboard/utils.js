@@ -120,9 +120,10 @@ window.makeComments = async function(character) {
     const userPrompt = `[Request ID: ${uniqueID}]
 
 STORY CONTEXT:
-${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
+${context.char} stands near ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
 The ${context.weather} sky hangs over ${context.street}. 
 It's ${context.time}, there is ${context.pollution}.
+There are some ${context.amenity} close.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
