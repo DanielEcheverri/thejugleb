@@ -125,7 +125,7 @@ It's ${context.time}, there is ${context.pollution}.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
 
-Write one **VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
+Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
 You can write it in two possible ways:
