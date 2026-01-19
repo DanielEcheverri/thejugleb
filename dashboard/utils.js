@@ -128,9 +128,9 @@ ${context.char} is walking ${context.speed}.
 Write one **VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
 
-You can write it either as:
-- An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
+You can write it in two possible ways:
 - Or just describe the scene around ${context.char}
+- An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
 
 Consider these examples and their lenght:
 -"|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
