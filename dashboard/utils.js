@@ -119,6 +119,7 @@ window.makeComments = async function(character) {
     
     const userPrompt = `[Request ID: ${uniqueID}]
 
+STORY CONTEXT:
 ${context.char} stands near ${context.amenity} at ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
 The ${context.weather} sky hangs over ${context.street}. 
 It's ${context.time}, there is ${context.pollution}.
@@ -127,6 +128,7 @@ ${context.char} is walking ${context.speed}.
 
 Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Dont forget to use simple, everyday language - not poetic or literary. Keep it casual and direct.
+Include something from the **STORY CONTEXT.**
 
 You can write it in two possible ways:
 1. Just describe the scene around ${context.char}
