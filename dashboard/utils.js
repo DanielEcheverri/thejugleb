@@ -197,7 +197,7 @@ EXAMPLES:
 
 window.loadSceneJSON = function() {
     // 1. Get current passage name
-    var currentPassage = State.passage;
+    var currentPassage = SugarCube.State.passage;
     var jsonPath = "https://danielecheverri.github.io/dashboard/scenes/" + currentPassage + ".json";
 
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
