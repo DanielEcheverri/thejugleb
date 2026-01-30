@@ -194,3 +194,30 @@ EXAMPLES:
         console.log(`[Fallback] Using default message for ${charname}`);
     }
 };
+
+window.loadSceneJSON = function() {
+    // 1. Get current passage name
+    var currentPassage = State.passage;
+    var jsonPath = "https://danielecheverri.github.io/dashboard/scenes/" + currentPassage + ".json";
+
+    console.log("[JSON Loader] Attempting to load: " + jsonPath);
+
+    // 2. Fetch the file
+    $.getJSON(jsonPath)
+        .done(function(data) {
+            
+            // Success: Log data to console
+            console.log("[JSON Loader] Success. Data loaded:", data);
+
+            // Assign to temporary variable _scene
+            State.temporary.scene = data;
+
+            // Inject the engine into the hook
+            // We use a specific ID hook so we know exactly where to put the engine
+            $("#logic_slot").wiki('<<include "Logic_AvatarEngine">>');
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            // Failure: Log error to console
+            console.error("[JSON Loader] FAILED. Reason: " + textStatus + ", " + error);
+        });
+};
