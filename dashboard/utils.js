@@ -196,7 +196,7 @@ EXAMPLES:
 };
 
 window.loadSceneJSON = function(sceneId) {
-    State.variables.inScene = true;
+    SugarCube.State.variables.inScene = true;
 
     var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
