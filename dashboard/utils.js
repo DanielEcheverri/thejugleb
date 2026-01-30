@@ -198,7 +198,7 @@ EXAMPLES:
 window.loadSceneJSON = function(sceneId) {
     // 1. Get current passage name
     var currentPassage = sceneId;
-    var jsonPath = "https://danielecheverri.github.io/dashboard/scenes/" + currentPassage + ".json";
+    var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + currentPassage + ".json";
 
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
 
