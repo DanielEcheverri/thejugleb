@@ -207,7 +207,7 @@ window.loadSceneJSON = function(sceneId) {
                 console.log("[JSON Loader] Success.");
 
                 // 1. Store in PERMANENT storage
-                setup.sceneData = data;
+                SugarCube.setup.sceneData = data;
 
                 // 2. Create a snippet that copies it to _scene, then runs the engine
                 // This ensures _scene exists exactly when the engine needs it.
