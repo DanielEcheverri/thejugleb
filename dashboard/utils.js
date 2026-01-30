@@ -210,7 +210,7 @@ window.loadSceneJSON = function(sceneId) {
             console.log("[JSON Loader] Success. Data loaded:", data);
 
             // Assign to temporary variable _scene
-            State.temporary.scene = data;
+            SugarCube.State.temporary.scene = data;
 
             // Inject the engine into the hook
             // We use a specific ID hook so we know exactly where to put the engine
