@@ -196,29 +196,30 @@ EXAMPLES:
 };
 
 window.loadSceneJSON = function(sceneId) {
-    // 1. Get current passage name
-    var currentPassage = sceneId;
-    var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + currentPassage + ".json";
-
+    var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
-
+    
     $.getJSON(jsonPath)
-            .done(function(data) {
-                console.log("[JSON Loader] Success.");
-
-                // 1. Store in PERMANENT storage
-                SugarCube.setup.sceneData = data;
-
-                // 2. Create a snippet that copies it to _scene, then runs the engine
-                // This ensures _scene exists exactly when the engine needs it.
-                var snippet = '<<set _scene to setup.sceneData>>' + 
-                            '<<include "Logic_AvatarEngine">>';
-
-                // 3. Inject
-                $("#logic_slot").empty().wiki(snippet);
-            })
-            .fail(function(jqxhr, textStatus, error) {
-                console.error("[JSON Loader] FAILED: " + textStatus + ", " + error);
-                $("#logic_slot").html("Error: " + textStatus);
-            });
+        .done(function(data) {
+            console.log("[JSON Loader] Success:", data);
+            
+            // Store in setup
+            SugarCube.setup.sceneData = data;
+            
+            // CHECK: Does the element exist?
+            console.log("[DEBUG] #logic_slot exists?", $("#logic_slot").length > 0);
+            
+            // Inject engine
+            var snippet = '<<set _scene to setup.sceneData>>' + 
+                          '<<include "Logic_AvatarEngine">>';
+            
+            $("#logic_slot").empty().wiki(snippet);
+            
+            // CHECK: What was injected?
+            console.log("[DEBUG] #logic_slot HTML:", $("#logic_slot").html());
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            console.error("[JSON Loader] FAILED:", textStatus, error);
+            $("#logic_slot").html("<div style='color:red;'>Failed to load scene: " + sceneId + "</div>");
+        });
 };
