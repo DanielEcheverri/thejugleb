@@ -195,9 +195,9 @@ EXAMPLES:
     }
 };
 
-window.loadSceneJSON = function() {
+window.loadSceneJSON = function(sceneId) {
     // 1. Get current passage name
-    var currentPassage = SugarCube.State.passage;
+    var currentPassage = sceneId;
     var jsonPath = "https://danielecheverri.github.io/dashboard/scenes/" + currentPassage + ".json";
 
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
