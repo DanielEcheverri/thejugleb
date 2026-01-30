@@ -202,22 +202,23 @@ window.loadSceneJSON = function(sceneId) {
 
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
 
-    // 2. Fetch the file
     $.getJSON(jsonPath)
-        .done(function(data) {
-            
-            // Success: Log data to console
-            console.log("[JSON Loader] Success. Data loaded:", data);
+            .done(function(data) {
+                console.log("[JSON Loader] Success.");
 
-            // Assign to temporary variable _scene
-            SugarCube.State.temporary.scene = data;
+                // 1. Store in PERMANENT storage
+                setup.sceneData = data;
 
-            // Inject the engine into the hook
-            // We use a specific ID hook so we know exactly where to put the engine
-            $("#logic_slot").wiki('<<include "Logic_AvatarEngine">>');
-        })
-        .fail(function(jqxhr, textStatus, error) {
-            // Failure: Log error to console
-            console.error("[JSON Loader] FAILED. Reason: " + textStatus + ", " + error);
-        });
+                // 2. Create a snippet that copies it to _scene, then runs the engine
+                // This ensures _scene exists exactly when the engine needs it.
+                var snippet = '<<set _scene to setup.sceneData>>' + 
+                            '<<include "Logic_AvatarEngine">>';
+
+                // 3. Inject
+                $("#logic_slot").empty().wiki(snippet);
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                console.error("[JSON Loader] FAILED: " + textStatus + ", " + error);
+                $("#logic_slot").html("Error: " + textStatus);
+            });
 };
