@@ -196,8 +196,34 @@ EXAMPLES:
 };
 
 window.loadSceneJSON = function(sceneId) {
-    SugarCube.State.variables.inScene = true;
+    // SugarCube.State.variables.inScene = true;
 
+    // var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
+    // console.log("[JSON Loader] Attempting to load: " + jsonPath);
+    
+    // $.getJSON(jsonPath)
+    //     .done(function(data) {
+    //         console.log("[JSON Loader] Success:", data);
+            
+    //         // Store in setup
+    //         SugarCube.setup.sceneData = data;
+            
+    //         // CHECK: Does the element exist?
+    //         console.log("[DEBUG] #logic_slot exists?", $("#logic_slot").length > 0);
+            
+    //         // Inject engine
+    //         var snippet = '<<set _scene to setup.sceneData>>' + 
+    //                       '<<include "Logic_AvatarEngine">>';
+            
+    //         $("#logic_slot").empty().wiki(snippet);
+            
+    //         // CHECK: What was injected?
+    //         console.log("[DEBUG] #logic_slot HTML:", $("#logic_slot").html());
+    //     })
+    //     .fail(function(jqxhr, textStatus, error) {
+    //         console.error("[JSON Loader] FAILED:", textStatus, error);
+    //         $("#logic_slot").html("<div style='color:red;'>Failed to load scene: " + sceneId + "</div>");
+    //     });
     var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
     console.log("[JSON Loader] Attempting to load: " + jsonPath);
     
@@ -205,23 +231,12 @@ window.loadSceneJSON = function(sceneId) {
         .done(function(data) {
             console.log("[JSON Loader] Success:", data);
             
-            // Store in setup
-            SugarCube.setup.sceneData = data;
+            // Store globally
+            State.temporary.scene = data;
             
-            // CHECK: Does the element exist?
-            console.log("[DEBUG] #logic_slot exists?", $("#logic_slot").length > 0);
-            
-            // Inject engine
-            var snippet = '<<set _scene to setup.sceneData>>' + 
-                          '<<include "Logic_AvatarEngine">>';
-            
-            $("#logic_slot").empty().wiki(snippet);
-            
-            // CHECK: What was injected?
-            console.log("[DEBUG] #logic_slot HTML:", $("#logic_slot").html());
+            console.log("[JSON Loader] Stored in State.temporary.scene");
         })
         .fail(function(jqxhr, textStatus, error) {
             console.error("[JSON Loader] FAILED:", textStatus, error);
-            $("#logic_slot").html("<div style='color:red;'>Failed to load scene: " + sceneId + "</div>");
         });
 };
