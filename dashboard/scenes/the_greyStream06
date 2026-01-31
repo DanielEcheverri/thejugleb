@@ -1,0 +1,31 @@
+{
+    "baseId": "the_greyStream06_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Whoa, whoa",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$avatar_name is making|noises—head turning left and right",
+            "trigger": ["looking left","looking right"]
+        },
+        {
+            "text": "|VS| Suddenly, a $avatar_t_type heading to $avatar_t_heading swiftly passed next to $avatar_name. |VS| ‘Too fast! Did you see that? It was a blur. No legs, just speed. My eyes are spinning, Little man-cub. Everything is rushing to get somewhere else.’",
+            "backtext": "| |...|",
+            "trigger": [{"part": "eyes", "dir": "touched"}]
+        },
+        {
+            "text": "‘Look at that $avatar_t_type. They have round feet! They don't step; they roll. That is how they move so fast without getting tired. Not very sage, if you ask me’ |VS| added $avatar_name, nodding their head.",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$avatar_name's keeps spinning.",
+            "trigger": ["looking left","looking right"]
+        },
+        {
+            "text": "‘Alright. If we want to cross $avatar_street street, we must match the speed. Don't fight the concrete river. Step... step... step. Glide like the crocodile’ |VS| doing long, rushed steps, trying to cross the street.",
+            "backtext": "| |...|",
+            "trigger": ["walking","looking left","looking right"]
+        },
+        {
+            "text": "‘We made it across. Good. My paws prefer the dirt, but the Grey Stream is fast. Let's get off before we get swept away. Let’s find the next page!’",
+            "backtext": "▓▓▓▓ ✓ PAGE 6  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}

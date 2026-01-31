@@ -1,0 +1,32 @@
+{
+    "baseId": "the_watchTower02_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Hmm",
+            "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$avatar_name is| murmuring, intrigued.|‘Hmph. Look at that.’",
+            "trigger": ["looking right", "looking left"]
+        },
+        {
+            "text": "‘‘Great, we found a new page! Let’s see… ‘There… That person!’ |VS| alerted $avatar_name |VS| ‘Just across $avatar_street street …walking fast. Do you see? People walk like a wolf with no pack: Heads down, eyes on their glassy, shiny, metallic rectangles,’ |VS| said $avatar_name, before talking again…",
+            "backtext": "| |...|",
+            "trigger": ["talking", "looking right", "looking left"]
+        },
+        {
+            "text": "‘And look at that! It is a $avatar_amenity. People come, look at it, and go, in and around it, but they never stop moving. The Man-Village is full of magic that feeds the eye!’ |VS| After a quiet pause, $avatar_name scratches their head and said…",
+            "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$avatar_name is| scratching, their head.",
+            "trigger": ["guiding the left hand up", "guiding the right hand up"]
+
+        },
+        {
+            "text": "‘Bah! They are too distracted! A tiger could walk right behind them, and they wouldn't know until the teeth snapped.’ ",
+            "backtext": "| |...|",
+            "trigger": "walking"
+        },
+                {
+            "text": " ‘We have seen enough. Let them rush. We take our time. Let's find a quieter path to the next page,’ |VS| suggests $avatar_name, waiting for your next move.",
+            "backtext": "▓▓▓▓ ✓ PAGE 2  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}

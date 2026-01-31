@@ -1,36 +1,30 @@
 {
     "baseId": "the_anchor01_",
-    "nextScene": "avatar_card_choice",
+    "nextScene": "avatar_card_choice",  
     "beats": [
         {
             "text": "Uh?",
             "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name is| snoring rhytmically",
-            "trigger": [
-                "guiding the left hand up",
-                "guiding the right hand up"
-            ]
+            "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
             "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $avatar_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
             "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name looks|startled!",
-            "trigger": [
-                "looking right",
-                "looking left"
-            ]
+            "trigger": ["looking right", "looking left"]
         },
         {
             "text": "‘Listen to that. That remote low hum? It isn't the wind. It is $storyCity, far in the distance. That is the Man-Village. Its sure sounds like a hive of busy bees this $storyTime.’ That is where we are going now. You need to be with your own kind before the rains come and Shere Khan finds you,’ said $avatar_name whispering.",
-            "backtext": "| |...| .",
+            "backtext": "| |...|",
             "trigger": "talking"
         },
         {
             "text": "‘It’s a long walk, and my memory is full of holes. If I only had my journal, I would know the fastest way to $storyCity … we need to find those missing pages. They will guide us on way.’",
-            "backtext": "...",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name is ready|to continue!",
             "trigger": "walking"
         },
-        {
+                {
             "text": "‘You have the first page safe in the bag? Good. Now, let’s find the next page. Lead the way. I'm right behind you.’",
-            "backtext": "▓▓▓▓ ✓ PAGE 1  ▓▓▓▓|A new page is|in the backpack.",
+            "backtext": "▓▓▓▓ ✓ PAGE 1  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }
     ]

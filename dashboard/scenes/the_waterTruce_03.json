@@ -1,0 +1,27 @@
+{
+    "baseId": "the_waterTruce03_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Hmm",
+            "backtext": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|$avatar_name is|panting—short,|rhythmic breaths",
+            "trigger": [{"part": "right hand", "dir": "touched"},{"part": "left hand", "dir": "touched"}]
+        },
+        {
+            "text": "‘Oh, sweet $storyTime ... here is another page! And hold on, listen to that liquid melody. My tongue feels like a piece of old sandpaper. Sometimes $storyCity is too dry, Little man-cub. The $storyPollution sucks the moisture right out of your fur.’ |VS| He continues walking cautiously…",
+            "backtext": "| |...|",
+            "trigger": ["walking"]
+        },
+        {
+            "text": "‘Look. We are not alone. See them? Them gathering at the watering hole? |VS| pointing at a Coffee Shop in the corner of $avatar_street street |VS| They are drinking too. Good! Let them drink. By the water, the Law says we are all brothers. No biting today,’ |VS| said $avatar_name taking a sip of water.",
+            "backtext": "| |...|",
+            "trigger": [{"part": "mouth", "dir": "touched"}]
+
+        },
+        {
+            "text": " ‘Brrr-up! Ah! That is better. Cold enough to wake the ancestors.’ |VS| He sighs, contented |VS|’I could stay here until the moon rises... but the truce does not last forever. We must move and find the next page before the hunger returns,’ |VS|while $avatar_name gives you a small tap in your head… ",
+            "backtext": "▓▓▓▓ ✓ PAGE 3  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}
