@@ -23,7 +23,7 @@
             "trigger": [{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
         {
-            "text": "|VS| After a couple of hours of resting, $avatar_name says |VS|’I could sleep for a week... but we have miles to cover. Our page search is not finished, little man-cub.’ |VS| $avatar_name Baloo while stretching, |VS| ‘Now…let’s find the next page’",
+            "text": "|VS| After a couple of hours of resting, $avatar_name says |VS|’I could sleep for a week... but we have miles to cover. Our page search is not finished, little man-cub.’ |VS| $avatar_name said while stretching, |VS| ‘Now…let’s find the next page’",
             "backtext": "▓▓▓▓ ✓ PAGE 4  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }
