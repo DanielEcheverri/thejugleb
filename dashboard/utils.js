@@ -244,7 +244,7 @@ window.loadScene = function(filename) {
         .then(function(data) {
             
             // 3. Inject data into SugarCube's temporary state
-            State.temporary.scene = data;
+            SugarCube.State.temporary.scene = data;
 
             // 4. Find the container and inject the engine
             var container = document.getElementById(containerId);
