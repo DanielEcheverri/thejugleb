@@ -245,7 +245,7 @@ window.loadScene = function(filename) {
                 
                 // 1. SAVE TO GLOBAL VARIABLE (PERSISTENT)
                 // This ensures the data survives liveblock ticks and repeats
-                SigarCube.State.variables.loaded_scene_data = data;
+                SugarCube.State.variables.loaded_scene_data = data;
 
                 // 2. INJECT WITH A BRIDGE
                 // We set _scene from the global variable, then run the engine.
