@@ -195,33 +195,67 @@ EXAMPLES:
     }
 };
 
-window.loadSceneJSON = function(sceneId) {
-    SugarCube.State.variables.inScene = true;
+// window.loadSceneJSON = function(sceneId) {
+//     SugarCube.State.variables.inScene = true;
 
-    var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
-    console.log("[JSON Loader] Attempting to load: " + jsonPath);
+//     var jsonPath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/" + sceneId + ".json";
+//     console.log("[JSON Loader] Attempting to load: " + jsonPath);
     
-    $.getJSON(jsonPath)
-        .done(function(data) {
-            console.log("[JSON Loader] Success:", data);
+//     $.getJSON(jsonPath)
+//         .done(function(data) {
+//             console.log("[JSON Loader] Success:", data);
             
-            // Store in setup
-            SugarCube.setup.sceneData = data;
+//             // Store in setup
+//             SugarCube.setup.sceneData = data;
             
-            // CHECK: Does the element exist?
-            console.log("[DEBUG] #logic_slot exists?", $("#logic_slot").length > 0);
+//             // CHECK: Does the element exist?
+//             console.log("[DEBUG] #logic_slot exists?", $("#logic_slot").length > 0);
             
-            // Inject engine
-            var snippet = '<<set _scene to setup.sceneData>>' + 
-                          '<<include "Logic_AvatarEngine">>';
+//             // Inject engine
+//             var snippet = '<<set _scene to setup.sceneData>>' + 
+//                           '<<include "Logic_AvatarEngine">>';
             
-            $("#logic_slot").empty().wiki(snippet);
+//             $("#logic_slot").empty().wiki(snippet);
             
-            // CHECK: What was injected?
-            console.log("[DEBUG] #logic_slot HTML:", $("#logic_slot").html());
+//             // CHECK: What was injected?
+//             console.log("[DEBUG] #logic_slot HTML:", $("#logic_slot").html());
+//         })
+//         .fail(function(jqxhr, textStatus, error) {
+//             console.error("[JSON Loader] FAILED:", textStatus, error);
+//             $("#logic_slot").html("<div style='color:red;'>Failed to load scene: " + sceneId + "</div>");
+//         });
+// };
+
+window.loadScene = function(filename) {
+    
+    // 1. CONFIGURATION
+    var containerId = "avatar_stage";
+    var defaultEngine = "Logic_AvatarEngine"; 
+    
+    // The Base URL for all your scene files
+    var basePath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
+
+    // 2. Fetch the file (Base Path + Filename)
+    fetch(basePath + filename)
+        .then(function(response) {
+            if (!response.ok) throw new Error("Scene not found at: " + basePath + filename);
+            return response.json();
         })
-        .fail(function(jqxhr, textStatus, error) {
-            console.error("[JSON Loader] FAILED:", textStatus, error);
-            $("#logic_slot").html("<div style='color:red;'>Failed to load scene: " + sceneId + "</div>");
+        .then(function(data) {
+            
+            // 3. Inject data into SugarCube's temporary state
+            State.temporary.scene = data;
+
+            // 4. Find the container and inject the engine
+            var container = document.getElementById(containerId);
+            
+            if (container) {
+                $(container).wiki('<<include "' + defaultEngine + '">>');
+            } else {
+                console.error("Error: <div id='" + containerId + "'> missing in this passage.");
+            }
+        })
+        .catch(function(error) {
+            console.error("Avatar Engine Error:", error);
         });
 };
