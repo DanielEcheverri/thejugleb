@@ -228,34 +228,41 @@ EXAMPLES:
 
 window.loadScene = function(filename) {
     
-    // 1. CONFIGURATION
-    var containerId = "avatar_stage";
-    var defaultEngine = "Logic_AvatarEngine"; 
-    
-    // The Base URL for all your scene files
-    var basePath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
+    // --- CONFIGURATION ---
+    var containerId = "avatar_story"; // The ID inside your avatar_story passage
+    var engineName  = "Logic_AvatarEngine"; 
+    var basePath    = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
 
-    // 2. Fetch the file (Base Path + Filename)
-    fetch(basePath + filename)
-        .then(function(response) {
-            if (!response.ok) throw new Error("Scene not found at: " + basePath + filename);
-            return response.json();
-        })
-        .then(function(data) {
-            
-            // 3. Inject data into SugarCube's temporary state
-            SugarCube.State.temporary.scene = data;
+    // --- THE LOADER LOGIC ---
+    var runLoader = function() {
+        // Double check the container exists (prevent errors if player navigated away)
+        var container = document.getElementById(containerId);
+        if (!container) return;
 
-            // 4. Find the container and inject the engine
-            var container = document.getElementById(containerId);
-            
-            if (container) {
-                $(container).wiki('<<include "' + defaultEngine + '">>');
-            } else {
-                console.error("Error: <div id='" + containerId + "'> missing in this passage.");
-            }
-        })
-        .catch(function(error) {
-            console.error("Avatar Engine Error:", error);
-        });
+        fetch(basePath + filename)
+            .then(function(response) {
+                if (!response.ok) throw new Error("Scene missing: " + filename);
+                return response.json();
+            })
+            .then(function(data) {
+                // 1. Store the Data
+                State.temporary.scene = data;
+
+                // 2. Inject the Engine
+                $(container).wiki('<<include "' + engineName + '">>');
+            })
+            .catch(function(error) {
+                console.error("Avatar Engine Error:", error);
+                $(container).append("<div class='error'>Error loading scene. check console.</div>");
+            });
+    };
+
+    // --- THE TRIGGER ---
+    // If the div is already there? Run it.
+    // If not (normal case)? Wait for the passage to finish rendering.
+    if (document.getElementById(containerId)) {
+        runLoader();
+    } else {
+        $(document).one(":passagedisplay", runLoader);
+    }
 };
