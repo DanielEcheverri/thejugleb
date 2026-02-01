@@ -228,16 +228,13 @@ EXAMPLES:
 
 window.loadScene = function(filename) {
     
-    // --- CONFIGURATION ---
-    var containerId = "avatar_story"; // The ID inside your avatar_story passage
+    var containerId = "avatar_story";
     var engineName  = "Logic_AvatarEngine"; 
     var basePath    = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
 
-    // --- THE LOADER LOGIC ---
     var runLoader = function() {
-        // Double check the container exists (prevent errors if player navigated away)
         var container = document.getElementById(containerId);
-        if (!container) return;
+        if (!container) return; // Exit if container is missing
 
         fetch(basePath + filename)
             .then(function(response) {
@@ -245,21 +242,21 @@ window.loadScene = function(filename) {
                 return response.json();
             })
             .then(function(data) {
-                // 1. Store the Data
-                SugarCube.State.temporary.scene = data;
+                
+                // 1. SAVE TO GLOBAL VARIABLE (PERSISTENT)
+                // This ensures the data survives liveblock ticks and repeats
+                SigarCube.State.variables.loaded_scene_data = data;
 
-                // 2. Inject the Engine
-                $(container).wiki('<<include "' + engineName + '">>');
+                // 2. INJECT WITH A BRIDGE
+                // We set _scene from the global variable, then run the engine.
+                $(container).empty().wiki('<<set _scene to $loaded_scene_data>><<include "' + engineName + '">>');
             })
             .catch(function(error) {
                 console.error("Avatar Engine Error:", error);
-                $(container).append("<div class='error'>Error loading scene. check console.</div>");
+                $(container).append("<div class='error'>Error loading scene.</div>");
             });
     };
 
-    // --- THE TRIGGER ---
-    // If the div is already there? Run it.
-    // If not (normal case)? Wait for the passage to finish rendering.
     if (document.getElementById(containerId)) {
         runLoader();
     } else {
