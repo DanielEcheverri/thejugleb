@@ -246,7 +246,7 @@ window.loadScene = function(filename) {
             })
             .then(function(data) {
                 // 1. Store the Data
-                State.temporary.scene = data;
+                SugarCube.State.temporary.scene = data;
 
                 // 2. Inject the Engine
                 $(container).wiki('<<include "' + engineName + '">>');
