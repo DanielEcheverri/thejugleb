@@ -248,7 +248,7 @@ window.loadScene = function(filename) {
                 console.log("[Debug] 3. JSON Loaded. Injecting Engine...");
                 
                 // Set global to ensure persistence
-                State.variables.loaded_scene_data = data;
+                SugarCube.State.variables.loaded_scene_data = data;
                 
                 // Inject
                 $(container).empty().wiki('<<set _scene to $loaded_scene_data>><<include "Logic_AvatarEngine">>');
