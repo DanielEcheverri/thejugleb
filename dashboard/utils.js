@@ -227,39 +227,43 @@ EXAMPLES:
 // };
 
 window.loadScene = function(filename) {
-    
     var containerId = "avatar_story";
-    var engineName  = "Logic_AvatarEngine"; 
-    var basePath    = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
+    var basePath = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
+
+    console.log("[Debug] 1. Function called for: " + filename);
 
     var runLoader = function() {
+        console.log("[Debug] 2. Container found. Fetching...");
         var container = document.getElementById(containerId);
-        if (!container) return; // Exit if container is missing
+        
+        // VISUAL DEBUG: Add a red border so we can see if the div survives
+        container.style.border = "2px solid red"; 
 
         fetch(basePath + filename)
             .then(function(response) {
-                if (!response.ok) throw new Error("Scene missing: " + filename);
+                if (!response.ok) throw new Error("Scene missing");
                 return response.json();
             })
             .then(function(data) {
+                console.log("[Debug] 3. JSON Loaded. Injecting Engine...");
                 
-                // 1. SAVE TO GLOBAL VARIABLE (PERSISTENT)
-                // This ensures the data survives liveblock ticks and repeats
-                SugarCube.State.variables.loaded_scene_data = data;
-
-                // 2. INJECT WITH A BRIDGE
-                // We set _scene from the global variable, then run the engine.
-                $(container).empty().wiki('<<set _scene to $loaded_scene_data>><<include "' + engineName + '">>');
+                // Set global to ensure persistence
+                State.variables.loaded_scene_data = data;
+                
+                // Inject
+                $(container).empty().wiki('<<set _scene to $loaded_scene_data>><<include "Logic_AvatarEngine">>');
+                
+                console.log("[Debug] 4. Injection Complete.");
             })
             .catch(function(error) {
-                console.error("Avatar Engine Error:", error);
-                $(container).append("<div class='error'>Error loading scene.</div>");
+                console.error("[Debug] ERROR:", error);
             });
     };
 
     if (document.getElementById(containerId)) {
         runLoader();
     } else {
+        console.log("[Debug] Container not ready. Waiting for :passagedisplay");
         $(document).one(":passagedisplay", runLoader);
     }
 };
