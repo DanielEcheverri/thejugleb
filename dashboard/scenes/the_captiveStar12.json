@@ -1,0 +1,31 @@
+{
+    "baseId": "the_captiveStar12_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Hmm!",
+            "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$avatar_name is muttering|—’Impossible. Impossible.’.",
+            "trigger": [{"part": "mouth", "dir": "touched"}]
+        },
+        {
+            "text": "‘My neck hurts. It is so high. What is that fruit at the top? It doesn't look like a coconut. It looks like... a frozen bubble.I want to touch it’",
+            "backtext": "| |...|",
+            "trigger": ["guiding the left hand up", "guiding the right hand up"]
+        },
+        {
+            "text": "Wait. I know that shape. That it is a cage! They have caught a star, here in $storyCity Little man-cub |VS| stated $avatar_name pointing at a lightbulb placed over $avatar_street street. |VS| ‘They trapped the Red Flower inside a piece of ice so it cannot escape.’",
+            "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$avatar_name gets closer|trying to have|a better look.",
+            "trigger": ["looking right", "looking left"]
+        },
+        {
+            "text": "|VS| In awe $avatar_name affirmed with surprise:|VS| ‘Powerful magic. Men are wizards, that is true. They own the light.’",
+            "backtext": "| |...|",
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+        },
+        {
+            "text": "|VS| You also try to reach the lightbulb. |VS| ‘Uh?! Do not shake the tree. I do not want that fire falling on my head. Let's move away before it wakes up’ |VS| concluded $avatar_name giving long, rushed steps.",
+            "backtext": "▓▓▓▓ ✓ PAGE 12  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}
