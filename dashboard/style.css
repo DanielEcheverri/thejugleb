@@ -11,7 +11,7 @@
         align-items: left;
         justify-content: left;
         width: 100%;
-      	background-color: #48494b;
+      	background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
         overflow-y: hidden;
     }
 
