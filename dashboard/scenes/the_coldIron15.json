@@ -1,25 +1,25 @@
 {
-    "baseId": "the_deepItch14_",
+    "baseId": "the_coldIron15_",
     "nextScene": "avatar_card_choice",  
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$avatar_name is grunting and twisting, frustrated.’.",
+            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$avatar_name is making low, suspicious ‘growl’ noises.",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘‘Aha! Another page… but wait! It’s back; the itch! Right there... right between the shoulders. It feels like a family of red ants is building a nest in my fur.’ (Beat) ‘I can't reach it. Help me, Little man-cub. Push!’",
-            "backtext": "| |...|",
-            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "text": "‘Easy... easy. Watch your step. You see how it stands? No branches? No leaves?’’ |VS| $avatar_name leans in close, nostrils flaring while picking up a new page. |VS| ‘Sniff... Sniff... Puh. It smells of rain and old coins. It is a trap made of iron.’",
+            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$avatar_name leans in|close, nostrils flaring ",
+            "trigger": [{"part": "mouth", "dir": "touched"}, {"part": "eyes", "dir": "touched"},{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
-            "text": "‘Ohhh... yes. Yes! Lower. A little to the left. Harder! Don't be shy, put your back into it!’ |VS| whispered $avatar_name, |VS| ‘That’s it! Grind that itch into dust. This is what the jagged edges of the world are for.’",
+            "text": "‘Gah! Cold! Look at it—this pole next to the $avatar_amenity on $avatar_street street ... it is hard as stone but smooth as water. Only Men make things this straight.’",
             "backtext": "| |...|",
-            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "trigger": [{"part": "mouth", "dir": "touched"}, "looking left","looking right"]
 
         },
         {
-            "text": "‘Gone. I am a new bear. I feel light as a feather.’ |VS| said $avatar_name in relief, shaking their body out. |VS| ‘Thank you. Now, while I'm still in a good mood... let's see what the winds have brought us. Let's go.’",
+            "text": "‘I don't like it. It makes my fur stand up.’ Whispered $avatar_name close to your ear. ‘We are getting too close to the village. Check the ground for another page. Move.’",
             "backtext": "▓▓▓▓ ✓ PAGE 15  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }

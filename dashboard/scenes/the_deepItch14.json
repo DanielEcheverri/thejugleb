@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|$avatar_name is grunting and twisting, frustrated.’.",
+            "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|$avatar_name is grunting and twisting, frustrated.’",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {

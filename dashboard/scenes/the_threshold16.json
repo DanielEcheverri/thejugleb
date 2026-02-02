@@ -1,0 +1,31 @@
+{
+    "baseId": "the_threshold16_",
+    "nextScene": "the_end",  
+    "beats": [
+        {
+            "text": "Hm",
+            "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$avatar_name leans|on the gate to|the man-Village.",
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+        },
+        {
+            "text": "‘Well. Here we are. This is the last page of the journal. The end of the trail.’ |VS| $avatar_name looks at the gate leading to $storyNeighborhood, then down at you.",
+            "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$avatar_name looks|at the gate",
+            "trigger": ["looking right", "looking left"]
+        },
+        {
+            "text": "‘I... I cannot cross this line, Little man-cub. My claws are too sharp for their houses,’ |VS| said $avatar_name taking a step back, creating distance between both of you.",
+            "backtext": "| |...|",
+            "trigger": ["walking"]
+        },
+        {
+            "text": "‘|VS|Taking the complete journal from their backpack $avatar_name said |VS|, ‘Don't look so sad! You have the strength of the Wolf, the wisdom of the Panther, and the wit of the Bear now. You will be the best in there. Even Shere Khan wouldn't dare follow you where you are going.",
+            "backtext": "| |...|",
+            "trigger": ["looking right", "looking left", {"part": "mouth", "dir": "touched"}]
+        },
+        {
+            "text": "|VS| $avatar_name gives you a final, warm smile, though their eyes look heavy. Then, $avatar_name starts the journey back to the jungle without looking back, but with the satisfaction of a well done job.",
+            "backtext": "▓▓▓▓ ✓ PAGE 16  ▓▓▓▓|And so...|this is goodbye...",
+            "trigger": null
+        }
+    ]
+}
