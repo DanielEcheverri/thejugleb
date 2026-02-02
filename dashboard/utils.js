@@ -195,63 +195,39 @@ EXAMPLES:
     }
 };
 
-// /* Define a global function to load JSON from your GitHub Pages directory */
-// window.loadScene = function(passageName) {
-//     // 1. The specific path where your JSON files live
-//     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
-    
-//     // 2. Combine path + filename + extension
-//     var url = baseURL + passageName + ".json";
-//     var data = null;
-
-//     // 3. Fetch the file synchronously
-//     $.ajax({
-//         url: url,
-//         dataType: "json",
-//         async: false, 
-//         success: function(json) {
-//             data = json;
-//         },
-//         error: function() {
-//             console.error("Could not load " + url);
-//             // Fallback data
-//             data = {
-//                 "beats": [
-//                     {
-//                         "text": "Error: Missing file at " + url,
-//                         "backtext": "File Missing",
-//                         "trigger": null
-//                     }
-//                 ],
-//                 "nextScene": "avatar_card_choice"
-//             };
-//         }
-//     });
-
-//     // 4. Save the loaded data into Twine's temporary '_scene' variable
-//     SugarCube.State.temporary.scene = data;
-// };
-/* Define an asynchronous loader */
+/* Define a global function to load JSON from your GitHub Pages directory */
 window.loadScene = function(passageName) {
+    // 1. The specific path where your JSON files live
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
+    
+    // 2. Combine path + filename + extension
     var url = baseURL + passageName + ".json";
+    var data = null;
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) throw new Error("HTTP error " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            // 1. Save data to a persistent story variable ($currentSceneData)
-            SugarCube.State.variables.currentSceneData = data;
-            // 2. Set a flag telling the passage that data is ready
-            SugarCube.State.variables.sceneReady = true;
-            // 3. Force the passage to re-render immediately
-            SugarCube.Engine.play(Engine.playing);
-        })
-        .catch(error => {
-            console.error("Could not load " + url, error);
-            SugarCube.State.variables.sceneError = true;
-            SugarCube.Engine.play(Engine.playing);
-        });
+    // 3. Fetch the file synchronously
+    $.ajax({
+        url: url,
+        dataType: "json",
+        async: false, 
+        success: function(json) {
+            data = json;
+        },
+        error: function() {
+            console.error("Could not load " + url);
+            // Fallback data
+            data = {
+                "beats": [
+                    {
+                        "text": "Error: Missing file at " + url,
+                        "backtext": "File Missing",
+                        "trigger": null
+                    }
+                ],
+                "nextScene": "avatar_card_choice"
+            };
+        }
+    });
+
+    // 4. Save the loaded data into Twine's temporary '_scene' variable
+    SugarCube.State.temporary.scene = data;
 };
