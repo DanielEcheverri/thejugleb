@@ -247,13 +247,13 @@ window.loadScene = function(passageName) {
             // 2. Set a flag telling the passage that data is ready
             SugarCube.State.variables.sceneReady = true;
             // 3. Force the passage to re-render immediately
-            SugarCube.Engine.play(Engine.playing);
+            window.SugarCube.Engine.play(Engine.playing);
 
         })
         .catch(error => {
             console.error("Could not load " + url, error);
             SugarCube.State.variables.sceneError = true;
-             SugarCube.Engine.play(Engine.playing);
+            window.SugarCube.Engine.play(Engine.playing);
 
         });
 };
