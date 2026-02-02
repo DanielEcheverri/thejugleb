@@ -1,0 +1,165 @@
+
+#ui-bar {
+	display: none;
+}
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      	font-family: "Roboto", sans-serif;
+        flex-direction: column;
+        align-items: left;
+        justify-content: left;
+        width: 100%;
+      	background-color: #48494b;
+        overflow-y: hidden;
+    }
+
+    #topContainer {
+        display: flex;
+      	flex-direction: column;
+        position: absolute;
+        top: 0;
+      	left: 0;
+        width: 100%;
+        height: 75%;
+        align-items: center;
+    }
+
+    #refreshArea {
+        width: 100%;
+        height: 85%;
+       	background-color: #48494b; 
+       	font-size: 15px;
+     	overflow-y: auto;
+      	display: flex;
+       	align-items: flex-start;
+
+    }
+    #buttonArea {
+        width: 100%;
+        height: 15%;
+     	overflow-y: auto;
+      	display: flex;
+      	align-items: flex-start;
+      	justify-content: center;
+
+    }
+
+    #bottomContainer {
+        display: flex;
+        position: absolute;
+        bottom: 0;
+      	left: 0;
+        width: 100%;
+        height: 20%;
+    }
+
+    #avatar_story, #hachi_story {
+        width: 50%;
+        height: 100%;
+        padding: 1%;
+      	color: #393939;
+      	font-size: 16px;
+    	line-height: 1.5;
+    }
+
+    #avatar_story {
+        background-color: #DEC20B;
+    }
+
+    #hachi_story {
+        background-color: #C99700;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+      	border: 0px solid #ddd;
+      	table-layout: fixed;
+    }
+
+    th, td {
+        padding: 4px;
+        border: 0px solid #ddd;
+        text-align: center;
+       	text-overflow: ellipsis;
+        overflow: hidden;
+       	white-space: nowrap;
+      	max-width: 100px;
+    }
+
+    th {
+        background-color: black;
+    }
+
+	td {
+      line-height: 21px;
+	}
+
+    tr:nth-child(even) {
+        background-color: #808080;
+    }
+	tr:nth-child(even) {
+        background-color: #666;/
+    }
+
+.macro-button {
+	background-color: red;
+  	color: white; 
+	width: 20%;
+	border: none;
+	padding: 15px 32px;
+	text-align: center;
+    font-weight: bold;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 12px;
+	cursor: pointer;
+	border-radius: 8px;
+	font-family: "Roboto", sans-serif;
+    justify-content: center;
+}
+
+/* Existing CSS for loading-animation and spinner */
+.loading-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Remove any positioning that might interfere with centering */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1); /* Light grey border */
+  border-top: 4px solid #3498db; /* Blue border for the spinner */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite; /* Apply the spin animation */
+  margin-bottom: 5px; /* Space between spinner and text */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* New CSS to center the loading container */
+.loading-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  position: fixed; /* Take it out of the normal flow */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+.svg-logo {
+  height: 100%;
+  margin-right: 50%; /* Adjust as needed */
+}

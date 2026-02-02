@@ -195,7 +195,6 @@ EXAMPLES:
     }
 };
 
-/* Define a global function to load JSON from your GitHub Pages directory */
 window.loadScene = function(passageName) {
     // 1. The specific path where your JSON files live
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
