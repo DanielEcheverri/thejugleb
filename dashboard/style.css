@@ -105,8 +105,8 @@
     }
 
 .macro-button {
-	background-color: red;
-  	color: white; 
+	background-color: #164010; /* Green */
+  	color: #F2E085; /* Text color */
 	width: 20%;
 	border: none;
 	padding: 15px 32px;
@@ -120,6 +120,9 @@
 	border-radius: 8px;
 	font-family: "Roboto", sans-serif;
     justify-content: center;
+    box-shadow: 
+			0 4px 8px rgba(0, 0, 0, 0.2), 
+			inset 0 0 10px rgba(0, 0, 0, 0.4); 
 }
 
 /* Existing CSS for loading-animation and spinner */
