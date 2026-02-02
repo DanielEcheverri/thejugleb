@@ -1,0 +1,27 @@
+{
+    "baseId": "the_deepItch14_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Hmm!",
+            "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|$avatar_name is grunting and twisting, frustrated.’.",
+            "trigger": [{"part": "mouth", "dir": "touched"}]
+        },
+        {
+            "text": "‘‘Aha! Another page… but wait! It’s back; the itch! Right there... right between the shoulders. It feels like a family of red ants is building a nest in my fur.’ (Beat) ‘I can't reach it. Help me, Little man-cub. Push!’",
+            "backtext": "| |...|",
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+        },
+        {
+            "text": "‘Ohhh... yes. Yes! Lower. A little to the left. Harder! Don't be shy, put your back into it!’ |VS| whispered $avatar_name, |VS| ‘That’s it! Grind that itch into dust. This is what the jagged edges of the world are for.’",
+            "backtext": "| |...|",
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+
+        },
+        {
+            "text": "‘Gone. I am a new bear. I feel light as a feather.’ |VS| said $avatar_name in relief, shaking their body out. |VS| ‘Thank you. Now, while I'm still in a good mood... let's see what the winds have brought us. Let's go.’",
+            "backtext": "▓▓▓▓ ✓ PAGE 14  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}
