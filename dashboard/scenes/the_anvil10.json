@@ -1,0 +1,31 @@
+{
+    "baseId": "the_anvil10_",
+    "nextScene": "avatar_card_choice",  
+    "beats": [
+        {
+            "text": "Unngh. Stubborn thing.",
+            "backtext": "▓▓▓▓▓ PAGE 10 ▓▓▓▓|$avatar_name is grunting|with effort.’",
+            "trigger": [{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
+        },
+        {
+            "text": "|VS| You find some nuts under a tree. $avatar_name tries to open it |VS| ‘This nut is a fighter. Look at it. Thick skin. It knows I want what is inside. But I am patient, Little man-cub. Hold it steady’ |VS| said $avatar_name forcing the nut to crack with their feet.",
+            "backtext": "| |...|",
+            "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"}]
+        },
+        {
+            "text": "‘Hah! Did you hear that? The shell is cracking. Let me hit it again! I will use the weight of my arm. Let gravity do the work!’",
+            "backtext": "▓▓▓▓▓ PAGE 10 ▓▓▓▓|$avatar_name's takes|stomps on the|shell again.",
+            "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"}]
+        },
+        {
+            "text": "‘Mmm. Worth it. Sweet as honey. Can you see? The rock gives us tools if we know how to ask’ Let's go find the next page, maybe we’ll also find more food this $storyTime while we walk.’",
+            "backtext": "| |...|",
+            "trigger": ["walking"]
+        },
+        {
+            "text": "|VS| $avatar_name licked his chops, before stating |VS| ‘I'm still hungry, though. That was just a snack.",
+            "backtext": "▓▓▓▓ ✓ PAGE 9  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}
