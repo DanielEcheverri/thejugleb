@@ -1,76 +1,60 @@
 
-#ui-bar {
-	display: none;
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Use viewport height for full screen */
+    width: 100%;
+    font-family: "Roboto", sans-serif;
+    background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
+    overflow: hidden; /* Prevent the whole page from scrolling */
+    
+    /* Flexbox Magic */
+    display: flex;
+    flex-direction: column;
 }
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      	font-family: "Roboto", sans-serif;
-        flex-direction: column;
-        align-items: left;
-        justify-content: left;
-        width: 100%;
-      	background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
-        overflow-y: hidden;
-    }
 
-    #topContainer {
-        display: flex;
-      	flex-direction: column;
-        position: absolute;
-        top: 0;
-      	left: 0;
-        width: 100%;
-        height: 75%;
-        align-items: center;
-    }
+#topContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 3; /* Takes up 3 parts of the space (roughly 75%) */
+    width: 100%;
+}
 
-    #refreshArea {
-        width: 100%;
-        height: 85%;
-       	background-color: #f2e08500; 
-       	font-size: 15px;
-     	overflow-y: auto;
-      	display: flex;
-       	align-items: flex-start;
+#refreshArea {
+    flex: 1; /* Grows to fill available space in topContainer */
+    background-color: #F2E085; 
+    font-size: 15px;
+    overflow-y: auto; /* Content stays scrollable here */
+    padding: 10px;
+}
 
-    }
-    #buttonArea {
-        width: 100%;
-        height: 15%;
-     	overflow-y: auto;
-      	display: flex;
-      	align-items: flex-start;
-      	justify-content: center;
+#buttonArea {
+    height: 60px; /* Fixed height for buttons is often safer than % */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.1); /* Slight tint to separate it */
+}
 
-    }
+#bottomContainer {
+    display: flex;
+    flex: 1; /* Takes up 1 part of the space (roughly 25%) */
+    width: 100%;
+}
 
-    #bottomContainer {
-        display: flex;
-        position: absolute;
-        bottom: 0;
-      	left: 0;
-        width: 100%;
-        height: 20%;
-    }
+#avatar_story, #hachi_story {
+    flex: 1; /* Each takes exactly 50% width automatically */
+    padding: 15px;
+    color: #F2E085; /* Changed to match your pale yellow for better contrast */
+    background-color: #164010;
+    font-size: 16px;
+    line-height: 1.5;
+}
 
-    #avatar_story, #hachi_story {
-        width: 50%;
-        height: 100%;
-        padding: 1%;
-      	color: #393939;
-      	font-size: 16px;
-    	line-height: 1.5;
-    }
-
-    #avatar_story {
-        background-color: #164010;
-    }
-
-    #hachi_story {
-        background-color: #164010;
-    }
+/* Add a small divider between the two story boxes */
+#avatar_story {
+    border-right: 1px solid #7DA63F;
+}
 
     table {
         width: 100%;
