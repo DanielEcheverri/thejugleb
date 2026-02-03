@@ -100,7 +100,7 @@
     tr:nth-child(even) {
         background-color: #7DA63F;
     }
-	tr:nth-child(even) {
+	tr:nth-child(odd) {
         background-color: #BF4E24;
     }
 
