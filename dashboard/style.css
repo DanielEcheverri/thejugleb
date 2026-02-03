@@ -62,14 +62,8 @@
       	color: #393939;
       	font-size: 16px;
     	line-height: 1.5;
-    }
-
-    #avatar_story {
         background-color: #164010;
-    }
-
-    #hachi_story {
-        background-color: #164010;
+        border-right: 1px solid #7DA63F;
     }
 
     table {
