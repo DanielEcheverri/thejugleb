@@ -121,7 +121,7 @@ display: none;
     /* Centering logic */
     display: flex;
     flex-direction: column;
-    align-items: center; /* This pulls it from the right back to the center */
+    align-items: center;
     justify-content: flex-start;
     padding: 20px;
     box-sizing: border-box;
