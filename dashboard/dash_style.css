@@ -1,235 +1,243 @@
 
 #ui-bar {
-	display: none;
+display: none;
 }
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      	font-family: "Roboto", sans-serif;
-        flex-direction: column;
-        align-items: left;
-        justify-content: left;
-        width: 100%;
-      	background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
-        overflow-y: hidden;
-    }
+  body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Roboto", sans-serif;
+      flex-direction: column;
+      align-items: left;
+      justify-content: left;
+      width: 100%;
+      background: radial-gradient(ellipse farthest-corner, #7DA63F, #BF4E24);
+      overflow-y: hidden;
+  }
 
-    /* The Main Header Row */
+  /* The Main Header Row */
 #topContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between; /* Spreads the three zones apart */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100px; /* Fixed height for a clean navigation bar */
-    padding: 0 30px;
-    box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.2); /* Contrast against the gradient background */
-    z-index: 10;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; /* Spreads the three zones apart */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px; /* Fixed height for a clean navigation bar */
+  padding: 0 30px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.2); /* Contrast against the gradient background */
+  z-index: 10;
 }
 
 /* Base logic for all three zones */
 .header-zone {
-    display: flex;
-    align-items: center;
-    flex: 1; /* Gives each zone 33.3% width */
+  display: flex;
+  align-items: center;
+  flex: 1; /* Gives each zone 33.3% width */
 }
 
 /* Alignments for each specific zone */
 .header-zone.left {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .header-zone.center {
-    justify-content: center;
-    gap: 15px;
+  justify-content: center;
+  gap: 15px;
 }
 
 .header-zone.right {
-    justify-content: flex-end;
-    gap: 10px;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* Scale the logo to fit the 100px bar */
 .svg-logo {
-    height: 70px; 
-    width: auto;
-    margin: 0;
+  height: 70px; 
+  width: auto;
+  margin: 0;
 }
 
-      /* The Select Style */
-      .styled-select {
-          background-color: #164010; /* Match your Green button */
-          color: #F2E085;           /* Match your Sand text */
-          border: 1px solid #7DA63F;
-          padding: 10px 15px;
-          font-family: "Roboto", sans-serif;
-          font-size: 14px;
-          border-radius: 8px;
-          cursor: pointer;
-          width: 200px;
-          box-shadow: 
-            0 2px 4px rgba(0, 0, 0, 0.2), 
-            inset 0 0 5px rgba(0, 0, 0, 0.4);
-          appearance: none; /* Removes default OS arrow */
-          background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E085' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 10px center;
-      }
+    /* The Select Style */
+    .styled-select {
+        background-color: #164010; /* Match your Green button */
+        color: #F2E085;           /* Match your Sand text */
+        border: 1px solid #7DA63F;
+        padding: 10px 15px;
+        font-family: "Roboto", sans-serif;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 200px;
+        box-shadow: 
+          0 2px 4px rgba(0, 0, 0, 0.2), 
+          inset 0 0 5px rgba(0, 0, 0, 0.4);
+        appearance: none; /* Removes default OS arrow */
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E085' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
 
-      .styled-select:hover {
-          border-color: #F2E085;
-      }
+    .styled-select:hover {
+        border-color: #F2E085;
+    }
 
-      .styled-select:focus {
-          outline: none;
-          border-color: #BF4E24; /* Rust color on focus */
-      }
+    .styled-select:focus {
+        outline: none;
+        border-color: #BF4E24; /* Rust color on focus */
+    }
 
-      
+    
 /* Ensure the refresh area starts AFTER the 100px header */
 #refreshArea {
-    position: absolute;
-    top: 100px;
-    width: 100%;
-    height: calc(80% - 100px); /* Fill space until the bottomContainer */
-    overflow-y: auto;
+  position: absolute;
+  top: 100px;
+  width: 100%;
+  height: calc(80% - 100px); /* Fill space until the bottomContainer */
+  overflow-y: auto;
 }
 
 /* Override macro-button to keep them from being too large in the header */
 .header-zone.right .macro-button {
-    width: auto;
-    padding: 10px 18px;
-    font-size: 14px;
-    margin: 0;
+  width: auto;
+  padding: 10px 18px;
+  font-size: 14px;
+  margin: 0;
 }
 
-    #refreshArea {
-        width: 100%;
-        height: 85%;
-       	background-color: #f2e08500; 
-       	font-size: 15px;
-     	overflow-y: auto;
-      	display: flex;
-       	align-items: flex-start;
+#refreshArea {
+    position: absolute;
+    top: 100px; /* Must match the height of your topContainer */
+    left: 0;
+    width: 100%;
+    height: calc(80% - 100px); /* Adjust based on your bottomContainer height */
+    background-color: transparent; 
+    font-size: 15px;
+    overflow-y: auto;
+    
+    /* Centering logic */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This pulls it from the right back to the center */
+    justify-content: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-    }
+  #bottomContainer {
+      display: flex;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20%;
+  }
 
-    #bottomContainer {
-        display: flex;
-        position: absolute;
-        bottom: 0;
-      	left: 0;
-        width: 100%;
-        height: 20%;
-    }
+  #avatar_story, #hachi_story {
+      width: 50%;
+      height: 100%;
+      padding: 1%;
+      font-size: 16px;
+    line-height: 1.5;
+      background-color: #164010;
+      border-right: 1px solid #7DA63F;
+      color: #F2E085;
+  }
 
-    #avatar_story, #hachi_story {
-        width: 50%;
-        height: 100%;
-        padding: 1%;
-        font-size: 16px;
-    	line-height: 1.5;
-        background-color: #164010;
-        border-right: 1px solid #7DA63F;
-        color: #F2E085;
-    }
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 0px solid #ddd;
+      table-layout: fixed;
+  }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-      	border: 0px solid #ddd;
-      	table-layout: fixed;
-    }
+  th, td {
+      padding: 4px;
+      border: 0px solid #ddd;
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 100px;
+  }
 
-    th, td {
-        padding: 4px;
-        border: 0px solid #ddd;
-        text-align: center;
-       	text-overflow: ellipsis;
-        overflow: hidden;
-       	white-space: nowrap;
-      	max-width: 100px;
-    }
+  th {
+      background-color: black;
+  }
 
-    th {
-        background-color: black;
-    }
+td {
+    line-height: 21px;
+}
 
-	td {
-      line-height: 21px;
-	}
-
-    tr:nth-child(even) {
-        background-color: #7DA63F;
-    }
-	tr:nth-child(odd) {
-        background-color: #BF4E24;
-    }
+  tr:nth-child(even) {
+      background-color: #7DA63F;
+  }
+tr:nth-child(odd) {
+      background-color: #BF4E24;
+  }
 
 .macro-button {
-	background-color: #164010; /* Green */
-  	color: #F2E085; /* Text color */
-	width: 20%;
-	border: none;
-	padding: 15px 32px;
-	text-align: center;
-    font-weight: bold;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin: 12px;
-	cursor: pointer;
-	border-radius: 8px;
-	font-family: "Roboto", sans-serif;
-    justify-content: center;
-    box-shadow: 
-			0 4px 8px rgba(0, 0, 0, 0.2), 
-			inset 0 0 10px rgba(0, 0, 0, 0.4); 
+background-color: #164010; /* Green */
+  color: #F2E085; /* Text color */
+width: 20%;
+border: none;
+padding: 15px 32px;
+text-align: center;
+  font-weight: bold;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+margin: 12px;
+cursor: pointer;
+border-radius: 8px;
+font-family: "Roboto", sans-serif;
+  justify-content: center;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.2), 
+    inset 0 0 10px rgba(0, 0, 0, 0.4); 
 }
 
 /* Existing CSS for loading-animation and spinner */
 .loading-animation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* Remove any positioning that might interfere with centering */
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+/* Remove any positioning that might interfere with centering */
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1); /* Light grey border */
-  border-top: 4px solid #BF4E24; 
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite; /* Apply the spin animation */
-  margin-bottom: 5px; /* Space between spinner and text */
+border: 4px solid rgba(0, 0, 0, 0.1); /* Light grey border */
+border-top: 4px solid #BF4E24; 
+border-radius: 50%;
+width: 30px;
+height: 30px;
+animation: spin 1s linear infinite; /* Apply the spin animation */
+margin-bottom: 5px; /* Space between spinner and text */
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
 }
 
 /* New CSS to center the loading container */
 .loading-container {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  position: fixed; /* Take it out of the normal flow */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000; /* Ensure it's on top of other content */
+display: flex;
+justify-content: center; /* Center horizontally */
+align-items: center; /* Center vertically */
+position: fixed; /* Take it out of the normal flow */
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1000; /* Ensure it's on top of other content */
 }
 
 .svg-logo {
-  height: 100%;
-  margin-right: 50%; /* Adjust as needed */
+height: 100%;
+margin-right: 50%; /* Adjust as needed */
 }
