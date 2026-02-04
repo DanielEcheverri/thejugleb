@@ -148,7 +148,8 @@ display: none;
   }
 
   table {
-      width: 100%;
+      width: 90%; /* Keeps it from hitting the very edges of the screen */
+      margin: 0 auto;
       border-collapse: collapse;
       border: 0px solid #ddd;
       table-layout: fixed;
