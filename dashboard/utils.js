@@ -143,12 +143,12 @@ Consider these four examples and their lenght:
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
-        window[`${character}_comment`] = gptResponse;
+        window.avatar_comment = gptResponse;
         console.log(`[Realism Update] ${character} (Focus: ${randomSFocus}):`, gptResponse);
     } catch (error) {
         console.error(`GPT Error for ${character}:`, error);
         const fallback = generateFallbackComment(character, context);
-        window[`${character}_comment`] = fallback;
+        window.avatar_comment = fallback;
         console.log(`[Fallback Comment] ${character}:`, fallback);
     }
 };
