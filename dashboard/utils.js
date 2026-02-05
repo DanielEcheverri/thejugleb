@@ -229,5 +229,4 @@ window.loadScene = function(passageName) {
 
     // 4. Save the loaded data into Twine's temporary '_scene' variable
     SugarCube.State.temporary.scene = data;
-    console.log(SugarCube.State.temporary.scene = data);
 };
