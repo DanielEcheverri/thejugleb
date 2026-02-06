@@ -62,8 +62,8 @@
 
     /* Dropdown */
     .styled-select {
-        background-color: #164010; /* Match your Green button */
-        color: #F2E085;           /* Match your Sand text */
+        background-color: #F2E085; /* Match your Green button */
+        color: #164010;           /* Match your Sand text */
         border: 1px solid #7DA63F;
         padding: 10px 15px;
         font-family: "Roboto", sans-serif;
@@ -71,9 +71,6 @@
         border-radius: 8px;
         cursor: pointer;
         width: 100px;
-        box-shadow: 
-          0 2px 4px rgba(0, 0, 0, 0.2), 
-          inset 0 0 5px rgba(0, 0, 0, 0.4);
         appearance: none; /* Removes default OS arrow */
         background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E085' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         background-repeat: no-repeat;
