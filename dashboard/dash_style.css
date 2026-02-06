@@ -54,14 +54,13 @@
   gap: 10px;
 }
 
-/* Scale the logo to fit the 100px bar */
 .svg-logo {
   height: 70px; 
   width: auto;
   margin: 0;
 }
 
-    /* The Select Style */
+    /* Dropdown */
     .styled-select {
         background-color: #164010; /* Match your Green button */
         color: #F2E085;           /* Match your Sand text */
@@ -71,7 +70,7 @@
         font-size: 14px;
         border-radius: 8px;
         cursor: pointer;
-        width: 200px;
+        width: 100px;
         box-shadow: 
           0 2px 4px rgba(0, 0, 0, 0.2), 
           inset 0 0 5px rgba(0, 0, 0, 0.4);
@@ -89,16 +88,6 @@
         outline: none;
         border-color: #BF4E24; /* Rust color on focus */
     }
-
-    
-/* Ensure the refresh area starts AFTER the 100px header */
-#refreshArea {
-  position: absolute;
-  top: 100px;
-  width: 100%;
-  height: calc(80% - 100px); /* Fill space until the bottomContainer */
-  overflow-y: auto;
-}
 
 /* Override macro-button to keep them from being too large in the header */
 .header-zone.right .macro-button {
@@ -173,7 +162,7 @@ td {
     line-height: 21px;
 }
 
-  tr:nth-child(even) {
+tr:nth-child(even) {
       background-color: #7DA63F;
   }
 tr:nth-child(odd) {
