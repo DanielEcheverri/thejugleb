@@ -79,11 +79,7 @@
           inset 0 0 10px rgba(0, 0, 0, 0.4); 
     }
 
-    .styled-select:hover {
-        border-color: #F2E085;
-        background-color: #7DA63F; /* Match your Green button */
-    }
-
+    .styled-select:hover 
     .styled-select:focus {
         outline: none;
         border-color: #BF4E24; /* Rust color on focus */
