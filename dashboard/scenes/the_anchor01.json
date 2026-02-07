@@ -4,12 +4,12 @@
     "beats": [
         {
             "text": "Uh?",
-            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$here_name is| snoring rhytmically",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name is| snoring rhytmically",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
             "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $avatar_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
-            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$here_name looks|startled!",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name looks|startled!",
             "trigger": ["looking right", "looking left"]
         },
         {
