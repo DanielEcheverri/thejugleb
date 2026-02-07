@@ -4,17 +4,17 @@
     "beats": [
         {
             "text": "Whoa, whoa",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$avatar_name is making|noises—head turning left and right",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name is making|noises—head turning left and right",
             "trigger": ["looking left","looking right"]
         },
         {
-            "text": "|VS| Suddenly, a $avatar_t_type heading to $avatar_t_heading swiftly passed next to $avatar_name. |VS| ‘Too fast! Did you see that? It was a blur. No legs, just speed. My eyes are spinning, Little man-cub. Everything is rushing to get somewhere else.’",
+            "text": "|VS| Suddenly, a $avatar_t_type heading to $avatar_t_heading swiftly passed next to $hero_name. |VS| ‘Too fast! Did you see that? It was a blur. No legs, just speed. My eyes are spinning, Little man-cub. Everything is rushing to get somewhere else.’",
             "backtext": "| |...|",
             "trigger": [{"part": "eyes", "dir": "touched"}]
         },
         {
-            "text": "‘Look at that $avatar_t_type. They have round feet! They don't step; they roll. That is how they move so fast without getting tired. Not very sage, if you ask me’ |VS| added $avatar_name, nodding their head.",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$avatar_name's keeps spinning.",
+            "text": "‘Look at that $avatar_t_type. They have round feet! They don't step; they roll. That is how they move so fast without getting tired. Not very sage, if you ask me’ |VS| added $hero_name, nodding their head.",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name's keeps spinning.",
             "trigger": ["looking left","looking right"]
         },
         {

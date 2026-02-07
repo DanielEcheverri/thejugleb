@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|$avatar_name is|panting—short,|rhythmic breaths",
+            "backtext": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|$hero_name is|panting—short,|rhythmic breaths",
             "trigger": [{"part": "right hand", "dir": "touched"},{"part": "left hand", "dir": "touched"}]
         },
         {
@@ -13,13 +13,13 @@
             "trigger": ["walking"]
         },
         {
-            "text": "‘Look. We are not alone. See them? Them gathering at the watering hole? |VS| pointing at a Coffee Shop in the corner of $avatar_street street |VS| They are drinking too. Good! Let them drink. By the water, the Law says we are all brothers. No biting today,’ |VS| said $avatar_name taking a sip of water.",
+            "text": "‘Look. We are not alone. See them? Them gathering at the watering hole? |VS| pointing at a Coffee Shop in the corner of $avatar_street street |VS| They are drinking too. Good! Let them drink. By the water, the Law says we are all brothers. No biting today,’ |VS| said $hero_name taking a sip of water.",
             "backtext": "| |...|",
             "trigger": [{"part": "mouth", "dir": "touched"}]
 
         },
         {
-            "text": " ‘Brrr-up! Ah! That is better. Cold enough to wake the ancestors.’ |VS| He sighs, contented |VS|’I could stay here until the moon rises... but the truce does not last forever. We must move and find the next page before the hunger returns,’ |VS|while $avatar_name gives you a small tap in your head… ",
+            "text": " ‘Brrr-up! Ah! That is better. Cold enough to wake the ancestors.’ |VS| He sighs, contented |VS|’I could stay here until the moon rises... but the truce does not last forever. We must move and find the next page before the hunger returns,’ |VS|while $hero_name gives you a small tap in your head… ",
             "backtext": "▓▓▓▓ ✓ PAGE 3  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }

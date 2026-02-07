@@ -4,21 +4,21 @@
     "beats": [
         {
             "text": "Sniff! Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$avatar_name is sniffing a wall, making thoughtful ‘Hmm’ noises",
+            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$hero_name is sniffing a wall, making thoughtful ‘Hmm’ noises",
             "trigger": ["looking left","looking right",{"part": "eyes", "dir": "touched"}]
         },
         {
             "text": "‘Someone has been here before us. Look at that mark by the big neon sign that says, ‘Welcome to $storyNeighborhood’. That is high up. A big animal made that. An elephant? Or another Man-Cub with a spray can?’",
-            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$avatar_name's curiously|looks at the marks.",
+            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$hero_name's curiously|looks at the marks.",
             "trigger": [{"part": "eyes", "dir": "touched"}]
         },
         {
-            "text": "‘Let's see... up... up! Lift me up, Little man-cub! I need to reach higher than the last one. Stretch! Stand on your toes! We must show them we are giants!’ |VS| insisted $avatar_name while trying to jump into the sign.",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$avatar_name's takes|momentum before jumping.",
+            "text": "‘Let's see... up... up! Lift me up, Little man-cub! I need to reach higher than the last one. Stretch! Stand on your toes! We must show them we are giants!’ |VS| insisted $hero_name while trying to jump into the sign.",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name's takes|momentum before jumping.",
             "trigger": ["jumping"]
         },
         {
-            "text": "Ha! There. That’s the spot. We are taller than we were yesterday. That is the only thing that matters,’ |VS| noted $avatar_name while marking your names with their paws.",
+            "text": "Ha! There. That’s the spot. We are taller than we were yesterday. That is the only thing that matters,’ |VS| noted $hero_name while marking your names with their paws.",
             "backtext": "| |...|",
             "trigger": [{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
         },

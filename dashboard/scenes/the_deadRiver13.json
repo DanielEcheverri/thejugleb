@@ -4,21 +4,21 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$avatar_name makes|a ‘tsk tsk’ sound, very annoyed.’.",
+            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$hero_name makes|a ‘tsk tsk’ sound, very annoyed.’.",
             "trigger": [{"part": "left hand", "dir": "touched"},{"part": "right hand", "dir": "touched"}]
         },
         {
-            "text": "‘Too hard. Listen to that. It rings like a hollow nut. There is no life in this ground. It is a shell,’ |VS| said $avatar_name tapping their hand on the pavement covering $avatar_street street.",
+            "text": "‘Too hard. Listen to that. It rings like a hollow nut. There is no life in this ground. It is a shell,’ |VS| said $hero_name tapping their hand on the pavement covering $avatar_street street.",
             "backtext": "| |...|",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
-            "text": "‘Look at the tracks. Not paw prints... but lines. White lines and yellow lines!’ |VS| observed $avatar_name with curiosity picking up from the street another page of the journal.",
-            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$avatar_name gets closer|trying to have|a better look.",
+            "text": "‘Look at the tracks. Not paw prints... but lines. White lines and yellow lines!’ |VS| observed $hero_name with curiosity picking up from the street another page of the journal.",
+            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$hero_name gets closer|trying to have|a better look.",
             "trigger": ["looking right", "looking left"]
         },
         {
-            "text": "‘Bah. My pads are aching already. This is no place for a bear. It leads to the cages, surely.’ |VS| $avatar_name lifted one of their legs trying to skip the feeling of the street pavement.",
+            "text": "‘Bah. My pads are aching already. This is no place for a bear. It leads to the cages, surely.’ |VS| $hero_name lifted one of their legs trying to skip the feeling of the street pavement.",
             "backtext": "| |...|",
             "trigger": ["standing right leg", "standing left leg"]
         },

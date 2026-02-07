@@ -4,26 +4,26 @@
     "beats": [
         {
             "text": "Whoa, whoa",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$avatar_name is murmuring nervously|—’Too bright, too open.’",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name is murmuring nervously|—’Too bright, too open.’",
             "trigger": [{"part": "eyes", "dir": "touched"},{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘Keep your head down, Little man-cub’ |VS| said $avatar_name crouching. ‘The Kite Hawks are circling in the $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$avatar_name's tries not|to be too loud..",
+            "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching. ‘The Kite Hawks are circling in the $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's tries not|to be too loud..",
             "trigger": ["walking","talking"]
         },
         {
-            "text": "‘But look at them. People usually don't look up. They have other things to worry for. They walk as if the whole world belongs to them’ |VS| exclaimed $avatar_name, starting to walk faster, while you tried to say something.",
+            "text": "‘But look at them. People usually don't look up. They have other things to worry for. They walk as if the whole world belongs to them’ |VS| exclaimed $hero_name, starting to walk faster, while you tried to say something.",
             "backtext": "| |...|",
             "trigger": ["looking left","looking right"]
         },
         {
-            "text": "|VS| Then $avatar_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out. Chin up. Walk heavy, like the Elephant. Make the ground shake so they know we are here.’ ",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$avatar_name's thumps is|feet agains the ground.",
+            "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out. Chin up. Walk heavy, like the Elephant. Make the ground shake so they know we are here.’ ",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's thumps is|feet agains the ground.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
-            "text": "|VS| You both started to walk faster. After a while, $avatar_name added |VS| ‘We survived the clearing. Good. Now, let's find cover before our luck runs out. Where is the next page?’",
+            "text": "|VS| You both started to walk faster. After a while, $hero_name added |VS| ‘We survived the clearing. Good. Now, let's find cover before our luck runs out. Where is the next page?’",
             "backtext": "▓▓▓▓ ✓ PAGE 7  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }

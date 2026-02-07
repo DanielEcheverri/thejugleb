@@ -4,21 +4,21 @@
     "beats": [
         {
             "text": "Unngh. Stubborn thing.",
-            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$avatar_name is snoring|wheezing until the|first touch.",
+            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$hero_name is snoring|wheezing until the|first touch.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
-            "text": "|VS| While you walk, $avatar_name protested, |VS| ‘No... no, Little man-cub. Not another step. The $storyWeather is too heavy. It’s pressing me flat against the earth. We stop here.’",
-            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$avatar_name moves their head|sideways in protest.",
+            "text": "|VS| While you walk, $hero_name protested, |VS| ‘No... no, Little man-cub. Not another step. The $storyWeather is too heavy. It’s pressing me flat against the earth. We stop here.’",
+            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$hero_name moves their head|sideways in protest.",
             "trigger": ["looking right", "looking left"]
         },
         {
-            "text": "‘Why are you in such a rush?’ said $avatar_name, ‘Look at them. Look at the $avatar_t_type rushing past. Running in circles like ants before a storm. Let them run. We are bears. We rest’ |VS| complained $avatar_name, feeling very tired and looking for a place to nap.",
+            "text": "‘Why are you in such a rush?’ said $hero_name, ‘Look at them. Look at the $avatar_t_type rushing past. Running in circles like ants before a storm. Let them run. We are bears. We rest’ |VS| complained $hero_name, feeling very tired and looking for a place to nap.",
             "backtext": "| |...|",
             "trigger": ["looking right", "looking left"]
         },
         {
-            "text": "|VS| However, you strongly push $avatar_name to continue walking |VS| ‘Okay! Okay, I'm up! You are as stubborn as a mule. Fine. We walk. But not this way. It's too bright. Put this page away in the backpack—it’s too hot to hold.",
+            "text": "|VS| However, you strongly push $hero_name to continue walking |VS| ‘Okay! Okay, I'm up! You are as stubborn as a mule. Fine. We walk. But not this way. It's too bright. Put this page away in the backpack—it’s too hot to hold.",
             "backtext": "| |...|",
             "trigger": ["walking"]
         },

@@ -4,21 +4,21 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$avatar_name is|murmuring nervously|—’Too bright, too open.’",
+            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$hero_name is|murmuring nervously|—’Too bright, too open.’",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘Sh! Freeze. Don't move a muscle, Little man-cub. He is still watching us’ |VS| announced $avatar_name while freezing his body with one of his legs in the air.",
+            "text": "‘Sh! Freeze. Don't move a muscle, Little man-cub. He is still watching us’ |VS| announced $hero_name while freezing his body with one of his legs in the air.",
             "backtext": "| |...|",
             "trigger": ["standing right leg", "standing left leg"]
         },
         {
-            "text": "‘Over there!’ |VS| whispered $avatar_name, |VS| ‘Do you see that shadow moving near the $avatar_t_stop $avatar_t_type stop? There is Shere Khan. He is still following us’ |VS| starting to walk backwards.",
-            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$avatar_name takes|a couple of|steps back.",
+            "text": "‘Over there!’ |VS| whispered $hero_name, |VS| ‘Do you see that shadow moving near the $avatar_t_stop $avatar_t_type stop? There is Shere Khan. He is still following us’ |VS| starting to walk backwards.",
+            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$hero_name takes|a couple of|steps back.",
             "trigger": ["walking"]
         },
         {
-            "text": "|VS| After some silence, $avatar_name cautioned |VS|, ‘He’s turning away. He didn't see us. Remember: You don't have to be faster than the tiger, just quieter than the leaf. Let's find the next page and vanish.’",
+            "text": "|VS| After some silence, $hero_name cautioned |VS|, ‘He’s turning away. He didn't see us. Remember: You don't have to be faster than the tiger, just quieter than the leaf. Let's find the next page and vanish.’",
             "backtext": "▓▓▓▓ ✓ PAGE 8  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }
