@@ -60,32 +60,31 @@
   margin: 0;
 }
 
-    /* Dropdown */
-    .styled-select {
-        background-color: #F2E085; /* Match your Green button */
-        color: #164010;           /* Match your Sand text */
-        border: 1px solid #7DA63F;
-        padding: 10px 15px;
-        font-family: "Roboto", sans-serif;
-        font-size: 14px;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 100px;
-        appearance: none; /* Removes default OS arrow */
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E085' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        box-shadow: 
-          inset 0 0 10px rgba(0, 0, 0, 0.4); 
-    }
+/* Dropdown */
+.styled-select {
+    background-color: #F2E085; /* Match your Green button */
+    color: #164010;           /* Match your Sand text */
+    border: 1px solid #7DA63F;
+    padding: 10px 15px;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100px;
+    appearance: none; /* Removes default OS arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E085' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    box-shadow: 
+      inset 0 0 10px rgba(0, 0, 0, 0.4); 
+}
 
-    .styled-select:hover 
-    .styled-select:focus {
-        outline: none;
-        border-color: #BF4E24; /* Rust color on focus */
-        background-color: #FFF; /* Match your Green button */
-    }
-
+.styled-select:hover 
+.styled-select:focus {
+    outline: none;
+    border-color: #BF4E24; /* Rust color on focus */
+    background-color: #FFF; /* Match your Green button */
+}
 
 /* Override macro-button to keep them from being too large in the header */
 .header-zone.right .macro-button {
