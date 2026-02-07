@@ -4,12 +4,12 @@
     "beats": [
         {
             "text": "Uh?",
-            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name is| snoring rhytmically",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$here_name is| snoring rhytmically",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
             "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $avatar_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
-            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name looks|startled!",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$here_name looks|startled!",
             "trigger": ["looking right", "looking left"]
         },
         {
@@ -19,7 +19,7 @@
         },
         {
             "text": "‘It’s a long walk, and my memory is full of holes. If I only had my journal, I would know the fastest way to $storyCity … we need to find those missing pages. They will guide us on way.’",
-            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$avatar_name is ready|to continue!",
+            "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name is ready|to continue!",
             "trigger": "walking"
         },
                 {
