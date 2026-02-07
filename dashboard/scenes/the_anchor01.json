@@ -1,6 +1,6 @@
 {
     "baseId": "the_anchor01_",
-    "nextScene": "avatar_card_choice",  
+    "nextScene": "card_choice",  
     "beats": [
         {
             "text": "Uh?",
