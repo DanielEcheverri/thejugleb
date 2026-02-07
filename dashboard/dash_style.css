@@ -83,13 +83,9 @@
     .styled-select:focus {
         outline: none;
         border-color: #BF4E24; /* Rust color on focus */
-        background-color: #7DA63F; /* Match your Green button */
+        background-color: #FFF; /* Match your Green button */
     }
 
-    input:not(:disabled):focus, input:not(:disabled):hover, select:not(:disabled):focus, select:not(:disabled):hover, textarea:not(:disabled):focus, textarea:not(:disabled):hover {
-    background-color: #FFF;
-    border-color: #eee;
-}
 
 /* Override macro-button to keep them from being too large in the header */
 .header-zone.right .macro-button {
