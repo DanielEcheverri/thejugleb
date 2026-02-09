@@ -8,12 +8,12 @@
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
-            "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $avatar_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
+            "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $hero_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
             "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name looks|startled!",
             "trigger": ["looking right", "looking left"]
         },
         {
-            "text": "‘Listen to that. That remote low hum? It isn't the wind. It is $storyCity, far in the distance. That is the Man-Village. Its sure sounds like a hive of busy bees this $storyTime.’ That is where we are going now. You need to be with your own kind before the rains come and Shere Khan finds you,’ said $avatar_name whispering.",
+            "text": "‘Listen to that. That remote low hum? It isn't the wind. It is $storyCity, far in the distance. That is the Man-Village. Its sure sounds like a hive of busy bees this $storyTime.’ That is where we are going now. You need to be with your own kind before the rains come and Shere Khan finds you,’ said $hero_name whispering.",
             "backtext": "| |...|",
             "trigger": "talking"
         },
