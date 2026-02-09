@@ -199,7 +199,7 @@ window.loadScene = function(passageName) {
     // 1. The specific path where your JSON files live
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
     
-    // 2. Combine path + filename + extension
+    // 2. Combine path + filename + extension +
     var url = baseURL + passageName + ".json";
     var data = null;
 
