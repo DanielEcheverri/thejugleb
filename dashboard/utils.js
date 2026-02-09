@@ -195,7 +195,7 @@ EXAMPLES:
     }
 };
 
-window.loadScene = function(passageName,targetEngine) {
+window.loadScene = function(passageName) {
     // 1. The specific path where your JSON files live
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
     
@@ -228,11 +228,5 @@ window.loadScene = function(passageName,targetEngine) {
     });
 
     // 4. Save the loaded data into Twine's temporary '_scene' variable
-    //SugarCube.State.temporary.scene = data;
-    /* Save to the correct global variable */
-    if (targetEngine === "avatar") {
-        SugarCube.State.variables.avatar_scene = jsonResult;
-    } else if (targetEngine === "hachi") {
-        SugarCube.State.variables.hachi_scene = jsonResult;
-    }
+    SugarCube.State.temporary.scene = data;
 };
