@@ -434,36 +434,36 @@ the_jungle_b 1.1
 
 :: commentMovement_hachi {"position":"1000,325","size":"200,100"}
 <<if ($hachi_movement !== "none" || $hachi_part_mov !== "none") && ( $hachi_movement !== _prevhachi_Movement || $hachi_part_mov !== _prevhachi_PartMov)>>
-    
-    <<set _prevhachi_Movement to $hachi_movement>>
-    <<set _prevhachi_PartMov to $hachi_part_mov>>
-    
-    <<if $hachi_movement !== "none">>
-        <<set $hachi_mov_track to $hachi_movement>>
-    <<elseif $hachi_part_mov !== "none">>
-        <<set $hachi_mov_track to $hachi_part_mov>>
-    <</if>>
-    
-        <<script>>
-        window.makeShortComments()
-            .then(() => {
-                const comment = hachi_shortComment;
 
-                if (comment) {
-                    const passage_temp = comment; 
-                    hachi_passage = variables().hachi_passage_id+'/|VS|'+passage_temp; 
-                } else {
-                    variables().hachi_passage = "This movement did not do anything, maybe a different one?";
-                }
-            })
-            .catch(error => {
-                console.error("Error during avatar comment generation:", error);
-                variables().hachi_passage = "Comment system error. Check console.";
-            });
-    <</script>>
-    
-    <<set $hachi_passage to variables().hachi_passage>>
+    <<set _prevhachi_Movement to $hachi_movement>>
+<<set _prevhachi_PartMov to $hachi_part_mov>>
+
+    <<if $hachi_movement !== "none">>
+<<set $hachi_mov_track to $hachi_movement>>
+<<elseif $hachi_part_mov !== "none">>
+<<set $hachi_mov_track to $hachi_part_mov>>
 <</if>>
+
+<<script>>
+window.makeShortComments()
+    .then(() => {
+        const comment = hachi_shortComment;
+
+        if (comment) {
+            const passage_temp = comment; 
+            hachi_passage = variables().hachi_passage_id+'/|VS|'+passage_temp; 
+        } else {
+            variables().hachi_passage = "This movement did not do anything, maybe a different one?";
+        }
+    })
+    .catch(error => {
+        console.error("Error during avatar comment generation:", error);
+        variables().hachi_passage = "Comment system error. Check console.";
+    });
+    <</script>>
+
+    <<set $hachi_passage to variables().hachi_passage>>
+    <</if>>
 
 
 :: commentScene_avatar {"position":"1450,325","size":"200,100"}
@@ -748,7 +748,7 @@ if (hachiDropdown) {
       <div class="loading-animation">
         
         <img src="https://danielecheverri.github.io/thejugleb/logo.svg" alt="The Jungle B" class="static-image">
-        <p>Loading information from Transitland, Openstreet Maps, OpenWeather, and Overpass ...</p>
+        <p>Loading data from Transitland, Openstreet Maps, OpenWeather, and Overpass ...</p>
         <div class="spinner"></div>
       </div>
     </div>

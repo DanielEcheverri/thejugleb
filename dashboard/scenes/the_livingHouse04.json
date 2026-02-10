@@ -18,7 +18,7 @@
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
-            "text": "‘Ah, perfect. A root for a pillow, moss for a blanket. The 'Bare Necessities' are right here under your nose’ |VS| said $hero_name, shaking his body, resting in some bushes. ",
+            "text": "‘Ah, perfect. A root for a pillow, moss for a blanket. The 'Bare Necessities' are right here under our nose’ |VS| said $hero_name, shaking his body, resting in some bushes. ",
             "backtext": "▓▓▓▓▓ PAGE 4 ▓▓▓▓▓|$hero_name's is|shaking!.",
             "trigger": [{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
