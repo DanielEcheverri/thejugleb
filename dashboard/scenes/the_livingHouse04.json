@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 4 ▓▓▓▓▓|$hero_name is humming|a low, happy tune.",
+            "backtext": "   ",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
@@ -15,12 +15,12 @@
         {
             "text": "‘Much better than those... gigantic things out there’ |VS| said $hero_name in disdain. |VS| ‘Look at that building near the $avatar_amenity. Square. Grey. Humans live in stone boxes stacked like firewood. But this? This is a palace ’",
             "backtext": "▓▓▓▓▓ PAGE 4 ▓▓▓▓▓|$hero_name stomps|their feet.",
-            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"},{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
         {
             "text": "‘Ah, perfect. A root for a pillow, moss for a blanket. The 'Bare Necessities' are right here under our nose’ |VS| said $hero_name, shaking his body, resting in some bushes. ",
             "backtext": "▓▓▓▓▓ PAGE 4 ▓▓▓▓▓|$hero_name's is|shaking!.",
-            "trigger": [{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"},{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
         {
             "text": "|VS| After a couple of hours of resting, $hero_name says |VS|’I could sleep for a week... but we have miles to cover. Our page search is not finished, little man-cub.’ |VS| $hero_name said while stretching, |VS| ‘Now…let’s find the next page’",

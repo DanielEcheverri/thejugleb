@@ -19,7 +19,7 @@
         },
         {
             "text": "‘Alright. If we want to cross $avatar_street street, we must match the speed. Don't fight the concrete river. Step... step... step. Glide like the crocodile’ |VS| doing long, rushed steps, trying to cross the street.",
-            "backtext": "| |...|",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name's looks|both sides|before moving.",
             "trigger": ["walking","looking left","looking right"]
         },
         {

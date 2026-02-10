@@ -706,13 +706,6 @@ if (hachiDropdown) {
     writeToHachi('hachi_passage',hachi_passage);
 <</script>>
 
-<<set avatar_backtext to "">>
-<<set hachi_backtext to "">>
-<<script>>
-    writeToAvatar('avatar_backtext',avatar_backtext);
-    writeToHachi('hachi_backtext',hachi_backtext);
-<</script>>
-
 <<set avatar_current_passage to "">>
 <<set hachi_current_passage to "">>
 <<script>>
@@ -748,7 +741,7 @@ if (hachiDropdown) {
       <div class="loading-animation">
         
         <img src="https://danielecheverri.github.io/thejugleb/logo.svg" alt="The Jungle B" class="static-image">
-        <p>Loading information from Transitland, Openstreet Maps, OpenWeather, and Overpass ...</p>
+        <p>Loading data from Transitland, Openstreet Maps, OpenWeather, and Overpass ...</p>
         <div class="spinner"></div>
       </div>
     </div>

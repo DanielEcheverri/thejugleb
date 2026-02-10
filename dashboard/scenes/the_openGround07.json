@@ -8,7 +8,7 @@
             "trigger": [{"part": "eyes", "dir": "touched"},{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching.|VS| ‘The Kite Hawks are circling in the $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
+            "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching.|VS| ‘The Kite Hawks are circling in this $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
             "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's tries not|to be too loud..",
             "trigger": ["walking","talking"]
         },
@@ -18,9 +18,9 @@
             "trigger": ["looking left","looking right"]
         },
         {
-            "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out. Chin up. Walk heavy, like the Elephant. Make the ground shake so they know we are here.’ ",
+            "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out! Chin up! Walk heavy, like the Elephant! Make the ground shake so they know we are here.’ ",
             "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's thumps their|feet against|the ground.",
-            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}, [{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
         {
             "text": "|VS| You both started to walk faster. After a while, $hero_name added |VS| ‘We survived the clearing. Good. Now, let's find cover before our luck runs out. Where is the next page?’",

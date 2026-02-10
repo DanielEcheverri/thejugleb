@@ -8,14 +8,14 @@
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "|VS| Suddenly, something else caught $hero_name’s attention |VS| ‘Who is that? There...reflected in the water. That great grey shape. He looks old this $storyTime, Little man-cub. Look at his fur... it's greyer than I remember.’",
+            "text": "|VS| Suddenly, something else caught $hero_name’s attention |VS| ‘Who is that? There!...reflected in the water. That great grey shape. He looks old this $storyTime, Little man-cub. Look at his fur... it's greyer than I remember.’",
             "backtext": "| |...|",
             "trigger": [{"part": "eyes", "dir": "touched"}]
         },
         {
             "text": "‘And look.. on the left. They aren’t in the jungle. They are standing next to a $avatar_amenity. They look lost.’ |VS| $hero_name tried to get a better look.",
             "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name looks to|the left of|their reflection.",
-            "trigger": ["looking left"]
+            "trigger": ["looking left", {"part": "eyes", "dir": "touched"}]
         },
         {
             "text": "‘Hah! No... that's just me. That's just us. The water plays tricks; makes you look like a stranger to yourself,’ |VS| Said $hero_name walking closer to the reflection, feeling a bit off…|VS|",
