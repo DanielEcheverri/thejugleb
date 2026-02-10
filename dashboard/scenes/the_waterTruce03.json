@@ -19,7 +19,7 @@
 
         },
         {
-            "text": " ‘Brrr-up! Ah! That is better. Cold enough to wake the ancestors.’ |VS| He sighs, contented |VS|’I could stay here until the moon rises... but the truce does not last forever. We must move and find the next page before the hunger returns,’ |VS|while $hero_name gives you a small tap in your head… ",
+            "text": " ‘Ah! That is better. Cold enough to wake the ancestors.’ |VS| He sighs, contented |VS|’I could stay here until the moon rises... but the truce does not last forever. We must move and find the next page before the hunger returns,’ |VS|while $hero_name gives you a small tap in your head… ",
             "backtext": "▓▓▓▓ ✓ PAGE 3  ▓▓▓▓|A new page is|in the backpack.",
             "trigger": null
         }

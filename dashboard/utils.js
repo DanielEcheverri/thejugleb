@@ -158,6 +158,16 @@ Consider these four examples and their lenght:
  * Uses GPT API with fallback to generic message on failure.
  */
 window.makeShortComments = async function(charname, movement) {
+
+    /* 1. CHECK LOCK: If busy, stop immediately */
+    if (window.isCommentBusy === true) {
+        console.log(`[Busy] Skipping comment for ${charname} because a request is already active.`);
+        return; 
+    }
+
+    /* 2. SET LOCK */
+    window.isCommentBusy = true;
+
     const apiKey = window.avatar_GPT;
     const uniqueID = Date.now();
     
@@ -192,6 +202,8 @@ EXAMPLES:
         const fallbackMessage = `${charname} tried ${movement}, but nothing happened. Maybe you should try something else.`;
         window.avatar_shortComment = fallbackMessage;
         console.log(`[Fallback] Using default message for ${charname}`);
+    } finally {
+        window.isCommentBusy = false;
     }
 };
 

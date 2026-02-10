@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Whoa, whoa",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name is making|noises—head turning left and right",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name is making|noises head turning|left and right",
             "trigger": ["looking left","looking right"]
         },
         {
@@ -14,7 +14,7 @@
         },
         {
             "text": "‘Look at that $avatar_t_type. They have round feet! They don't step; they roll. That is how they move so fast without getting tired. Not very sage, if you ask me’ |VS| added $hero_name, nodding their head.",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name's keeps spinning.",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name's keeps|spinning.",
             "trigger": ["looking left","looking right"]
         },
         {
