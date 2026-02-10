@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$hero_name is muttering|—’Impossible. Impossible.’.",
+            "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$hero_name is muttering|--Impossible,|Impossible--..",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {

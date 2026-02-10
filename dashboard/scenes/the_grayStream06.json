@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Whoa, whoa",
-            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name is making|noises head turning|left and right",
+            "backtext": "▓▓▓▓▓ PAGE 6 ▓▓▓▓▓|$hero_name is making|noises head turning|left and right.",
             "trigger": ["looking left","looking right"]
         },
         {

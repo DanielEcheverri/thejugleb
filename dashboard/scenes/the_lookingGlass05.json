@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name is murmuring quietly...",
+            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name is|murmuring|quietly...",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
@@ -14,7 +14,7 @@
         },
         {
             "text": "‘And look.. on the left. They aren’t in the jungle. They are standing next to a $avatar_amenity. They look lost.’ |VS| $hero_name tried to get a better look.",
-            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name looks to|the left of|the reflection.",
+            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name looks to|the left of|their reflection.",
             "trigger": ["looking left"]
         },
         {

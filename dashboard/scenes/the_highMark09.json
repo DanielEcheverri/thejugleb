@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Sniff! Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$hero_name is sniffing a wall, making thoughtful ‘Hmm’ noises",
+            "backtext": "▓▓▓▓▓ PAGE 9 ▓▓▓▓▓|$hero_name is sniffing|a wall, making|thoughtful noises.",
             "trigger": ["looking left","looking right",{"part": "eyes", "dir": "touched"}]
         },
         {

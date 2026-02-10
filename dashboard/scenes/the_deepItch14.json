@@ -4,11 +4,11 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|$hero_name is grunting and twisting, frustrated.’",
+            "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|$hero_name is|grunting and|twisting, frustrated.",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘‘Aha! Another page… but wait! It’s back; the itch! Right there... right between the shoulders. It feels like a family of red ants is building a nest in my fur.’ (Beat) ‘I can't reach it. Help me, Little man-cub. Push!’",
+            "text": "‘‘Aha! Another page… but wait! It’s back; the itch! Right there... right between the shoulders. ‘I can't reach it. Help me, Little man-cub. Push!’",
             "backtext": "| |...|",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },

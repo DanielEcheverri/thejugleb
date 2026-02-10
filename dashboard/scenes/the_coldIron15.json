@@ -4,12 +4,12 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$hero_name is making low, suspicious ‘growl’ noises.",
+            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$hero_name is making low,|suspicious ‘growl’|noises.",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
             "text": "‘Easy... easy. Watch your step. You see how it stands? No branches? No leaves?’’ |VS| $hero_name leans in close, nostrils flaring while picking up a new page. |VS| ‘Sniff... Sniff... Puh. It smells of rain and old coins. It is a trap made of iron.’",
-            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$hero_name leans in|close, nostrils flaring ",
+            "backtext": "▓▓▓▓▓ PAGE 15 ▓▓▓▓|$hero_name leans in|close, nostrils|flaring.",
             "trigger": [{"part": "mouth", "dir": "touched"}, {"part": "eyes", "dir": "touched"},{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {

@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|$hero_name is|panting—short,|rhythmic breaths",
+            "backtext": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|$hero_name is|panting--short,|rhythmic breaths.",
             "trigger": [{"part": "right hand", "dir": "touched"},{"part": "left hand", "dir": "touched"}]
         },
         {

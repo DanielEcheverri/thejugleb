@@ -13,7 +13,7 @@
             "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"}]
         },
         {
-            "text": "‘Hah! Did you hear that? The shell is cracking. Let me hit it again! I will use the weight of my arm. Let gravity do the work!’",
+            "text": "‘Hah! Did you hear that? The shell is cracking. Let me hit it again! I will use the weight of my foot. Let gravity do the work!’",
             "backtext": "▓▓▓▓▓ PAGE 10 ▓▓▓▓|$hero_name's takes|stomps on the|shell again.",
             "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"},{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
         },

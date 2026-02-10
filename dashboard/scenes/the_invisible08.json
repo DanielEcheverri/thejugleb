@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Hmm",
-            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$hero_name is|murmuring nervously|—’Too bright, too open.’",
+            "backtext": "▓▓▓▓▓ PAGE 8 ▓▓▓▓▓|$hero_name is|saying nervously|--Still too open!--",
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {

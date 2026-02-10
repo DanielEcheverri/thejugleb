@@ -4,7 +4,7 @@
     "beats": [
         {
             "text": "Whoa, whoa",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name is murmuring nervously|—’Too bright, too open.’",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name is murmuring nervously|--’Too bright...|too open.--",
             "trigger": [{"part": "eyes", "dir": "touched"},{"part": "mouth", "dir": "touched"}]
         },
         {
@@ -19,7 +19,7 @@
         },
         {
             "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out. Chin up. Walk heavy, like the Elephant. Make the ground shake so they know we are here.’ ",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's thumps is|feet agains the ground.",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's thumps their|feet against|the ground.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
