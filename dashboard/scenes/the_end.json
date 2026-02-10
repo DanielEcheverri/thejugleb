@@ -1,0 +1,31 @@
+{
+    "baseId": "the_end_",
+    "nextScene": "start_both",  
+    "beats": [
+        {
+            "text": "Hmm",
+            "backtext": "▓▓▓▓ ✓ END  ▓▓▓▓|$hero_name is murmuring quietly...",
+            "trigger": [{"part": "mouth", "dir": "touched"}]
+        },
+        {
+            "text": "|VS| Suddenly, something else caught $hero_name’s attention |VS| ‘Who is that? There...reflected in the water. That great grey shape. He looks old this $storyTime, Little man-cub. Look at his fur... it's greyer than I remember.’",
+            "backtext": "| |...|",
+            "trigger": [{"part": "eyes", "dir": "touched"}]
+        },
+        {
+            "text": "‘And look.. on the left. They aren’t in the jungle. They are standing next to a $avatar_amenity. They look lost.’ |VS| $hero_name tried to get a better look.",
+            "backtext": "▓▓▓▓ ✓ END  ▓▓▓▓|$hero_name looks to|the left of|the reflection.",
+            "trigger": ["looking left"]
+        },
+        {
+            "text": "‘Hah! No... that's just me. That's just us. The water plays tricks; makes you look like a stranger to yourself,’ |VS| Said $hero_name walking closer to the reflection, feeling a bit off…|VS|",
+            "backtext": "| |...|",
+            "trigger": ["walking"]
+        },
+        {
+            "text": "‘I've seen enough. The water makes me full. Let's find dry land. Where to next?’",
+            "backtext": "▓▓▓▓ ✓ END  ▓▓▓▓|A new page is|in the backpack.",
+            "trigger": null
+        }
+    ]
+}

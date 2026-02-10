@@ -8,7 +8,7 @@
             "trigger": [{"part": "eyes", "dir": "touched"},{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching. ‘The Kite Hawks are circling in the $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
+            "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching.|VS| ‘The Kite Hawks are circling in the $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
             "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's tries not|to be too loud..",
             "trigger": ["walking","talking"]
         },

@@ -13,7 +13,7 @@
             "trigger": [{"part": "right hand", "dir": "touched"},{"part": "left hand", "dir": "touched"}]
         },
         {
-            "text": "‘Much better than those... gigantic things out there’ |VS| said $hero_name in disdain. |VS| ‘Look at that building near the avatar_amenity. Square. Grey. Humans live in stone boxes stacked like firewood. But this? This is a palace ’",
+            "text": "‘Much better than those... gigantic things out there’ |VS| said $hero_name in disdain. |VS| ‘Look at that building near the $avatar_amenity. Square. Grey. Humans live in stone boxes stacked like firewood. But this? This is a palace ’",
             "backtext": "▓▓▓▓▓ PAGE 4 ▓▓▓▓▓|$hero_name stomps|their feet.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },

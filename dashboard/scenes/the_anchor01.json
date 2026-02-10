@@ -13,7 +13,7 @@
             "trigger": ["looking right", "looking left"]
         },
         {
-            "text": "‘Listen to that. That remote low hum? It isn't the wind. It is $storyCity, far in the distance. That is the Man-Village. Its sure sounds like a hive of busy bees this $storyTime.’ That is where we are going now. You need to be with your own kind before the rains come and Shere Khan finds you,’ said $hero_name whispering.",
+            "text": "‘Listen to that. That remote low hum? It isn't the wind. It is $storyCity, far in the distance. That is the Man-Village. Its sure sounds like a hive of busy bees this $storyTime.’ That is where we are going now. You need to be with your own kind before the rains come and Shere Khan finds you,’ |VS| said $hero_name whispering.",
             "backtext": "| |...|",
             "trigger": "talking"
         },

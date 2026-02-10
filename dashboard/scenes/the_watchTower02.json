@@ -5,7 +5,7 @@
         {
             "text": "Hmm",
             "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$hero_name is| murmuring, intrigued.|‘Hmph. Look at that.’",
-            "trigger": ["looking right", "looking left"]
+            "trigger": ["looking right", "looking left",{"part": "mouth", "dir": "touched"}]
         },
         {
             "text": "‘‘Great, we found a new page! Let’s see… ‘There… That person!’ |VS| alerted $hero_name |VS| ‘Just across $avatar_street street …walking fast. Do you see? People walk like a wolf with no pack: Heads down, eyes on their glassy, shiny, metallic rectangles,’ |VS| said $hero_name, before talking again…",
@@ -14,12 +14,12 @@
         },
         {
             "text": "‘And look at that! It is a $avatar_amenity. People come, look at it, and go, in and around it, but they never stop moving. The Man-Village is full of magic that feeds the eye!’ |VS| After a quiet pause, $hero_name scratches their head and said…",
-            "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$hero_name is| scratching, their head.",
+            "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$hero_name is| scratching| their head.",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
 
         },
         {
-            "text": "‘Bah! They are too distracted! A tiger could walk right behind them, and they wouldn't know until the teeth snapped.’ ",
+            "text": "‘Bah! They are too distracted! A tiger could walk right behind them, and they wouldn't know until the teeth snapped, |VS| as they continued walking.’ ",
             "backtext": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|$hero_name starts| walking at a |slow pace",
             "trigger": "walking"
         },
