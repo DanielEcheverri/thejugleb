@@ -159,7 +159,7 @@ Consider these four examples and their lenght:
  */
 window.makeShortComments = async function(charname, movement) {
 
-    /* 1. CHECK LOCK: If busy, stop immediately */
+    /* If busy, stop immediately */
     if (window.isCommentBusy === true) {
         console.log(`[Busy] Skipping comment for ${charname} because a request is already active.`);
         return; 
@@ -208,14 +208,11 @@ EXAMPLES:
 };
 
 window.loadScene = function(passageName) {
-    // 1. The specific path where your JSON files live
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
-    
-    // 2. Combine path + filename + extension
-    var url = baseURL + passageName + ".json";
+        var url = baseURL + passageName + ".json";
     var data = null;
 
-    // 3. Fetch the file synchronously
+    // Fetch the file synchronously
     $.ajax({
         url: url,
         dataType: "json",
@@ -239,6 +236,6 @@ window.loadScene = function(passageName) {
         }
     });
 
-    // 4. Save the loaded data into Twine's temporary '_scene' variable
+    // Save the loaded data into Twine's temporary '_scene' variable
     SugarCube.State.temporary.scene = data;
 };
