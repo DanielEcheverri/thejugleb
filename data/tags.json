@@ -1,53 +1,37 @@
 {
 	"tags": {
-		"12": {
+		"21": {
 			"displayText": "Triggering Non-narrative mode.",
 			"variable": "noNarrative",
 			"boolean": true,
 			"function": "window.magic1_Sound.play();window.bgm_Sound.stop();"
 		},
-		"13": {
+		"22": {
 			"displayText": "Triggering Narrative mode.",
 			"variable": "noNarrative",
 			"boolean": false
 		},
-		"14": {
+		"23": {
 			"displayText": "Using Coqui's Voice.",
 			"variable": "speakFancy",
 			"boolean": false,
 			"function": "console.log('Coqui TTS in avatar mode.');"
 		},
-		"15": {
+		"24": {
 			"displayText": "Using Azure's Voice.",
 			"variable": "speakFancy",
 			"boolean": true,
 			"function": "console.log('Azure TTS in avatar mode.');"
 		},
-		"16": {
+		"25": {
 			"variable": "backText",
 			"string": "▓▓▓▓▓ PAGE 2 ▓▓▓▓▓|Once upon a time|there was bear|living in a forest.",
 			"function": "sendData();"
 		},
-		"17": {
+		"26": {
 			"variable": "backText",
 			"string": "▓▓▓▓▓ PAGE 3 ▓▓▓▓▓|That bear's name|was Baloo.|Mowgli's good friend.",
 			"function": "sendData();"
-		},
-		"21": {
-		},
-		"23": {
-		},
-		"24": {
-		},
-		"25": {
-		},
-		"26": {
-		},
-		"27": {
-		},
-		"28": {
-		},
-		"29": {
 		},
 		"31": {
 		}
