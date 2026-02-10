@@ -1,0 +1,1271 @@
+:: StoryTitle
+the_jungle_b 1.1
+
+
+:: StoryData
+{
+  "ifid": "bcb51f6d-bf0b-443d-859f-852ce89f9fbf",
+  "format": "SugarCube",
+  "format-version": "2.36.1",
+  "start": "init",
+  "tag-colors": {
+    "beat": "yellow"
+  },
+  "zoom": 0.6
+}
+
+
+:: Logic_AvatarCardChoiceEngine {"position":"1450,200","size":"200,100"}
+<<nobr>>
+    /* --- 0. INITIALIZATION --- */
+    /* Global Counter */
+    <<if $cards_scanned is undefined>>
+        <<set $cards_scanned to 0>>
+    <</if>>
+
+    /* Global History Tracker (Array of IDs) */
+    <<if $scanned_history is undefined>>
+        <<set $scanned_history to []>>
+    <</if>>
+
+    /* Setup Intro */
+    <<set $avatar_passage_id to _scene.baseId + "intro">>
+    
+    /* Wikify Intro */
+    <<set _rawText to _scene.intro>>
+    <<set _processedText to _rawText.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+        return State.variables[v] !== undefined ? State.variables[v] : m;
+    })>>
+    
+    <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _processedText + "/">>
+    <<set $avatar_backtext to "▓▓▓▓▓ ✓ INFO ▓▓▓▓▓|Is there a|new page for |$hero_name's journal?">>
+    
+    /* State Tracking */
+    <<set _processingInterjection to false>>
+    <<set _errorMode to false>>
+    <<set _targetRoute to "">>
+    <<set _lastIdleTime to Date.now()>>
+    <<set _isFetchingComment to false>>
+
+
+<<liveblock>>
+    
+    /* STATE 1: WAITING FOR CARD SCAN              */
+    <<if _processingInterjection is false and _errorMode is false>>
+
+        <<if $avatar_narrating == $avatar_passage_id + "false">>
+	    <<if (Date.now() - _lastIdleTime) > 10000 and _isFetchingComment is false>>                
+                <<set _isFetchingComment to true>>
+                <<set _lastIdleTime to Date.now()>>
+                <<include "commentScene_avatar">>
+            <</if>>
+
+            /* CHECK: Has a card been scanned? */
+            <<if _scene.routes[$avatar_tag]>>
+                
+                /* --- A. HISTORY CHECK (Prevent Duplicates) --- */
+                <<if $scanned_history.includes($avatar_tag)>>
+                    
+                     /* FAILURE: Duplicate Card */
+                     <<set _errorMode to true>>
+                     <<set $avatar_passage_id to _scene.baseId + "err_dup">>
+                     <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _scene.validation.duplicate + "/">>
+                
+                /* --- B. RULE CHECK (Turn 1 / Turn 9) --- */
+                <<else>>
+                    
+                    /* Determine what turn this WOULD be */
+                    <<set _potentialTurn to $cards_scanned + 1>>
+                    <<set _rule to _scene.validation[_potentialTurn]>>
+                    
+                    <<if _rule and $avatar_tag != _rule.requiredCard>>
+                        
+                        /* FAILURE: Wrong Card for this Turn */
+                        <<set _errorMode to true>>
+                        <<set $avatar_passage_id to _scene.baseId + "err_" + _potentialTurn>>
+                        <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _rule.error + "/">>
+
+                    <<else>>
+                    
+                        /* SUCCESS: Proceed */
+                        
+                        /* 1. Save to History & Increment */
+                        <<run $scanned_history.push($avatar_tag)>>
+                        <<set $cards_scanned ++>>
+                        
+                        /* 2. Set Destination */
+                        <<set _targetRoute to _scene.routes[$avatar_tag]>>
+
+                        /* 3. Check Turn Script (Narrative) */
+                        <<if _scene.turnScripts[$cards_scanned]>>
+                            
+                            /* Play Interjection */
+                            <<set _processingInterjection to true>>
+                            
+                            <<set $avatar_passage_id to _scene.baseId + "turn_" + $cards_scanned>>
+                            <<set _rawText to _scene.turnScripts[$cards_scanned]>>
+                            <<set _processedText to _rawText.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+                                return State.variables[v] !== undefined ? State.variables[v] : m;
+                            })>>
+                            
+                            <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _processedText + "/">>
+                            
+                        <<else>>
+                            /* Jump Immediately */
+                            <<replace "#avatar_story">>
+                                <<include _targetRoute>>
+                            <</replace>>
+                        <</if>>
+                        
+                    <</if>>
+                <</if>>
+            <</if>>
+         <<else>>
+            /* [IDLE KEEP ALIVE] */
+            <<set _lastIdleTime to Date.now()>>
+            <<set _isFetchingComment to false>>
+        <</if>>      
+
+    /* STATE 2: PLAYING INTERJECTION (Valid Move)  */
+    <<elseif _processingInterjection is true>>
+        
+        <<if $avatar_narrating == $avatar_passage_id + "false">>
+            <<replace "#avatar_story">>
+                <<include _targetRoute>>
+            <</replace>>
+        <</if>>
+
+    /* STATE 3: PLAYING ERROR (Invalid Move)       */
+    <<elseif _errorMode is true>>
+        
+        <<if $avatar_narrating == $avatar_passage_id + "false">>
+            
+            /* RESET ERROR */
+            <<set _errorMode to false>>
+            <<set $avatar_tag to 0>>
+            
+            /* Reset Prompt */
+            <<set $avatar_passage_id to _scene.baseId + "retry">>
+            <<set $avatar_passage to $avatar_passage_id + "/|VS| " + "Try again." + "/">>
+
+	    <<set _lastIdleTime to Date.now()>>
+            
+        <</if>>
+
+    <</if>>
+
+    	<<print $avatar_passage>>
+<</liveblock>>
+<</nobr>>
+
+
+:: Logic_AvatarEngine {"position":"1225,200","size":"200,100"}
+<<nobr>>
+
+    /* --- 0. INITIALIZATION --- */
+    <<if not $avatar_engine_initialized>>
+        <<set $seq to 0>>
+        
+        /* PROCESS TEXT */
+        <<set _rawText to _scene.beats[$seq].text>>
+        <<set _processedText to _rawText.replace(/\$(\w+)/g, function(match, varName) {
+            return State.variables[varName] !== undefined ? State.variables[varName] : match;
+        })>>
+        
+        <<set $avatar_passage_id to _scene.baseId + $seq>>
+        <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
+        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+        <<set $avatar_engine_initialized to true>>
+    <</if>>
+
+<<liveblock>>
+    /* --- 1. CALCULATE STATUS --- */
+    <<set _isLastBeat to ($seq >= (_scene.beats.length - 1))>>
+    <<set _currentStateStr to _scene.baseId + $seq + "false">>
+    <<set _audioIsFinished to ($avatar_narrating == _currentStateStr)>>
+
+    /* --- 2. DETECT INPUT --- */
+    <<set _generalMovActive to ($avatar_movement !== "none" and $avatar_movement !== "")>>
+    <<set _partMovActive    to ($avatar_part_mov !== "none" and $avatar_part_mov !== "")>>
+    <<set _inputActive      to (_generalMovActive or _partMovActive)>>
+
+    /* --- 3. LOGIC SPLIT --- */
+    <<if not _isLastBeat>>
+        
+        /* MODE A: NORMAL STEP */
+        <<if _audioIsFinished>>
+            
+            /* MATCH CHECK & LISTENER SETUP */
+            <<set _matchFound to false>>
+            <<set _triggers to [].concat(_scene.beats[$seq].trigger)>>
+            
+            /* Reset Flags */
+            <<set _expectsGeneral to false>>
+            <<set _expectsPart to false>>
+            <<set _listeningParts to []>>
+            
+            <<for _t range _triggers>>
+                <<if typeof _t is "string">>
+                    <<set _expectsGeneral to true>>
+                    <<if $avatar_movement == _t>>
+                        <<set _matchFound to true>>
+                        <<break>>
+                    <</if>>
+                <<elseif typeof _t is "object">>
+                    <<set _expectsPart to true>>
+                    
+                    <<set _listeningParts.push(_t.part)>>
+                    
+                    <<if $avatar_part_mov == _t.part and $avatar_part_dir == _t.dir>>
+                        <<set _matchFound to true>>
+                        <<break>>
+                    <</if>>
+                <</if>>
+            <</for>>
+
+            /* RESULT 1: SUCCESS */
+            <<if _matchFound is true>>
+                
+                <<set $seq ++>>
+                
+                /* PROCESS TEXT */
+                <<set _rawText to _scene.beats[$seq].text>>
+                <<set _processedText to _rawText.replace(/\$(\w+)/g, function(match, varName) {
+                    return State.variables[varName] !== undefined ? State.variables[varName] : match;
+                })>>
+                
+                <<set $avatar_passage_id to _scene.baseId + $seq>>
+                <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
+                <<set $avatar_backtext to _scene.beats[$seq].backtext>> 
+
+            /* RESULT 2: FAILURE (FILTERED CHECK) */
+            <<elseif _inputActive is true>>
+                
+                <<set _validFailure to false>>
+
+                /* Case A: General Move Fail */
+
+				<<if _expectsGeneral and _generalMovActive>>
+                    <<set _validFailure to true>>
+                <</if>>
+
+                /* Case B: Part Move Fail */
+                /* Only fail if the moved part is one of the LISTENING PARTS */
+                <<if _expectsPart and _partMovActive>>
+                    <<if _listeningParts.includes($avatar_part_mov)>>
+                        <<set _validFailure to true>>
+                    <</if>>
+                <</if>>
+
+                /* Only run failure code if valid */
+                <<if _validFailure is true>>
+                    
+                    <<if _partMovActive>>
+                        <<set $avatar_movement to $avatar_part_mov + " " + $avatar_part_dir>>
+                    <</if>>
+
+                    <<set $avatar_passage_id to _scene.baseId + $seq>>
+                    <<include "commentMovement_avatar">>
+                    <<set $avatar_passage to "">>
+                <</if>>
+                
+            <</if>>
+        <</if>>
+
+    <<else>>
+        /* MODE B: FINAL STEP */
+        <<if _audioIsFinished>>
+            <<set _targetScene to _scene.nextScene>>
+        	<<if _targetScene is "card_choice">>
+                <<set _targetScene to $current_engine.toLowerCase() + "_" + _targetScene>>
+            <</if>>
+            <<unset $avatar_engine_initialized>>
+            <<replace "#avatar_story">>
+                <<include _targetScene>>
+            <</replace>>
+        <</if>>
+    <</if>>
+    
+	<<print $avatar_passage>>
+<</liveblock>>
+<</nobr>>
+
+
+
+:: PassageFooter {"position":"1125,450","size":"200,100"}
+<<liveblock>>
+<<if $prev_avatar_passage !== $avatar_passage>>
+    <<set avatar_passage to $avatar_passage>>
+    <<script>>
+    writeToAvatar('avatar_passage', avatar_passage);
+    <</script>>
+    <<set $prev_avatar_passage to $avatar_passage>>
+<</if>>
+
+<<if $prev_avatar_backtext !== $avatar_backtext>>
+    <<set _rawBacktext to $avatar_backtext>>
+    <<set _processedBacktext to _rawBacktext.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+        return State.variables[v] !== undefined ? State.variables[v] : m;
+    })>>
+
+<<script>>
+        var finalText = State.temporary.processedBacktext;
+        writeToAvatar('avatar_backtext', finalText);
+    <</script>>
+
+    <<set $prev_avatar_backtext to $avatar_backtext>>
+<</if>>
+
+<<if $prev_hachi_passage !== $hachi_passage>>
+    <<set hachi_passage to $hachi_passage>>
+    <<script>>
+    writeToHachi('hachi_passage', hachi_passage);
+    <</script>>
+    <<set $prev_hachi_passage to $hachi_passage>>
+<</if>>
+
+<<if $prev_hachi_backtext !== $hachi_backtext>>
+    <<set hachi_backtext to $hachi_backtext>>
+    <<script>>
+    writeToHachi('hachi_backtext', hachi_backtext);
+    <</script>>
+    <<set $prev_hachi_backtext to $hachi_backtext>>
+<</if>>
+<</liveblock>>
+
+
+:: avatar_card_choice [beat] {"position":"2175,475","size":"200,200"}
+<<nobr>>
+<<set _scene to {
+    "baseId": "avatar_card_choice_",
+    "intro": "Choose a new beat...",
+
+    /* 1. VALIDATION LAYER (Enforcing Rules) */
+    "validation": {
+        "1": { 
+            "requiredCard": "1", 
+            "error": "Hmmm, this does not look like the first beat. Our journey must start at The Anchor." 
+        },
+        "9": { 
+            "requiredCard": "16", 
+            "error": "Now we are at the end. We must use The Threshold beat now." 
+        },
+        "duplicate": "'We have already been there. We need a different beat,' |VS| said $avatar_name."
+    },
+
+    /* 2. NARRATIVE LAYER (Turn-based Scripts) */
+    "turnScripts": {
+        "3": "|VS|Keep your eyes open, Little Man-Cub. Shere Khan is prowling the jungle, and we must find the pages with the path to the Man-Village before he finds us.",
+        "5": "|VS|Hush... freeze. Do you feel that heavy silence? Shere Khan is close now... very close. We must be careful where we go.",
+        "6": "|VS|Keep your head down... Shere Khan hasn't lost our trail yet. We need to move fast and silent, like ghosts, before he circles back.",
+        "8": "|VS|Breathe easy now, Little Man-Cub. I think we have finally twisted our trail enough to lose him; the shadow of Shere Khan has passed.",
+    },
+
+    /* 3. NAVIGATION LAYER (Card Routes) */
+    "routes": {
+        "1": "the_anchor01",
+        "2": "the_watchTower02",
+        "3": "the_waterTruce03",
+        "4": "the_livingHouse04", 
+        "5": "the_lookingGlass05",
+        "6": "the_grayStream06",
+        "7": "the_openGround07",
+        "8": "the_invisible08",
+        "9": "the_highMark09",
+        "10": "the_anvil10",
+        "11": "the_highNoon11",
+        "12": "the_captiveStar12",
+        "13": "the_deadRiver13",
+        "14": "the_deepItch14",
+        "15": "the_coldIron15",
+        "16": "the_threshold16"
+    }
+}>>
+
+<<set $current_engine to "avatar">>
+<<set $hero_name to $avatar_name>>
+<<include "Logic_AvatarCardChoiceEngine">>
+<</nobr>>
+
+
+:: commentMovement_avatar {"position":"1225,325","size":"200,100"}
+<<if ($avatar_movement !== "none" || $avatar_part_mov !== "none") && ($avatar_movement !== _prevavatar_Movement || $avatar_part_mov !== _prevavatar_PartMov)>>
+    <<set _prevavatar_Movement to $avatar_movement>>
+    <<set _prevavatar_PartMov to $avatar_part_mov>>
+    
+    <<if $avatar_movement !== "none">>
+        <<set $avatar_mov_track to $avatar_movement>>
+    <<elseif $avatar_part_mov !== "none">>
+        <<set $avatar_mov_track to $avatar_part_mov>>
+    <</if>>
+    
+    <<script>>
+        const avatarName = variables().avatar_name;
+        const avatarMovement = variables().avatar_movement;
+
+        window.makeShortComments(avatarName, avatarMovement)
+            .then(() => {
+                const comment = window.avatar_shortComment;
+                let newPassage;
+                
+                if (comment) {
+                    newPassage = variables().avatar_passage_id + '/|VS|' + comment;
+                } else {
+                    newPassage = "This movement did not do anything, maybe a different one?";
+                }
+
+                State.variables.avatar_passage = newPassage;
+                window.writeToAvatar('avatar_passage', newPassage);
+                //$(document).trigger(':storyupdate'); 
+            })
+            .catch(error => {
+                console.error("Error during avatar comment generation:", error);
+				const errorPassage = "Comment system error. Check console.";
+                State.variables.avatar_passage = errorPassage;
+                window.writeToAvatar('avatar_passage', errorPassage);
+                
+                //$(document).trigger(':storyupdate'); 
+            });
+    <</script>>
+    <<set $prev_avatar_passage to $avatar_passage>>
+
+<</if>>
+
+
+:: commentMovement_hachi {"position":"1000,325","size":"200,100"}
+<<if ($hachi_movement !== "none" || $hachi_part_mov !== "none") && ( $hachi_movement !== _prevhachi_Movement || $hachi_part_mov !== _prevhachi_PartMov)>>
+    
+    <<set _prevhachi_Movement to $hachi_movement>>
+    <<set _prevhachi_PartMov to $hachi_part_mov>>
+    
+    <<if $hachi_movement !== "none">>
+        <<set $hachi_mov_track to $hachi_movement>>
+    <<elseif $hachi_part_mov !== "none">>
+        <<set $hachi_mov_track to $hachi_part_mov>>
+    <</if>>
+    
+        <<script>>
+        window.makeShortComments()
+            .then(() => {
+                const comment = hachi_shortComment;
+
+                if (comment) {
+                    const passage_temp = comment; 
+                    hachi_passage = variables().hachi_passage_id+'/|VS|'+passage_temp; 
+                } else {
+                    variables().hachi_passage = "This movement did not do anything, maybe a different one?";
+                }
+            })
+            .catch(error => {
+                console.error("Error during avatar comment generation:", error);
+                variables().hachi_passage = "Comment system error. Check console.";
+            });
+    <</script>>
+    
+    <<set $hachi_passage to variables().hachi_passage>>
+<</if>>
+
+
+:: commentScene_avatar {"position":"1450,325","size":"200,100"}
+<<script>>
+        const avatarName = variables().avatar_name;
+
+        window.makeComments(avatarName)
+            .then(() => {
+                const comment = window.avatar_comment; // Assuming this is set by makeComments
+                let newPassage;
+                
+                if (comment) {
+                    newPassage = variables().avatar_passage_id + '/|VS|' + comment;
+                } else {
+                    newPassage = "This movement did not do anything, maybe a different one?";
+                }
+
+                State.variables.avatar_passage = newPassage;
+                window.writeToAvatar('avatar_passage', newPassage);
+            })
+            .catch(error => {
+                console.error("Error during avatar comment generation:", error);
+				const errorPassage = "Comment system error. Check console.";
+                State.variables.avatar_passage = errorPassage;
+                window.writeToAvatar('avatar_passage', errorPassage);
+            })
+            .finally(() => {
+                State.temporary.isFetchingComment = false;
+            });
+    <</script>>
+    <<set $prev_avatar_passage to $avatar_passage>>
+
+
+
+:: dropDown_avatar {"position":"1225,75","size":"100,100"}
+
+<<set $selectedAvatarValue to "">>
+<<done>>
+<<script>>
+var avatarDropdown = document.getElementById('avatar_dropdown');
+
+if (avatarDropdown) {
+    
+    /* 1. Populate (Your existing code) */
+    if (avatarDropdown.options.length <= 1) { 
+        var avatarPassages = Story.lookup('tags', 'beat');
+        if (avatarPassages && avatarPassages.length) {
+            avatarPassages.sort((a, b) => a.title.localeCompare(b.title));
+
+            for (let i = 0; i < avatarPassages.length; ++i) {
+                const option = document.createElement('option');
+                option.value = avatarPassages[i].title;
+                option.text = avatarPassages[i].title;
+                avatarDropdown.appendChild(option);
+            }
+        }
+    }
+    
+    $(document).off('change.avatar', '#avatar_dropdown').on('change.avatar', '#avatar_dropdown', function (ev) {
+        var selectedValue = this.value;        
+        if (selectedValue) {
+            console.log("Selection detected: " + selectedValue);
+            
+            // Set the variable securely
+            SugarCube.State.variables.selectedAvatarValue = selectedValue;
+            
+            // Reset the dropdown visual immediately
+            this.selectedIndex = 0; 
+        }
+    });
+}
+<</script>>
+<</done>>
+<<nobr>>
+<<liveblock>>
+    <<if $selectedAvatarValue !== "">>
+    	<<unset $avatar_engine_initialized>>
+        <<set $hero_name to $avatar_name>>
+        <<replace '#avatar_story'>>
+            <<set $cards_scanned ++>>
+            <<include $selectedAvatarValue>>
+        <</replace>>
+        <<set $selectedAvatarValue to "">>
+    <</if>>
+<</liveblock>>
+<</nobr>>
+
+
+:: dropDown_hachi {"position":"1100,75","size":"100,100"}
+<<set $selectedHachiValue to "">>
+<<done>>
+<<script>>
+var hachiDropdown = document.getElementById('hachi_dropdown');
+
+if (hachiDropdown) {
+    var hachiPassages = Story.lookup('tags', 'beat');
+
+    if (hachiPassages && hachiPassages.length) {
+        for (let i = 0; i < hachiPassages.length; ++i) {
+            const option = document.createElement('option');
+            option.value = hachiPassages[i].title;
+            option.text = hachiPassages[i].title;
+            hachiDropdown.appendChild(option);
+        }
+    }
+
+    $(hachiDropdown).on('change', function (ev) {
+        var selectedValue = this.value;
+        if (selectedValue) {
+            console.log("Selected passage:", selectedValue);
+            State.variables.selectedHachiValue = selectedValue;
+            //stopComments('hachi');
+            this.selectedIndex = 0;
+        }
+    });
+}
+<</script>>
+<</done>>
+
+<<liveblock>>
+	<<if $selectedHachiValue !== "">>
+      <<replace '#hachi_story'>>
+        <<set $hachi_nextAct to false>>
+        <<include $selectedHachiValue>>
+        <<set $selectedHachiValue to "">>
+      <</replace>>
+    <</if>>
+<</liveblock>>
+
+
+:: init {"position":"1000,575","size":"200,200"}
+<<nobr>>
+<<set _timerRunning = true>>
+<<set $dispatch_lock to false>>
+
+<<timed 4s>>
+  <<set _timerRunning = false>>
+  <<set $avatar_checkpoint to avatar_checkpoint>>
+  <<set $avatar_checkpoint_dist to avatar_checkpoint_dist>>
+  <<set $avatar_heading to avatar_heading>>
+  <<set $avatar_latitude to avatar_latitude>>
+  <<set $avatar_longitude to avatar_longitude>>
+  <<set $avatar_movement to avatar_movement>>
+  <<set $avatar_part_dir to avatar_part_dir>>
+  <<set $avatar_part_mov to avatar_part_mov>>
+  <<set $avatar_tag to avatar_tag>>
+  <<set $avatar_passage to avatar_passage>>
+  <<set $avatar_current_passage to avatar_current_passage>>
+  <<set $avatar_street to avatar_street>>
+  <<set $avatar_status to avatar_status>>
+  <<set $avatar_speed to avatar_speed>>
+  <<set $avatar_narrating to avatar_narrating>>
+  <<set $avatar_backtext to avatar_backtext>>
+  <<set $avatar_name to avatar_name>>
+  <<set $avatar_GPT to avatar_GPT>>
+
+  <<set $hachi_checkpoint to hachi_checkpoint>>
+  <<set $hachi_checkpoint_dist to hachi_checkpoint_dist>>
+  <<set $hachi_heading to hachi_heading>>
+  <<set $hachi_latitude to hachi_latitude>>
+  <<set $hachi_longitude to hachi_longitude>>
+  <<set $hachi_movement to hachi_movement>>
+  <<set $hachi_part_dir to hachi_part_dir>>
+  <<set $hachi_part_mov to hachi_part_mov>>
+  <<set $hachi_tag to hachi_tag>>
+  <<set $hachi_passage to hachi_passage>>
+  <<set $hachi_current_passage to hachi_current_passage>>
+  <<set $hachi_street to hachi_street>>
+  <<set $hachi_status to hachi_status>>
+  <<set $hachi_speed to hachi_speed>>
+  <<set $hachi_narrating to hachi_narrating>>
+  <<set $hachi_name to hachi_name>>
+  <<set $hachi_GPT to hachi_GPT>>
+
+  <<script>>
+  Promise.all([
+    fetchWeather(avatar_latitude, avatar_longitude),
+    fetchStreetName(avatar_latitude, avatar_longitude),
+    fetchStreetName(hachi_latitude, hachi_longitude),
+    fetchSpeed(avatar_speed),
+    fetchSpeed(hachi_speed),
+    fetchAmenity(avatar_latitude, avatar_longitude),
+    fetchAmenity(hachi_latitude, hachi_longitude),
+    fetchStops(avatar_latitude, avatar_longitude),
+    fetchStops(hachi_latitude, hachi_longitude),
+    fetchCity(avatar_latitude, avatar_longitude),
+    fetchPollution(avatar_latitude, avatar_longitude)
+  ])
+  .then(([weatherDescription, avatarStreetName, hachiStreetName, avatarSpeed, hachiSpeed, avatarAmenity, hachiAmenity,avatarStop, hachiStop, cityNeighborhood, cityPollution]) => {
+    variables().storyWeather = weatherDescription;
+    writeToAvatar('avatar_street', avatarStreetName);
+    writeToHachi('hachi_street', hachiStreetName);
+    variables().storyTime = getTimeOfDay();
+    variables().avatar_walking_speed = avatarSpeed;
+    variables().hachi_walking_speed = hachiSpeed;
+    variables().avatar_amenity = avatarAmenity;
+    variables().hachi_amenity = hachiAmenity;
+    variables().avatar_t_stop=avatarStop.stopName;
+    variables().avatar_t_route=avatarStop.routeShortName;
+    variables().avatar_t_heading=avatarStop.tripHeadSign;
+    variables().avatar_t_type=avatarStop.routeType;
+    variables().hachi_t_stop=hachiStop.stopName;
+    variables().hachi_t_route=hachiStop.routeShortName;
+    variables().hachi_t_heading=hachiStop.tripHeadSign;
+    variables().hachi_t_type=hachiStop.routeType;
+    variables().storyCity = cityNeighborhood.city;
+    variables().storyNeighborhood = cityNeighborhood.neighborhood;
+    variables().storyPollution = cityPollution;
+
+    console.log("Time of day is: " + variables().storyTime);
+    console.log("Avatar walking speed is: " + variables().avatar_speed);
+    console.log("Hachi walking speed is: " + variables().hachi_speed);
+    console.log("Avatar closest amenity is: " + variables().avatar_amenity);
+    console.log("Hachi closest amenity is: " + variables().hachi_amenity);
+    console.log("Avatar transit closest stop is: " +  variables().avatar_t_stop);
+    console.log("Avatar transit heading: " +   variables().avatar_t_heading);
+    console.log("Avatar transit route: " +  variables().avatar_t_route);
+    console.log("Avatar transit type: " +  variables().avatar_t_type);
+    console.log("Hachi transit closest stop is: " +  variables().hachi_t_stop);
+    console.log("Hachi transit heading: " +   variables().hachi_t_heading);
+    console.log("Hachi transit route: " +  variables().hachi_t_route);
+    console.log("Hachi transit type: " +  variables().hachi_t_type);
+    console.log("Story city: " + variables().storyCity);
+    console.log("Story neighborhood: " + variables().storyNeighborhood);
+    console.log("Story pollution: " + variables().storyPollution);
+    console.log("Story weather: " + variables().storyWeather);
+    Engine.play("loading");
+  })
+  .catch((error) => {
+    console.error("Error:", error.message);
+  });
+  <</script>>
+  
+<<set $avatar_t_type to variables().avatar_t_type>>
+  
+<<set avatar_passage to "init/">>
+<<set hachi_passage to "init/">>
+<<script>>
+    writeToAvatar('avatar_passage',avatar_passage);
+    writeToHachi('hachi_passage',hachi_passage);
+<</script>>
+
+<<set avatar_backtext to "">>
+<<set hachi_backtext to "">>
+<<script>>
+    writeToAvatar('avatar_backtext',avatar_backtext);
+    writeToHachi('hachi_backtext',hachi_backtext);
+<</script>>
+
+<<set avatar_current_passage to "">>
+<<set hachi_current_passage to "">>
+<<script>>
+    writeToAvatar('avatar_current_passage',avatar_current_passage);
+    writeToHachi('hachi_current_passage',hachi_current_passage);
+<</script>>
+
+<<set avatar_checkpoint to "">>
+<<set hachi_checkpoint to "">>
+<<script>>
+    writeToAvatar('avatar_checkpoint',avatar_checkpoint);
+    writeToHachi('hachi_checkpoint',hachi_checkpoint);
+<</script>>
+
+<<set avatar_narrating to "">>
+<<set hachi_narrating to "">>
+<<script>>
+    writeToAvatar('avatar_narrating',avatar_narrating);
+    writeToHachi('hachi_narrating',hachi_narrating);
+    console.log("Initializing narration");
+<</script>>
+
+<<set avatar_backtext to "">>
+<<set hachi_backtext to "">>
+<<script>>
+    writeToAvatar('avatar_backtext',avatar_backtext);
+    writeToHachi('hachi_backtext',hachi_backtext);
+<</script>>
+
+
+<</timed>><<if _timerRunning>>
+	<div class="loading-container">
+      <div class="loading-animation">
+        
+        <img src="https://danielecheverri.github.io/thejugleb/logo.svg" alt="The Jungle B" class="static-image">
+        <p>Loading information from Transitland, Openstreet Maps, OpenWeather, and Overpass ...</p>
+        <div class="spinner"></div>
+      </div>
+    </div>
+<</if>>
+<</nobr>>
+
+
+
+:: live_variables {"position":"1225,575","size":"200,200"}
+
+<<nobr>>
+<<set $avatar_checkpoint to avatar_checkpoint>>
+<<set $avatar_checkpoint_dist to avatar_checkpoint_dist>>
+<<set $avatar_heading to avatar_heading>>
+<<set $avatar_latitude to avatar_latitude>>
+<<set $avatar_longitude to avatar_longitude>>
+<<set $avatar_movement to avatar_movement>>
+<<set $avatar_part_dir to avatar_part_dir>>
+<<set $avatar_part_mov to avatar_part_mov>>
+<<set $avatar_tag to avatar_tag>>
+<<set $avatar_passage to avatar_passage>>
+<<set $avatar_current_passage to avatar_current_passage>>
+<<set $avatar_street to avatar_street>>
+<<set $avatar_status to avatar_status>>
+<<set $avatar_speed to avatar_speed>>
+<<set $avatar_narrating to avatar_narrating>>
+<<set $avatar_backtext to avatar_backtext>>
+<<set $avatar_name to avatar_name>>
+<<set $avatar_GPT to avatar_GPT>>
+
+<<set $hachi_checkpoint to hachi_checkpoint>>
+<<set $hachi_checkpoint_dist to hachi_checkpoint_dist>>
+<<set $hachi_heading to hachi_heading>>
+<<set $hachi_latitude to hachi_latitude>>
+<<set $hachi_longitude to hachi_longitude>>
+<<set $hachi_movement to hachi_movement>>
+<<set $hachi_part_dir to hachi_part_dir>>
+<<set $hachi_part_mov to hachi_part_mov>>
+<<set $hachi_tag to hachi_tag>>
+<<set $hachi_passage to hachi_passage>>
+<<set $hachi_current_passage to hachi_current_passage>>
+<<set $hachi_street to hachi_street>>
+<<set $hachi_status to hachi_status>>
+<<set $hachi_speed to hachi_speed>>
+<<set $hachi_narrating to hachi_narrating>>
+<<set $hachi_backtext to hachi_backtext>>
+<<set $hachi_name to hachi_name>>
+<<set $hachi_GPT to hachi_GPT>>
+
+<<set $avatar_variables = []>>
+<<set $hachi_variables = []>>
+<<set _variables = [
+    "avatar_status", "avatar_checkpoint", "avatar_checkpoint_dist", "avatar_speed", "avatar_heading", "avatar_latitude", 
+    "avatar_longitude", "avatar_street", "avatar_movement", "avatar_part_dir", "avatar_part_mov", "avatar_tag","avatar_passage","avatar_current_passage","avatar_backtext","avatar_narrating",
+   "hachi_status", "hachi_checkpoint", "hachi_checkpoint_dist", "hachi_speed","hachi_heading", "hachi_latitude", 
+    "hachi_longitude", "hachi_street", "hachi_movement", "hachi_part_dir", "hachi_part_mov", "hachi_tag", "hachi_passage","hachi_current_passage","hachi_backtext", "hachi_narrating"
+]>>
+<<set _table = "<table class='variables-table'><table border='1'><tr><th></th><th>AVATAR</th><th></th><th>HACHI</th></tr>" >>
+
+<<for _variable range _variables>>
+    <<if _variable.indexOf("avatar") !== -1>>
+        <<set $avatar_variables.push({name: _variable, value: window[_variable] || ""})>>
+    <<elseif _variable.indexOf("hachi") !== -1>>
+        <<set $hachi_variables.push({name: _variable, value: window[_variable] || ""})>>
+    <</if>>
+<</for>>
+
+<<set _rowCount = Math.max($avatar_variables.length, $hachi_variables.length)>>
+<<set _i = 0>>
+<<for _i; _i lt _rowCount; _i++>>
+    <<set _avatarVar = $avatar_variables[_i] || {name: "", value: ""}>>
+    <<set _hachiVar = $hachi_variables[_i] || {name: "", value: ""}>>
+    <<set _table += "<tr><td>" + _avatarVar.name + "</td><td>" + _avatarVar.value + "</td><td>" + _hachiVar.name + "</td><td>" + _hachiVar.value + "</td></tr>" >>
+<</for>>
+<<set _table += "</table>" >>
+_table
+<</nobr>>
+
+
+
+
+
+
+:: loading {"position":"1000,800","size":"200,100"}
+<<nobr>>
+<<set $hachi_passage to "loading/">>
+<<set $avatar_passage to "loading/">>
+<<silently>>
+  <<repeat 150ms>>
+      <<replace "#refreshArea">>
+          <<include "live_variables">>
+          <<update>>
+      <</replace>>
+  <</repeat>>
+<</silently>>
+
+<<liveblock>>
+  <<if $avatar_status == "Online" and $hachi_status=="Online">>
+      <<set _buttonCaption to "GO">>
+  <<else>>
+      <<set _buttonCaption to "RELOAD">>
+  <</if>>
+  <<if $storyReady == true>>
+  	  <<set _buttonCaption to "RELOAD">>
+  <</if>>
+<</liveblock>>
+
+<div id="topContainer">
+  <div class="header-zone left">
+      <img src="https://danielecheverri.github.io/thejugleb/logo.svg" alt="The Jungle B" class="svg-logo">
+  </div>
+
+  <div class="header-zone center">
+  </div>
+
+  <div class="header-zone right">
+      <<button '<<live _buttonCaption>>'>>
+          <<if _buttonCaption == "GO">>
+              <<set _buttonCaption to "RELOAD">>
+              <<set $storyReady to true>>
+          <<else>>
+              <<run Engine.restart()>>
+              <<set _buttonCaption to "RELOAD">>
+          <</if>>
+      <</button>>
+  </div>
+</div>
+
+<div id="refreshArea">
+    </div>
+    
+<<repeat 200ms>>
+  <<if $storyReady is true>>
+      <<goto "main">>
+      <<stop>>
+  <</if>>
+<</repeat>>
+
+<</nobr>>
+
+
+:: main {"position":"1225,800","size":"200,100"}
+<<nobr>>
+<<silently>>
+	<<repeat 150ms>>
+      <<replace "#refreshArea">>
+          <<include "live_variables">>
+          <<update>>
+      <</replace>>
+      <</repeat>>
+<</silently>>
+
+<<liveblock>>
+  <<if $avatar_status == "Online" and $hachi_status=="Online">>
+      <<set _buttonCaption to "GO">>
+  <<else>>
+      <<set _buttonCaption to "RELOAD">>
+  <</if>>
+  <<if $storyReady == true>>
+  	  <<set _buttonCaption to "RESET">>
+  <</if>>
+<</liveblock>>
+
+<div id="topContainer">
+  <div class="header-zone left">
+      <img src="https://danielecheverri.github.io/thejugleb/logo.svg" alt="The Jungle B" class="svg-logo">
+  </div>
+
+  <div class="header-zone center">
+      <select id="avatar_dropdown" class="styled-select">
+          <option value="">Avatar 01</option>
+      </select>
+      <select id="hachi_dropdown" class="styled-select">
+          <option value="">-Avatar 02</option>
+      </select>
+  </div>
+
+  <div class="header-zone right">
+      <<button "Open Log">>
+          <<run window.open('https://docs.google.com/spreadsheets/d/1brOnXa48OITo0EV0Or8x_oUBus3nOFoYezXeRN_D6SI/edit?gid=0#gid=0', '_blank');>>
+      <</button>>
+      <<button '<<live _buttonCaption>>'>>
+          <<if _buttonCaption == "GO">>
+              <<set _buttonCaption to "RELOAD">>
+              <<set $storyReady to true>>
+          <<else>>
+              <<run Engine.restart()>>
+              <<set _buttonCaption to "RELOAD">>
+          <</if>>
+      <</button>>
+  </div>
+</div>
+
+<div id="refreshArea">
+  </div>
+
+<div id="bottomContainer">
+    <div id="avatar_story"><<include "start_both">></div>
+    <div id="hachi_story">$hachi_passage</div>
+</div>
+
+<<include "dropDown_avatar">>
+<<include "dropDown_hachi">>
+
+<</nobr>>
+
+
+:: start_both {"position":"2225,100","size":"100,100"}
+<<nobr>>
+<<set $avatar_passage_id_name to "start_both_">>
+<<set $avatar_passage_id_seq to 0>>
+<<set $avatar_passage_id to $avatar_passage_id_name+$avatar_passage_id_seq>>
+
+<<set $avatar_passage to $avatar_passage_id+"/Welcome text./">>
+<<set $avatar_temp_counter to 0>>
+
+<<set $avatar_backtext to "">>
+
+<<set $hachi_passage_id_name to "start_both_">>
+<<set $hachi_passage_id_seq to 0>>
+<<set $hachi_passage_id to $hachi_passage_id_name+$hachi_passage_id_seq>>
+
+<<set $hachi_passage to $hachi_passage_id+"/Welcome text./">>
+<<set $hachi_temp_counter to 0>>
+
+<<set $hachi_backtext to "">>
+
+<<liveblock>>
+
+<<if $avatar_narrating == "start_both_0false" >>
+      <<replace "#avatar_story">>
+          <<include"avatar_card_choice">>
+    <</replace>>
+<</if>>
+
+<<if $hachi_narrating == "start_both_0false" >>
+      <<replace "#hachi_story">>
+          <<include"hachi_card_choice">>
+    <</replace>>
+<</if>>
+
+<<print $avatar_passage>>
+
+<</liveblock>>
+<</nobr>>
+
+
+:: the_anchor01 [beat] {"position":"2175,225","size":"200,100"}
+<<nobr>>
+<<run window.loadScene("the_anchor01")>>
+<<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_anvil10 [beat] {"position":"1725,600","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_anvil10")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_captiveStar12 [beat] {"position":"2400,600","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_captiveStar12")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_coldIron15 [beat] {"position":"2400,725","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_coldIron15")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_deadRiver13 [beat] {"position":"2625,600","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_deadRiver13")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_deepItch14 [beat] {"position":"1950,725","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_deepItch14")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_end {"position":"2225,950","size":"100,100"}
+<<nobr>>
+    <<run window.loadScene("the_end")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_grayStream06 [beat] {"position":"1725,475","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_grayStream06")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_highMark09 [beat] {"position":"2625,475","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_highMark09")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_highNoon11 [beat] {"position":"1950,600","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_highNoon11")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_invisible08 [beat] {"position":"2400,475","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_invisible08")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_livingHouse04 [beat] {"position":"2400,350","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_livingHouse04")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_lookingGlass05 [beat] {"position":"2625,350","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_lookingGlass05")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_openGround07 [beat] {"position":"1950,475","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_openGround07")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_threshold16 [beat] {"position":"2175,825","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_threshold16")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_watchTower02 [beat] {"position":"1725,350","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_watchTower02")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: the_waterTruce03 [beat] {"position":"1950,350","size":"200,100"}
+<<nobr>>
+    <<run window.loadScene("the_waterTruce03")>>
+    <<include "Logic_AvatarEngine">>
+<</nobr>>
+
+
+:: StoryScript [script]
+Config.history.controls = false;
+/* Load External CSS */
+var link = document.createElement("link");
+link.rel  = "stylesheet";
+link.type = "text/css";
+link.href = "https://danielecheverri.github.io/thejugleb/dashboard/dash_style.css"; 
+document.head.appendChild(link);
+
+(function () {
+	"use strict";
+
+	$(document).on(":liveupdate", function () {
+		$(".macro-live").trigger(":liveupdateinternal");
+	});
+
+	Macro.add(['update', 'upd'], {
+		handler: function handler() {
+			$(document).trigger(":liveupdate");
+		}
+	});
+
+	Macro.add(['live', 'l', 'lh'], {
+		skipArgs: true,
+		handler: function handler() {
+			if (this.args.full.length === 0) {
+				return this.error('no expression specified');
+			}
+			try {
+				var statement = this.args.full;
+				var result = toStringOrDefault(Scripting.evalJavaScript(statement), null);
+				if (result !== null) {
+					var lh = this.name === "lh";
+					var $el = $("<span></span>").addClass("macro-live").wiki(lh ? Util.escape(result) : result).appendTo(this.output);
+					$el.on(":liveupdateinternal", this.createShadowWrapper(function (ev) {
+						var out = toStringOrDefault(Scripting.evalJavaScript(statement), null);
+						$el.empty().wiki(lh ? Util.escape(out) : out);
+					}));
+				}
+			} catch (ex) {
+				return this.error("bad evaluation: " + (_typeof(ex) === 'object' ? ex.message : ex));
+			}
+		}
+	});
+
+	Macro.add(['liveblock', 'lb'], {
+		tags: null,
+		handler: function handler() {
+			try {
+				var content = this.payload[0].contents.trim();
+				if (content) {
+					var $el = $("<span></span>").addClass("macro-live macro-live-block").wiki(content).appendTo(this.output);
+					$el.on(":liveupdateinternal", this.createShadowWrapper(function (ev) {
+						$el.empty().wiki(content);
+					}));
+				}
+			} catch (ex) {
+				return this.error("bad evaluation: " + (_typeof(ex) === 'object' ? ex.message : ex));
+			}
+		}
+	});
+})();
+
+setup.aScriptImport = importScripts([
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js",
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth-compat.js",
+  "https://www.gstatic.com/firebasejs/12.6.0/firebase-database-compat.js",
+  "https://danielecheverri.github.io/thejugleb/dashboard/utils.js",
+  "https://danielecheverri.github.io/thejugleb/dashboard/fetchServices.js"
+]);
+
+
+setup.aScriptImport
+  .then(function () {
+  console.log('Starting Firebase');
+  const firebaseConfig = {
+    apiKey: "AIzaSyDuRvVnlDRGlQoDcWg6SlXR9lr4Xlz1PX4",
+    authDomain: "thejungle-33676.firebaseapp.com",
+    databaseURL: "https://thejungle-33676-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "thejungle-33676",
+    storageBucket: "thejungle-33676.firebasestorage.app",
+    messagingSenderId: "1078745256439",
+    appId: "1:1078745256439:web:6bb68e64e3a526fb061ef2"
+  };
+
+  // Initialize Firebase
+  const app =firebase.initializeApp(firebaseConfig);  
+  const auth = firebase.auth(app);
+  const database = firebase.database(app);
+  
+  auth.onAuthStateChanged(function(user) {
+    if (user) {
+      window.firebaseUID = user.uid;
+      console.log("Firebase signed in anonymously:", user.uid);
+    } else {
+      auth.signInAnonymously().catch(console.error);
+    }
+  });
+  
+  const avatarDatabase = 'avatar_data/';
+  const hachiDatabase = 'hachi_data/';
+  
+  var avatarRef = firebase.database().ref(avatarDatabase);
+  avatarRef.on('value', (snapshot) => {
+    const avatarData = snapshot.val();
+    for (let nodeName in avatarData) {
+      if (avatarData.hasOwnProperty(nodeName)) {
+        window[nodeName] = avatarData[nodeName];
+      }
+    } 
+  });
+
+  var hachiRef = firebase.database().ref(hachiDatabase);
+  hachiRef.on('value', (snapshot) => {
+    const hachiData = snapshot.val();
+    for (let nodeName in hachiData) {
+      if (hachiData.hasOwnProperty(nodeName)) {
+        window[nodeName] = hachiData[nodeName];
+      }
+    }
+  });
+
+function stopAllAvatarListeners() {
+  avatarRef.off();
+  console.log("All listeners on avatarRef stopped.");
+}
+  
+window.stopAllAvatarListeners = stopAllAvatarListeners;
+    
+window.writeToAvatar = function(databaseNode, avatarData) {
+    const avatarRef = firebase.database().ref(avatarDatabase + databaseNode);
+    return avatarRef.set(avatarData)
+        .then(() => {
+            console.log("Successfully updated " + avatarData + " in " + avatarDatabase + " node " + databaseNode);
+        })
+        .catch(error => {
+            console.error("Error updating data:", error);
+            throw error; // Re-throw the error to be caught by the caller
+        });
+}
+  
+window.writeToHachi = function(databaseNode, hachiData) {
+    const hachiRef = firebase.database().ref(hachiDatabase + databaseNode);
+    return hachiRef.set(hachiData)
+        .then(() => {
+            console.log("Successfully updated " + hachiData + " in " + hachiDatabase + " node " + databaseNode);
+        })
+        .catch(error => {
+            console.error("Error updating data:", error);
+            throw error; // Re-throw the error to be caught by the caller
+        });
+}
+//Last line of the function. KEEP
+})
