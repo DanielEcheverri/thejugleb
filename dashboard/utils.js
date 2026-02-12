@@ -207,9 +207,9 @@ EXAMPLES:
     }
 };
 
-window.loadScene = function(passageName) {
+window.loadScene = function(passageName, character) {
     var baseURL = "https://danielecheverri.github.io/thejugleb/dashboard/scenes/";
-        var url = baseURL + passageName + ".json";
+    var url = baseURL + passageName + ".json";
     var data = null;
 
     // Fetch the file synchronously
@@ -222,20 +222,18 @@ window.loadScene = function(passageName) {
         },
         error: function() {
             console.error("Could not load " + url);
-            // Fallback data
-            data = {
-                "beats": [
-                    {
-                        "text": "Error: Missing file at " + url,
-                        "backtext": "File Missing",
-                        "trigger": null
-                    }
-                ],
-                "nextScene": "avatar_card_choice"
-            };
         }
     });
 
-    // Save the loaded data into Twine's temporary '_scene' variable
-    SugarCube.State.temporary.scene = data;
+    // Dynamically save the data to the character-prefixed temporary variable
+    if (data) {
+        if (character) {
+            // Construct name: "hachi" becomes "hachiScene" -> creates _hachiScene
+            var varName = character + "Scene";
+            SugarCube.State.temporary[varName] = data;
+        } else {
+            // Default fallback if no character is passed
+            SugarCube.State.temporary.scene = data;
+        }
+    }
 };
