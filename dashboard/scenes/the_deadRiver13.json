@@ -4,12 +4,12 @@
     "beats": [
         {
             "text": "Hmm!",
-            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$hero_name makes|a tsk tsk’ sound,|very annoyed..",
+            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$hero_name makes with|their hands a sound,|very annoyed..",
             "trigger": [{"part": "left hand", "dir": "touched"},{"part": "right hand", "dir": "touched"}]
         },
         {
             "text": "‘Too hard. Listen to that. It rings like a hollow nut. There is no life in this ground. It is a shell,’ |VS| said $hero_name tapping their hand on the pavement covering $avatar_street street.",
-            "backtext": "| |...|",
+            "backtext": "▓▓▓▓▓ PAGE 13 ▓▓▓▓|$hero_name grabs your|hand so you could|feel it too.",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
@@ -20,7 +20,7 @@
         {
             "text": "‘Bah. My pads are aching already. This is no place for a bear. It leads to the cages, surely.’ |VS| $hero_name lifted one of their legs trying to skip the feeling of the street pavement.",
             "backtext": "| |...|",
-            "trigger": ["standing right leg", "standing left leg"]
+            "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"}]
         },
         {
             "text": "‘We have marked this danger in the journal. Good. Now, keep your nose to the wind. Look for the next page blowing in the grass. Let's find a softer path.’",

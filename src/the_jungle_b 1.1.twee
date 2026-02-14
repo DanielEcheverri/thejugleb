@@ -361,7 +361,7 @@ the_jungle_b 1.1
             "requiredCard": "16", 
             "error": "Now we are at the end. We must use The Threshold beat now." 
         },
-        "duplicate": "'We have already been there. We need a different beat,' |VS| said $avatar_name."
+        "duplicate": "'We have already been there. We need a different beat,' |VS| said $hero_name."
     },
 
     /* 2. NARRATIVE LAYER (Turn-based Scripts) */

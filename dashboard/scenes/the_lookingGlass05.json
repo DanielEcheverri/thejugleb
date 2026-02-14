@@ -18,8 +18,8 @@
             "trigger": ["looking left", {"part": "eyes", "dir": "touched"}]
         },
         {
-            "text": "‘Hah! No... that's just me. That's just us. The water plays tricks; makes you look like a stranger to yourself,’ |VS| Said $hero_name walking closer to the reflection, feeling a bit off…|VS|",
-            "backtext": "| |...|",
+            "text": "‘Hah! No... that's just me. That's just us. The water plays tricks; makes you look like a stranger to yourself.’ ",
+            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name walked closer|to the reflection|feeling a bit off…",
             "trigger": ["walking"]
         },
         {

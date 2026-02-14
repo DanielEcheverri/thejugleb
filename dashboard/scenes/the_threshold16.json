@@ -5,7 +5,7 @@
         {
             "text": "Hm",
             "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$hero_name leans|on the gate to|the man-Village.",
-            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"},{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },
         {
             "text": "‘Well. Here we are. This is the last page of the journal. The end of the trail.’ |VS| $hero_name looks at the gate leading to $storyNeighborhood, then down at you.",
@@ -18,8 +18,8 @@
             "trigger": ["walking"]
         },
         {
-            "text": "‘|VS|Taking the complete journal from their backpack $hero_name said |VS|, ‘Don't look so sad! You have the strength of the Wolf, the wisdom of the Panther, and the wit of the Bear. You will be the best in there. Even Shere Khan wouldn't dare follow you where you are going.",
-            "backtext": "| |...|",
+            "text": "‘|VS|Taking the complete journal from their backpack $hero_name said |VS|, ‘Don't look so sad! You have the strength of the Wolf, the wisdom of the Panther, and the wit of the Bear. You will be the best here. Even Shere Khan wouldn't dare follow you where you are going.",
+            "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$hero_name's voice|abreaks a bit.",
             "trigger": ["looking right", "looking left", {"part": "mouth", "dir": "touched"}]
         },
         {

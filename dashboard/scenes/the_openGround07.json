@@ -9,12 +9,12 @@
         },
         {
             "text": "‘Keep your head down, Little man-cub’ |VS| said $hero_name crouching.|VS| ‘The Kite Hawks are circling in this $storyTime. I can feel their shadows on my back. I feel... naked out here without a tree to lean on’ |VS| whispered covering his head. ",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's tries not|to be too loud..",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's tries not|to be too loud...",
             "trigger": ["walking","talking"]
         },
         {
             "text": "‘But look at them. People usually don't look up. They have other things to worry for. They walk as if the whole world belongs to them’ |VS| exclaimed $hero_name, starting to walk faster, while you tried to say something.",
-            "backtext": "| |...|",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's looks|turns their head|and looks at you.",
             "trigger": ["looking left","looking right"]
         },
         {

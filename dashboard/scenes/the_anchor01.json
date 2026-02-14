@@ -8,7 +8,7 @@
             "trigger": ["guiding the left hand up", "guiding the right hand up","guiding the left hand down", "guiding the right hand down"]
         },
         {
-            "text": "‘Hrnngh... okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $hero_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
+            "text": "‘okay, okay. I'm up. I wasn't sleeping, Little man-cub. I was just... getting some rest this $storyTime.’ |VS| Said $hero_name, smacking their lips, tasting the $storyPollution. |VS| ‘You are restless today. I can feel you fidgeting,’ |VS| added while looking around the sprawling forest.",
             "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name is|looking around|startled!",
             "trigger": ["looking right", "looking left"]
         },
@@ -18,7 +18,7 @@
             "trigger": "talking"
         },
         {
-            "text": "‘It’s a long walk, and my memory is full of holes. If I only had my journal, I would know the fastest way to $storyCity … we need to find those missing pages. They will guide our way.’",
+            "text": "‘It’s a long walk, and my memory is full of holes. If I only had my journal, I would know the fastest way to $storyCity. We need to find those missing pages. They will guide our way.’",
             "backtext": "▓▓▓▓▓ PAGE 1 ▓▓▓▓▓|$hero_name is ready|to continue|walking!",
             "trigger": "walking"
         },
