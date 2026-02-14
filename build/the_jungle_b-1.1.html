@@ -405,8 +405,10 @@ window.writeToHachi = function(databaseNode, hachiData) {
         
         &lt;&lt;set $avatar_passage_id to _scene.baseId + $seq&gt;&gt;
         &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/&quot; + _processedText + &quot;/&quot;&gt;&gt;
-        /* &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt; */
-        &lt;&lt;set $avatar_backtext to &quot;&quot;&gt;&gt;
+        
+        /* [FIX]: Start as &quot;Talking&quot; so we don&#39;t flash the text before audio starts */
+        &lt;&lt;set $avatar_backtext to &quot;Talking&quot;&gt;&gt;
+        
         &lt;&lt;set $avatar_engine_initialized to true&gt;&gt;
     &lt;&lt;/if&gt;&gt;
 
@@ -415,6 +417,14 @@ window.writeToHachi = function(databaseNode, hachiData) {
     &lt;&lt;set _isLastBeat to ($seq &gt;= (_scene.beats.length - 1))&gt;&gt;
     &lt;&lt;set _currentStateStr to _scene.baseId + $seq + &quot;false&quot;&gt;&gt;
     &lt;&lt;set _audioIsFinished to ($avatar_narrating == _currentStateStr)&gt;&gt;
+
+    /* --- BACKTEXT CONTROL --- */
+    /* If audio is NOT finished, force &#39;Talking&#39;. If finished, show the Scene Text. */
+    &lt;&lt;if _audioIsFinished is false&gt;&gt;
+        &lt;&lt;set $avatar_backtext to &quot;Talking&quot;&gt;&gt;
+    &lt;&lt;else&gt;&gt;
+        &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
+    &lt;&lt;/if&gt;&gt;
 
     /* --- 2. DETECT INPUT --- */
     &lt;&lt;set _generalMovActive to ($avatar_movement !== &quot;none&quot; and $avatar_movement !== &quot;&quot;)&gt;&gt;
@@ -426,9 +436,6 @@ window.writeToHachi = function(databaseNode, hachiData) {
         
         /* MODE A: NORMAL STEP */
         &lt;&lt;if _audioIsFinished&gt;&gt;
-
-            /* Send the message to the backpack once it stops taking */
-            &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
 
             /* MATCH CHECK &amp; LISTENER SETUP */
             &lt;&lt;set _matchFound to false&gt;&gt;
@@ -448,9 +455,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     &lt;&lt;/if&gt;&gt;
                 &lt;&lt;elseif typeof _t is &quot;object&quot;&gt;&gt;
                     &lt;&lt;set _expectsPart to true&gt;&gt;
-                    
                     &lt;&lt;set _listeningParts.push(_t.part)&gt;&gt;
-                    
                     &lt;&lt;if $avatar_part_mov == _t.part and $avatar_part_dir == _t.dir&gt;&gt;
                         &lt;&lt;set _matchFound to true&gt;&gt;
                         &lt;&lt;break&gt;&gt;
@@ -471,7 +476,9 @@ window.writeToHachi = function(databaseNode, hachiData) {
                 
                 &lt;&lt;set $avatar_passage_id to _scene.baseId + $seq&gt;&gt;
                 &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/&quot; + _processedText + &quot;/&quot;&gt;&gt;
-                &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt; 
+                
+                /* Force Talking immediately for the new beat */
+                &lt;&lt;set $avatar_backtext to &quot;Talking&quot;&gt;&gt;
 
             /* RESULT 2: FAILURE (FILTERED CHECK) */
             &lt;&lt;elseif _inputActive is true&gt;&gt;
@@ -479,20 +486,18 @@ window.writeToHachi = function(databaseNode, hachiData) {
                 &lt;&lt;set _validFailure to false&gt;&gt;
 
                 /* Case A: General Move Fail */
-
-				&lt;&lt;if _expectsGeneral and _generalMovActive&gt;&gt;
+                &lt;&lt;if _expectsGeneral and _generalMovActive&gt;&gt;
                     &lt;&lt;set _validFailure to true&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
 
                 /* Case B: Part Move Fail */
-                /* Only fail if the moved part is one of the LISTENING PARTS */
                 &lt;&lt;if _expectsPart and _partMovActive&gt;&gt;
                     &lt;&lt;if _listeningParts.includes($avatar_part_mov)&gt;&gt;
                         &lt;&lt;set _validFailure to true&gt;&gt;
                     &lt;&lt;/if&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
 
-                /* Only run failure code if valid */
+                /* Execute Failure */
                 &lt;&lt;if _validFailure is true&gt;&gt;
                     
                     &lt;&lt;if _partMovActive&gt;&gt;
@@ -502,6 +507,8 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     &lt;&lt;set $avatar_passage_id to _scene.baseId + $seq&gt;&gt;
                     &lt;&lt;include &quot;commentMovement_avatar&quot;&gt;&gt;
                     &lt;&lt;set $avatar_passage to &quot;&quot;&gt;&gt;
+                    
+                    /* Comment logic will restart audio, so next tick Backtext Control handles &quot;Talking&quot; */
                 &lt;&lt;/if&gt;&gt;
                 
             &lt;&lt;/if&gt;&gt;
@@ -511,7 +518,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
         /* MODE B: FINAL STEP */
         &lt;&lt;if _audioIsFinished&gt;&gt;
             &lt;&lt;set _targetScene to _scene.nextScene&gt;&gt;
-        	&lt;&lt;if _targetScene is &quot;card_choice&quot;&gt;&gt;
+            &lt;&lt;if _targetScene is &quot;card_choice&quot;&gt;&gt;
                 &lt;&lt;set _targetScene to $current_engine.toLowerCase() + &quot;_&quot; + _targetScene&gt;&gt;
             &lt;&lt;/if&gt;&gt;
             &lt;&lt;unset $avatar_engine_initialized&gt;&gt;
@@ -521,7 +528,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
         &lt;&lt;/if&gt;&gt;
     &lt;&lt;/if&gt;&gt;
     
-	&lt;&lt;print $avatar_passage&gt;&gt;
+    &lt;&lt;print $avatar_passage&gt;&gt;
 &lt;&lt;/liveblock&gt;&gt;
 &lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="PassageFooter" tags="" position="1125,450" size="200,100">&lt;&lt;liveblock&gt;&gt;
 &lt;&lt;if $prev_avatar_passage !== $avatar_passage&gt;&gt;

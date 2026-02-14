@@ -175,8 +175,8 @@ the_jungle_b 1.1
         <<set $avatar_passage_id to _scene.baseId + $seq>>
         <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
         
-        /* Initial set (Safety) */
-        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+        /* [FIX]: Start as "Talking" so we don't flash the text before audio starts */
+        <<set $avatar_backtext to "Talking">>
         
         <<set $avatar_engine_initialized to true>>
     <</if>>
@@ -187,8 +187,8 @@ the_jungle_b 1.1
     <<set _currentStateStr to _scene.baseId + $seq + "false">>
     <<set _audioIsFinished to ($avatar_narrating == _currentStateStr)>>
 
-    /* --- [NEW] BACKTEXT CONTROL --- */
-    /* Dynamically switch backtext based on speaking status */
+    /* --- BACKTEXT CONTROL --- */
+    /* If audio is NOT finished, force 'Talking'. If finished, show the Scene Text. */
     <<if _audioIsFinished is false>>
         <<set $avatar_backtext to "Talking">>
     <<else>>
@@ -246,7 +246,8 @@ the_jungle_b 1.1
                 <<set $avatar_passage_id to _scene.baseId + $seq>>
                 <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
                 
-                /* Note: Backtext update is now handled automatically by the Control block at top of loop */
+                /* Force Talking immediately for the new beat */
+                <<set $avatar_backtext to "Talking">>
 
             /* RESULT 2: FAILURE (FILTERED CHECK) */
             <<elseif _inputActive is true>>
@@ -275,6 +276,8 @@ the_jungle_b 1.1
                     <<set $avatar_passage_id to _scene.baseId + $seq>>
                     <<include "commentMovement_avatar">>
                     <<set $avatar_passage to "">>
+                    
+                    /* Comment logic will restart audio, so next tick Backtext Control handles "Talking" */
                 <</if>>
                 
             <</if>>
