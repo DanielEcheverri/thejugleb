@@ -405,7 +405,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
         
         &lt;&lt;set $avatar_passage_id to _scene.baseId + $seq&gt;&gt;
         &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/&quot; + _processedText + &quot;/&quot;&gt;&gt;
-        &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
+        /* &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt; */
         &lt;&lt;set $avatar_engine_initialized to true&gt;&gt;
     &lt;&lt;/if&gt;&gt;
 
@@ -425,7 +425,10 @@ window.writeToHachi = function(databaseNode, hachiData) {
         
         /* MODE A: NORMAL STEP */
         &lt;&lt;if _audioIsFinished&gt;&gt;
-            
+
+            /* Send the message to the backpack once it stops taking */
+            &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
+
             /* MATCH CHECK &amp; LISTENER SETUP */
             &lt;&lt;set _matchFound to false&gt;&gt;
             &lt;&lt;set _triggers to [].concat(_scene.beats[$seq].trigger)&gt;&gt;
@@ -902,13 +905,6 @@ if (hachiDropdown) {
     writeToHachi(&#39;hachi_passage&#39;,hachi_passage);
 &lt;&lt;/script&gt;&gt;
 
-&lt;&lt;set avatar_backtext to &quot;&quot;&gt;&gt;
-&lt;&lt;set hachi_backtext to &quot;&quot;&gt;&gt;
-&lt;&lt;script&gt;&gt;
-    writeToAvatar(&#39;avatar_backtext&#39;,avatar_backtext);
-    writeToHachi(&#39;hachi_backtext&#39;,hachi_backtext);
-&lt;&lt;/script&gt;&gt;
-
 &lt;&lt;set avatar_current_passage to &quot;&quot;&gt;&gt;
 &lt;&lt;set hachi_current_passage to &quot;&quot;&gt;&gt;
 &lt;&lt;script&gt;&gt;
@@ -944,7 +940,7 @@ if (hachiDropdown) {
       &lt;div class=&quot;loading-animation&quot;&gt;
         
         &lt;img src=&quot;https://danielecheverri.github.io/thejugleb/logo.svg&quot; alt=&quot;The Jungle B&quot; class=&quot;static-image&quot;&gt;
-        &lt;p&gt;Loading information from Transitland, Openstreet Maps, OpenWeather, and Overpass ...&lt;/p&gt;
+        &lt;p&gt;Loading data from Transitland, Openstreet Maps, OpenWeather, and Overpass ...&lt;/p&gt;
         &lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;

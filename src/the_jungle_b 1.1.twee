@@ -174,7 +174,7 @@ the_jungle_b 1.1
         
         <<set $avatar_passage_id to _scene.baseId + $seq>>
         <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
-        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+        /* <<set $avatar_backtext to _scene.beats[$seq].backtext>> */
         <<set $avatar_engine_initialized to true>>
     <</if>>
 
@@ -194,7 +194,10 @@ the_jungle_b 1.1
         
         /* MODE A: NORMAL STEP */
         <<if _audioIsFinished>>
-            
+
+            /* Send the message to the backpack once it stops taking */
+            <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+
             /* MATCH CHECK & LISTENER SETUP */
             <<set _matchFound to false>>
             <<set _triggers to [].concat(_scene.beats[$seq].trigger)>>

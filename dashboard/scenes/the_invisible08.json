@@ -10,7 +10,7 @@
         {
             "text": "‘Sh! Freeze. Don't move a muscle, Little man-cub. He is still watching us’ |VS| announced $hero_name while freezing his body with one of his legs in the air.",
             "backtext": "| |...|",
-            "trigger": ["standing right leg", "standing left leg", {"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
+            "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}]
         },
         {
             "text": "‘Over there!’ |VS| whispered $hero_name, |VS| ‘Do you see that shadow moving near the $avatar_t_stop $avatar_t_type stop? There is Shere Khan. He is still following us’ |VS| starting to walk backwards.",

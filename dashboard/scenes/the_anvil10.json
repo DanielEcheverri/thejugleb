@@ -5,7 +5,7 @@
         {
             "text": "Unngh. Stubborn thing.",
             "backtext": "▓▓▓▓▓ PAGE 10 ▓▓▓▓|$hero_name is grunting|with effort.’",
-            "trigger": [{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
+            "trigger": [{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"},{"part": "mouth", "dir": "touched"}]
         },
         {
             "text": "|VS| You find some nuts under a tree. $hero_name tries to open it |VS| ‘This nut is a fighter. Look at it. Thick skin. It knows I want what is inside. But I am patient, Little man-cub. Hold it steady’ |VS| said $hero_name forcing the nut to crack with their feet.",
@@ -18,7 +18,7 @@
             "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"},{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
         },
         {
-            "text": "‘Mmm. Worth it. Sweet as honey. Can you see? The rock gives us tools if we know how to ask’ Let's go find the next page, maybe we’ll also find more food this $storyTime while we walk.’",
+            "text": "‘Mmm. Worth it. Sweet as honey. Can you see? The rock gives us tools if we know how to ask’. Let's go find the next page, maybe we’ll also find more food this $storyTime while we walk.’",
             "backtext": "| |...|",
             "trigger": ["walking"]
         },
