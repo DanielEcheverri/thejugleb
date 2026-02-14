@@ -247,7 +247,7 @@ the_jungle_b 1.1
                 <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
                 
                 /* Force Talking immediately for the new beat */
-                <<set $avatar_backtext to "Talking">>
+                <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
 
             /* RESULT 2: FAILURE (FILTERED CHECK) */
             <<elseif _inputActive is true>>
