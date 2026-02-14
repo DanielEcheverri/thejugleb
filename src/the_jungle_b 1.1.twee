@@ -174,8 +174,10 @@ the_jungle_b 1.1
         
         <<set $avatar_passage_id to _scene.baseId + $seq>>
         <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
-        /* <<set $avatar_backtext to _scene.beats[$seq].backtext>> */
-        <<set $avatar_backtext to "">>
+        
+        /* Initial set (Safety) */
+        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+        
         <<set $avatar_engine_initialized to true>>
     <</if>>
 
@@ -184,6 +186,14 @@ the_jungle_b 1.1
     <<set _isLastBeat to ($seq >= (_scene.beats.length - 1))>>
     <<set _currentStateStr to _scene.baseId + $seq + "false">>
     <<set _audioIsFinished to ($avatar_narrating == _currentStateStr)>>
+
+    /* --- [NEW] BACKTEXT CONTROL --- */
+    /* Dynamically switch backtext based on speaking status */
+    <<if _audioIsFinished is false>>
+        <<set $avatar_backtext to "Talking">>
+    <<else>>
+        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+    <</if>>
 
     /* --- 2. DETECT INPUT --- */
     <<set _generalMovActive to ($avatar_movement !== "none" and $avatar_movement !== "")>>
@@ -195,9 +205,6 @@ the_jungle_b 1.1
         
         /* MODE A: NORMAL STEP */
         <<if _audioIsFinished>>
-
-            /* Send the message to the backpack once it stops taking */
-            <<set $avatar_backtext to _scene.beats[$seq].backtext>>
 
             /* MATCH CHECK & LISTENER SETUP */
             <<set _matchFound to false>>
@@ -217,9 +224,7 @@ the_jungle_b 1.1
                     <</if>>
                 <<elseif typeof _t is "object">>
                     <<set _expectsPart to true>>
-                    
                     <<set _listeningParts.push(_t.part)>>
-                    
                     <<if $avatar_part_mov == _t.part and $avatar_part_dir == _t.dir>>
                         <<set _matchFound to true>>
                         <<break>>
@@ -240,7 +245,8 @@ the_jungle_b 1.1
                 
                 <<set $avatar_passage_id to _scene.baseId + $seq>>
                 <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
-                <<set $avatar_backtext to _scene.beats[$seq].backtext>> 
+                
+                /* Note: Backtext update is now handled automatically by the Control block at top of loop */
 
             /* RESULT 2: FAILURE (FILTERED CHECK) */
             <<elseif _inputActive is true>>
@@ -248,20 +254,18 @@ the_jungle_b 1.1
                 <<set _validFailure to false>>
 
                 /* Case A: General Move Fail */
-
-				<<if _expectsGeneral and _generalMovActive>>
+                <<if _expectsGeneral and _generalMovActive>>
                     <<set _validFailure to true>>
                 <</if>>
 
                 /* Case B: Part Move Fail */
-                /* Only fail if the moved part is one of the LISTENING PARTS */
                 <<if _expectsPart and _partMovActive>>
                     <<if _listeningParts.includes($avatar_part_mov)>>
                         <<set _validFailure to true>>
                     <</if>>
                 <</if>>
 
-                /* Only run failure code if valid */
+                /* Execute Failure */
                 <<if _validFailure is true>>
                     
                     <<if _partMovActive>>
@@ -280,7 +284,7 @@ the_jungle_b 1.1
         /* MODE B: FINAL STEP */
         <<if _audioIsFinished>>
             <<set _targetScene to _scene.nextScene>>
-        	<<if _targetScene is "card_choice">>
+            <<if _targetScene is "card_choice">>
                 <<set _targetScene to $current_engine.toLowerCase() + "_" + _targetScene>>
             <</if>>
             <<unset $avatar_engine_initialized>>
@@ -290,7 +294,7 @@ the_jungle_b 1.1
         <</if>>
     <</if>>
     
-	<<print $avatar_passage>>
+    <<print $avatar_passage>>
 <</liveblock>>
 <</nobr>>
 
