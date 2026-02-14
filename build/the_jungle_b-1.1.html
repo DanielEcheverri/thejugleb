@@ -407,7 +407,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
         &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/&quot; + _processedText + &quot;/&quot;&gt;&gt;
         
         /* [FIX]: Start as &quot;Talking&quot; so we don&#39;t flash the text before audio starts */
-        &lt;&lt;set $avatar_backtext to &quot;Talking&quot;&gt;&gt;
+        &lt;&lt;set $avatar_backtext to &quot;-------------|(	      )| ----------  /|           l/&quot;&gt;&gt;
         
         &lt;&lt;set $avatar_engine_initialized to true&gt;&gt;
     &lt;&lt;/if&gt;&gt;
@@ -421,7 +421,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
     /* --- BACKTEXT CONTROL --- */
     /* If audio is NOT finished, force &#39;Talking&#39;. If finished, show the Scene Text. */
     &lt;&lt;if _audioIsFinished is false&gt;&gt;
-        &lt;&lt;set $avatar_backtext to &quot;Talking&quot;&gt;&gt;
+        &lt;&lt;set $avatar_backtext to &quot;-------------|(	      )| ----------  /|           l/&quot;&gt;&gt;
     &lt;&lt;else&gt;&gt;
         &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
     &lt;&lt;/if&gt;&gt;

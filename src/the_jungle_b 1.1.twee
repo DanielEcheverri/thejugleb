@@ -176,7 +176,7 @@ the_jungle_b 1.1
         <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
         
         /* [FIX]: Start as "Talking" so we don't flash the text before audio starts */
-        <<set $avatar_backtext to "-------------|(	      )| ----------  /|           l/">>
+        <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
         
         <<set $avatar_engine_initialized to true>>
     <</if>>
@@ -190,7 +190,7 @@ the_jungle_b 1.1
     /* --- BACKTEXT CONTROL --- */
     /* If audio is NOT finished, force 'Talking'. If finished, show the Scene Text. */
     <<if _audioIsFinished is false>>
-        <<set $avatar_backtext to "-------------|(	      )| ----------  /|           l/">>
+        <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
     <<else>>
         <<set $avatar_backtext to _scene.beats[$seq].backtext>>
     <</if>>
