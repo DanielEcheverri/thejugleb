@@ -9,11 +9,11 @@
         },
         {
             "text": "‘My neck hurts. It is so high. What is that fruit at the top? It doesn't look like a coconut. It looks like... a frozen bubble. I want to touch it’",
-            "backtext": "| |...|",
+            "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$hero_name lifts their|arm trying to|reach something.",
             "trigger": ["guiding the left hand up", "guiding the right hand up"]
         },
         {
-            "text": "Wait. I know that shape. That it is a cage! They have caught a star, here in $storyCity Little man-cub. |VS| stated $hero_name pointing at a lightbulb placed over $avatar_street street. |VS| ‘They trapped the Red Flower inside a piece of ice so it cannot escape.’",
+            "text": "Wait. I know that shape. That it's a cage! They have caught a star, here in $storyCity Little man-cub. |VS| stated $hero_name pointing at a lightbulb placed over $avatar_street street. |VS| ‘They trapped the Red Flower inside a piece of ice so it cannot escape.’",
             "backtext": "▓▓▓▓▓ PAGE 12 ▓▓▓▓|$hero_name gets closer|trying to have|a better look.",
             "trigger": ["looking right", "looking left", "walking"]
         },

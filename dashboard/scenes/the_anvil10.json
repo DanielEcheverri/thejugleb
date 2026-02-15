@@ -18,7 +18,7 @@
             "trigger": [{"part": "left foot", "dir": "pressed"},{"part": "right foot", "dir": "pressed"},{"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
         },
         {
-            "text": "‘Mmm. Worth it. Sweet as honey. Can you see? The rock gives us tools if we know how to ask’. Let's go find the next page, maybe we’ll also find more food this $storyTime while we walk.’",
+            "text": "‘Worth it. Sweet as honey. Can you see? The rock gives us tools if we know how to ask’. Let's go find the next page, maybe we’ll also find more food this $storyTime while we walk.’",
             "backtext": "| |...|",
             "trigger": ["walking"]
         },

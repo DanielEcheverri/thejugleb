@@ -97,9 +97,9 @@ const sketch = (p) => {
         const movementThresholds = {
             "LEFT ARM": 50,
             "RIGHT ARM": 50,
-            "HEAD": 45,   
-            "LEFT LEG": 30,    
-            "RIGHT LEG": 30
+            "HEAD": 50,   
+            "LEFT LEG": 50,    
+            "RIGHT LEG": 50
         };
         const defaultMovementThreshold = 25;
 		//const movementThreshold = 25;

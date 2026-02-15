@@ -8,8 +8,8 @@
             "trigger": [{"part": "mouth", "dir": "touched"}]
         },
         {
-            "text": "|VS| Suddenly, something else caught $hero_name’s attention |VS| ‘Who is that? There!...reflected in the water. That great grey shape. He looks old this $storyTime, Little man-cub. Look at his fur... it's greyer than I remember.’",
-            "backtext": "| |...|",
+            "text": "|VS| Suddenly, something else caught $hero_name’s attention |VS| ‘Who is that? There!...reflected in the water. That great grey shape. He looks old this $storyTime. Look at his fur... it's greyer than I remember.’",
+            "backtext": "▓▓▓▓▓ PAGE 5 ▓▓▓▓▓|$hero_name's quickly blink|looking at ther|reflection.",
             "trigger": [{"part": "eyes", "dir": "touched"}]
         },
         {

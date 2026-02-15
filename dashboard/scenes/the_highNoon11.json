@@ -9,18 +9,18 @@
         },
         {
             "text": "|VS| While you walk, $hero_name protested, |VS| ‘No... no, Little man-cub. Not another step. The $storyWeather is too heavy. It’s pressing me flat against the earth. We stop here.’",
-            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$hero_name moves their head|sideways in protest.",
-            "trigger": ["looking right", "looking left"]
+            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$hero_name moves their|head sideways|in protest.",
+            "trigger": [{"part": "head", "dir": "left"},{"part": "head", "dir": "right"}]
         },
         {
             "text": "‘Why are you in such a rush?’ said $hero_name, ‘Look at them. Look at the $avatar_t_type rushing past. Running in circles like ants before a storm. Let them run. We are bears. We rest’ |VS| complained $hero_name, feeling very tired and looking for a place to nap.",
-            "backtext": "| |...|",
+            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|You move $hero_name's|head trying to|get their attention.",
             "trigger": ["looking right", "looking left"]
         },
         {
             "text": "|VS| However, you strongly push $hero_name to continue walking |VS| ‘Okay! Okay, I'm up! You are as stubborn as a mule. Fine. We walk. But not this way. It's too bright. Put this page away in the backpack—it’s too hot to hold.",
-            "backtext": "| |...|",
-            "trigger": ["walking"]
+            "backtext": "▓▓▓▓▓ PAGE 11 ▓▓▓▓|$hero_name starts|walking, tired,|and mumbling.",
+            "trigger": ["walking","talking"]
         },
         {
             "text": "Let’s find us some shade.",

@@ -14,11 +14,11 @@
         },
         {
             "text": "‘But look at them. People usually don't look up. They have other things to worry for. They walk as if the whole world belongs to them’ |VS| exclaimed $hero_name, starting to walk faster, while you tried to say something.",
-            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's looks|turns their head|and looks at you.",
+            "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's turns|their head|and looks at you.",
             "trigger": ["looking left","looking right"]
         },
         {
-            "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not shrink. Chest out! Chin up! Walk heavy, like the Elephant! Make the ground shake so they know we are here.’ ",
+            "text": "|VS| Then $hero_name muttered after looking at you, |VS|  ‘You are right. We must not give up. Chest out! Chin up! Walk heavy, like the Elephant! Make the ground shake so they know we are here.’ ",
             "backtext": "▓▓▓▓▓ PAGE 7 ▓▓▓▓▓|$hero_name's thumps their|feet against|the ground.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"}, {"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
         },

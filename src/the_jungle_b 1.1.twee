@@ -367,7 +367,7 @@ the_jungle_b 1.1
     /* 2. NARRATIVE LAYER (Turn-based Scripts) */
     "turnScripts": {
         "3": "|VS|Keep your eyes open, Little Man-Cub. Shere Khan is prowling the jungle, and we must find the pages with the path to the Man-Village before he finds us.",
-        "5": "|VS|Hush... freeze. Do you feel that heavy silence? Shere Khan is close now... very close. We must be careful where we go.",
+        "5": "|VS|Hush! Freeze! Do you feel that heavy silence? Shere Khan is close now... very close. We must be careful where we go.",
         "6": "|VS|Keep your head down... Shere Khan hasn't lost our trail yet. We need to move fast and silent, like ghosts, before he circles back.",
         "8": "|VS|Breathe easy now, Little Man-Cub. I think we have finally twisted our trail enough to lose him; the shadow of Shere Khan has passed.",
     },
