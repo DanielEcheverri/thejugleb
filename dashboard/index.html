@@ -303,7 +303,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     
                      /* FAILURE: Duplicate Card */
                      &lt;&lt;set _errorMode to true&gt;&gt;
-
+                    &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_dup&quot;&gt;&gt;
                      /* Wikify Error Text */
                      &lt;&lt;set _rawError to _scene.validation.duplicate&gt;&gt;
                      &lt;&lt;set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
@@ -326,6 +326,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
                         
                         /* Wikify Error Text */
                         &lt;&lt;set _rawError to _rule.error&gt;&gt;
+                        &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_&quot; + _potentialTurn&gt;&gt;
                         &lt;&lt;set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
                             return State.variables[v] !== undefined ? State.variables[v] : m;
                         })&gt;&gt;

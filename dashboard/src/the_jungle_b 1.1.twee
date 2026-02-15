@@ -68,7 +68,7 @@ the_jungle_b 1.1
                     
                      /* FAILURE: Duplicate Card */
                      <<set _errorMode to true>>
-
+                    <<set $avatar_passage_id to _scene.baseId + "err_dup">>
                      /* Wikify Error Text */
                      <<set _rawError to _scene.validation.duplicate>>
                      <<set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
@@ -91,6 +91,7 @@ the_jungle_b 1.1
                         
                         /* Wikify Error Text */
                         <<set _rawError to _rule.error>>
+                        <<set $avatar_passage_id to _scene.baseId + "err_" + _potentialTurn>>
                         <<set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
                             return State.variables[v] !== undefined ? State.variables[v] : m;
                         })>>
