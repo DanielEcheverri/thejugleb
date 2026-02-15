@@ -68,7 +68,7 @@ the_jungle_b 1.1
                     
                      /* FAILURE: Duplicate Card */
                      <<set _errorMode to true>>
-                     <<set $avatar_passage_id to _scene.baseId + "err_dup">>
+                     /* <<set $avatar_passage_id to _scene.baseId + "err_dup">> */
                      <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _scene.validation.duplicate + "/">>
                 
                 /* --- B. RULE CHECK (Turn 1 / Turn 9) --- */
@@ -82,7 +82,7 @@ the_jungle_b 1.1
                         
                         /* FAILURE: Wrong Card for this Turn */
                         <<set _errorMode to true>>
-                        <<set $avatar_passage_id to _scene.baseId + "err_" + _potentialTurn>>
+                        /* <<set $avatar_passage_id to _scene.baseId + "err_" + _potentialTurn>> */
                         <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _rule.error + "/">>
 
                     <<else>>
@@ -277,7 +277,6 @@ the_jungle_b 1.1
                     <<include "commentMovement_avatar">>
                     <<set $avatar_passage to "">>
                     
-                    /* Comment logic will restart audio, so next tick Backtext Control handles "Talking" */
                 <</if>>
                 
             <</if>>
@@ -285,6 +284,7 @@ the_jungle_b 1.1
 
     <<else>>
         /* MODE B: FINAL STEP */
+        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
         <<if _audioIsFinished>>
             <<set _targetScene to _scene.nextScene>>
             <<if _targetScene is "card_choice">>
@@ -320,8 +320,8 @@ the_jungle_b 1.1
     })>>
 
 <<script>>
-        var finalText = State.temporary.processedBacktext;
-        writeToAvatar('avatar_backtext', finalText);
+    var finalText = State.temporary.processedBacktext;
+    writeToAvatar('avatar_backtext', finalText);
     <</script>>
 
     <<set $prev_avatar_backtext to $avatar_backtext>>
@@ -355,13 +355,13 @@ the_jungle_b 1.1
     "validation": {
         "1": { 
             "requiredCard": "1", 
-            "error": "Hmmm, this does not look like the first beat. Our journey must start at The Anchor." 
+            "error": "$hero_name alerted: |VS| Hmmm, this does not look like the first beat. Our journey must start at The Anchor." 
         },
         "9": { 
             "requiredCard": "16", 
-            "error": "Now we are at the end. We must use The Threshold beat now." 
+            "error": "$hero_name noted: |VS| Now we are at the end. We must use The Threshold beat now." 
         },
-        "duplicate": "'We have already been there. We need a different beat,' |VS| said $hero_name."
+        "duplicate": "|VS|'We have already been there. We need a different beat,' |VS| said $hero_name."
     },
 
     /* 2. NARRATIVE LAYER (Turn-based Scripts) */

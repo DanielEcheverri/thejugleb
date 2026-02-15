@@ -9,7 +9,7 @@
         },
         {
             "text": "‘Well. Here we are. This is the last page of the journal. The end of the trail.’ |VS| $hero_name looks at the gate leading to $storyNeighborhood, then down at you.",
-            "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$hero_name looks|at the gate",
+            "backtext": "▓▓▓▓▓ PAGE 16 ▓▓▓▓|$hero_name looks|at the gate.",
             "trigger": ["looking right", "looking left"]
         },
         {
