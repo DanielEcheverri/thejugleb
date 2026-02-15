@@ -303,8 +303,14 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     
                      /* FAILURE: Duplicate Card */
                      &lt;&lt;set _errorMode to true&gt;&gt;
-                     /* &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_dup&quot;&gt;&gt; */
-                     &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _scene.validation.duplicate + &quot;/&quot;&gt;&gt;
+
+                     /* Wikify Error Text */
+                     &lt;&lt;set _rawError to _scene.validation.duplicate&gt;&gt;
+                     &lt;&lt;set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+                        return State.variables[v] !== undefined ? State.variables[v] : m;
+                     })&gt;&gt;
+                     
+                     &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _processedError + &quot;/&quot;&gt;&gt;
                 
                 /* --- B. RULE CHECK (Turn 1 / Turn 9) --- */
                 &lt;&lt;else&gt;&gt;
@@ -317,8 +323,14 @@ window.writeToHachi = function(databaseNode, hachiData) {
                         
                         /* FAILURE: Wrong Card for this Turn */
                         &lt;&lt;set _errorMode to true&gt;&gt;
-                        /* &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_&quot; + _potentialTurn&gt;&gt; */
-                        &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _rule.error + &quot;/&quot;&gt;&gt;
+                        
+                        /* Wikify Error Text */
+                        &lt;&lt;set _rawError to _rule.error&gt;&gt;
+                        &lt;&lt;set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+                            return State.variables[v] !== undefined ? State.variables[v] : m;
+                        })&gt;&gt;
+
+                        &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _processedError + &quot;/&quot;&gt;&gt;
 
                     &lt;&lt;else&gt;&gt;
                     
@@ -338,6 +350,8 @@ window.writeToHachi = function(databaseNode, hachiData) {
                             &lt;&lt;set _processingInterjection to true&gt;&gt;
                             
                             &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;turn_&quot; + $cards_scanned&gt;&gt;
+
+                            /* Wikify Text */
                             &lt;&lt;set _rawText to _scene.turnScripts[$cards_scanned]&gt;&gt;
                             &lt;&lt;set _processedText to _rawText.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
                                 return State.variables[v] !== undefined ? State.variables[v] : m;
@@ -589,7 +603,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
     /* 2. NARRATIVE LAYER (Turn-based Scripts) */
     &quot;turnScripts&quot;: {
         &quot;3&quot;: &quot;|VS|Keep your eyes open, Little Man-Cub. Shere Khan is prowling the jungle, and we must find the pages with the path to the Man-Village before he finds us.&quot;,
-        &quot;5&quot;: &quot;|VS|Hush... freeze. Do you feel that heavy silence? Shere Khan is close now... very close. We must be careful where we go.&quot;,
+        &quot;5&quot;: &quot;|VS|Hush! Freeze! Do you feel that heavy silence? Shere Khan is close now... very close. We must be careful where we go.&quot;,
         &quot;6&quot;: &quot;|VS|Keep your head down... Shere Khan hasn&#39;t lost our trail yet. We need to move fast and silent, like ghosts, before he circles back.&quot;,
         &quot;8&quot;: &quot;|VS|Breathe easy now, Little Man-Cub. I think we have finally twisted our trail enough to lose him; the shadow of Shere Khan has passed.&quot;,
     },

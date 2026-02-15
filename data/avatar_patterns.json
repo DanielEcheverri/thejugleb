@@ -55,7 +55,7 @@
 		"pattern": [
 			{ "partMoving": "right foot", "directionMoving": "pressed" },
 			{ "partMoving": "right foot", "directionMoving": "released" },
-			{ "partMoving": "right foot", "directionMoving": "pressed" },
+			{ "partMoving": "right foot", "directionMoving": "pressed" }
 		]
 	},
 			{
@@ -63,7 +63,7 @@
 		"pattern": [
 			{ "partMoving": "left foot", "directionMoving": "pressed" },
 			{ "partMoving": "left foot", "directionMoving": "released" },
-			{ "partMoving": "left foot", "directionMoving": "pressed" },
+			{ "partMoving": "left foot", "directionMoving": "pressed" }
 		]
 	},
 	{

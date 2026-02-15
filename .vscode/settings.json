@@ -1,4 +1,7 @@
 {
     "twineTweeLanguage.twee-3.warnings.unknownMacro": false,
-    "twineTweeLanguage.twee-3.warnings.unknownPassage": false
+    "twineTweeLanguage.twee-3.warnings.unknownPassage": false,
+    "twineTweeLanguage.project.storyFilesDirectory": "dashboard/src",
+    "twineTweeLanguage.build.buildDirectory": "dashboard",
+    "twineTweeLanguage.build.outputFile": "index.html"
 }
