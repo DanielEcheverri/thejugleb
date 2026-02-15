@@ -303,7 +303,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     
                      /* FAILURE: Duplicate Card */
                      &lt;&lt;set _errorMode to true&gt;&gt;
-                     &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_dup&quot;&gt;&gt;
+                     /* &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_dup&quot;&gt;&gt; */
                      &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _scene.validation.duplicate + &quot;/&quot;&gt;&gt;
                 
                 /* --- B. RULE CHECK (Turn 1 / Turn 9) --- */
@@ -317,7 +317,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
                         
                         /* FAILURE: Wrong Card for this Turn */
                         &lt;&lt;set _errorMode to true&gt;&gt;
-                        &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_&quot; + _potentialTurn&gt;&gt;
+                        /* &lt;&lt;set $avatar_passage_id to _scene.baseId + &quot;err_&quot; + _potentialTurn&gt;&gt; */
                         &lt;&lt;set $avatar_passage to $avatar_passage_id + &quot;/|VS| &quot; + _rule.error + &quot;/&quot;&gt;&gt;
 
                     &lt;&lt;else&gt;&gt;
@@ -508,7 +508,6 @@ window.writeToHachi = function(databaseNode, hachiData) {
                     &lt;&lt;include &quot;commentMovement_avatar&quot;&gt;&gt;
                     &lt;&lt;set $avatar_passage to &quot;&quot;&gt;&gt;
                     
-                    /* Comment logic will restart audio, so next tick Backtext Control handles &quot;Talking&quot; */
                 &lt;&lt;/if&gt;&gt;
                 
             &lt;&lt;/if&gt;&gt;
@@ -516,6 +515,7 @@ window.writeToHachi = function(databaseNode, hachiData) {
 
     &lt;&lt;else&gt;&gt;
         /* MODE B: FINAL STEP */
+        &lt;&lt;set $avatar_backtext to _scene.beats[$seq].backtext&gt;&gt;
         &lt;&lt;if _audioIsFinished&gt;&gt;
             &lt;&lt;set _targetScene to _scene.nextScene&gt;&gt;
             &lt;&lt;if _targetScene is &quot;card_choice&quot;&gt;&gt;
@@ -546,8 +546,8 @@ window.writeToHachi = function(databaseNode, hachiData) {
     })&gt;&gt;
 
 &lt;&lt;script&gt;&gt;
-        var finalText = State.temporary.processedBacktext;
-        writeToAvatar(&#39;avatar_backtext&#39;, finalText);
+    var finalText = State.temporary.processedBacktext;
+    writeToAvatar(&#39;avatar_backtext&#39;, finalText);
     &lt;&lt;/script&gt;&gt;
 
     &lt;&lt;set $prev_avatar_backtext to $avatar_backtext&gt;&gt;
@@ -577,13 +577,13 @@ window.writeToHachi = function(databaseNode, hachiData) {
     &quot;validation&quot;: {
         &quot;1&quot;: { 
             &quot;requiredCard&quot;: &quot;1&quot;, 
-            &quot;error&quot;: &quot;Hmmm, this does not look like the first beat. Our journey must start at The Anchor.&quot; 
+            &quot;error&quot;: &quot;$hero_name alerted: |VS| Hmmm, this does not look like the first beat. Our journey must start at The Anchor.&quot; 
         },
         &quot;9&quot;: { 
             &quot;requiredCard&quot;: &quot;16&quot;, 
-            &quot;error&quot;: &quot;Now we are at the end. We must use The Threshold beat now.&quot; 
+            &quot;error&quot;: &quot;$hero_name noted: |VS| Now we are at the end. We must use The Threshold beat now.&quot; 
         },
-        &quot;duplicate&quot;: &quot;&#39;We have already been there. We need a different beat,&#39; |VS| said $hero_name.&quot;
+        &quot;duplicate&quot;: &quot;|VS|&#39;We have already been there. We need a different beat,&#39; |VS| said $hero_name.&quot;
     },
 
     /* 2. NARRATIVE LAYER (Turn-based Scripts) */
