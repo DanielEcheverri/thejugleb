@@ -68,8 +68,14 @@ the_jungle_b 1.1
                     
                      /* FAILURE: Duplicate Card */
                      <<set _errorMode to true>>
-                     /* <<set $avatar_passage_id to _scene.baseId + "err_dup">> */
-                     <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _scene.validation.duplicate + "/">>
+
+                     /* Wikify Error Text */
+                     <<set _rawError to _scene.validation.duplicate>>
+                     <<set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+                        return State.variables[v] !== undefined ? State.variables[v] : m;
+                     })>>
+                     
+                     <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _processedError + "/">>
                 
                 /* --- B. RULE CHECK (Turn 1 / Turn 9) --- */
                 <<else>>
@@ -82,8 +88,14 @@ the_jungle_b 1.1
                         
                         /* FAILURE: Wrong Card for this Turn */
                         <<set _errorMode to true>>
-                        /* <<set $avatar_passage_id to _scene.baseId + "err_" + _potentialTurn>> */
-                        <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _rule.error + "/">>
+                        
+                        /* Wikify Error Text */
+                        <<set _rawError to _rule.error>>
+                        <<set _processedError to _rawError.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
+                            return State.variables[v] !== undefined ? State.variables[v] : m;
+                        })>>
+
+                        <<set $avatar_passage to $avatar_passage_id + "/|VS| " + _processedError + "/">>
 
                     <<else>>
                     
@@ -103,6 +115,8 @@ the_jungle_b 1.1
                             <<set _processingInterjection to true>>
                             
                             <<set $avatar_passage_id to _scene.baseId + "turn_" + $cards_scanned>>
+
+                            /* Wikify Text */
                             <<set _rawText to _scene.turnScripts[$cards_scanned]>>
                             <<set _processedText to _rawText.replace(/(?:\$|variables\(\)\.)(\w+)/g, function(m, v) {
                                 return State.variables[v] !== undefined ? State.variables[v] : m;
