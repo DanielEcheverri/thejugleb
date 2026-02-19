@@ -177,7 +177,7 @@ the_jungle_b 1.1
 :: Logic_AvatarEngine {"position":"1225,200","size":"200,100"}
 <<nobr>>
 
-    /* --- 0. INITIALIZATION ---*/
+    /* --- 0. INITIALIZATION --- */
     <<if not $avatar_engine_initialized>>
         <<set $seq to 0>>
         
@@ -190,9 +190,9 @@ the_jungle_b 1.1
         <<set $avatar_passage_id to _scene.baseId + $seq>>
         <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
         
-        /* [FIX]: Start as "Talking" so we don't flash the text before audio starts */
         <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
         
+        <<set $avatar_failure_phase to "">>
         <<set $avatar_engine_initialized to true>>
     <</if>>
 
@@ -203,7 +203,6 @@ the_jungle_b 1.1
     <<set _audioIsFinished to ($avatar_narrating == _currentStateStr)>>
 
     /* --- BACKTEXT CONTROL --- */
-    /* If audio is NOT finished, force 'Talking'. If finished, show the Scene Text. */
     <<if _audioIsFinished is false>>
         <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
     <<else>>
@@ -215,100 +214,116 @@ the_jungle_b 1.1
     <<set _partMovActive    to ($avatar_part_mov !== "none" and $avatar_part_mov !== "")>>
     <<set _inputActive      to (_generalMovActive or _partMovActive)>>
 
+    /* --- FAILURE PHASE HANDLING --- */
+    <<if $avatar_failure_phase is "comment">>
+        <<set _commentDone to ($avatar_narrating == _scene.baseId + $seq + "_failfalse")>>
+        <<if _commentDone>>
+            <<set $avatar_failure_phase to "">>
+            <<set _rawText to _scene.beats[$seq].text>>
+            <<set _processedText to _rawText.replace(/\$(\w+)/g, function(match, varName) {
+                return State.variables[varName] !== undefined ? State.variables[varName] : match;
+            })>>
+            <<set $avatar_passage_id to _scene.baseId + $seq>>
+            <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
+            <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
+        <</if>>
+    <</if>>
+
     /* --- 3. LOGIC SPLIT --- */
-    <<if not _isLastBeat>>
-        
-        /* MODE A: NORMAL STEP */
-        <<if _audioIsFinished>>
-
-            /* MATCH CHECK & LISTENER SETUP */
-            <<set _matchFound to false>>
-            <<set _triggers to [].concat(_scene.beats[$seq].trigger)>>
+    <<if not $avatar_failure_phase>>
+        <<if not _isLastBeat>>
             
-            /* Reset Flags */
-            <<set _expectsGeneral to false>>
-            <<set _expectsPart to false>>
-            <<set _listeningParts to []>>
-            
-            <<for _t range _triggers>>
-                <<if typeof _t is "string">>
-                    <<set _expectsGeneral to true>>
-                    <<if $avatar_movement == _t>>
-                        <<set _matchFound to true>>
-                        <<break>>
+            /* MODE A: NORMAL STEP */
+            <<if _audioIsFinished>>
+
+                /* MATCH CHECK & LISTENER SETUP */
+                <<set _matchFound to false>>
+                <<set _triggers to [].concat(_scene.beats[$seq].trigger)>>
+                
+                /* Reset Flags */
+                <<set _expectsGeneral to false>>
+                <<set _expectsPart to false>>
+                <<set _listeningParts to []>>
+                
+                <<for _t range _triggers>>
+                    <<if typeof _t is "string">>
+                        <<set _expectsGeneral to true>>
+                        <<if $avatar_movement == _t>>
+                            <<set _matchFound to true>>
+                            <<break>>
+                        <</if>>
+                    <<elseif typeof _t is "object">>
+                        <<set _expectsPart to true>>
+                        <<set _listeningParts.push(_t.part)>>
+                        <<if $avatar_part_mov == _t.part and $avatar_part_dir == _t.dir>>
+                            <<set _matchFound to true>>
+                            <<break>>
+                        <</if>>
                     <</if>>
-                <<elseif typeof _t is "object">>
-                    <<set _expectsPart to true>>
-                    <<set _listeningParts.push(_t.part)>>
-                    <<if $avatar_part_mov == _t.part and $avatar_part_dir == _t.dir>>
-                        <<set _matchFound to true>>
-                        <<break>>
-                    <</if>>
-                <</if>>
-            <</for>>
+                <</for>>
 
-            /* RESULT 1: SUCCESS */
-            <<if _matchFound is true>>
-                
-                <<set $seq ++>>
-                
-                /* PROCESS TEXT */
-                <<set _rawText to _scene.beats[$seq].text>>
-                <<set _processedText to _rawText.replace(/\$(\w+)/g, function(match, varName) {
-                    return State.variables[varName] !== undefined ? State.variables[varName] : match;
-                })>>
-                
-                <<set $avatar_passage_id to _scene.baseId + $seq>>
-                <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
-                
-                /* Force Talking immediately for the new beat */
-                <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
+                /* RESULT 1: SUCCESS */
+                <<if _matchFound is true>>
+                    
+                    <<set $seq ++>>
+                    
+                    /* PROCESS TEXT */
+                    <<set _rawText to _scene.beats[$seq].text>>
+                    <<set _processedText to _rawText.replace(/\$(\w+)/g, function(match, varName) {
+                        return State.variables[varName] !== undefined ? State.variables[varName] : match;
+                    })>>
+                    
+                    <<set $avatar_passage_id to _scene.baseId + $seq>>
+                    <<set $avatar_passage to $avatar_passage_id + "/" + _processedText + "/">>
+                    
+                    <<set $avatar_backtext to "▓▓▓ NARRATING ▓▓▓▓|~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^|_-~^~-__-~^~-__-~^~-__-~^~-__-~^~-|___---______---______---______---_">>
 
-            /* RESULT 2: FAILURE (FILTERED CHECK) */
-            <<elseif _inputActive is true>>
-                
-                <<set _validFailure to false>>
+                /* RESULT 2: FAILURE (FILTERED CHECK) */
+                <<elseif _inputActive is true>>
+                    
+                    <<set _validFailure to false>>
 
-                /* Case A: General Move Fail */
-                <<if _expectsGeneral and _generalMovActive>>
-                    <<set _validFailure to true>>
-                <</if>>
-
-                /* Case B: Part Move Fail */
-                <<if _expectsPart and _partMovActive>>
-                    <<if _listeningParts.includes($avatar_part_mov)>>
+                    /* Case A: General Move Fail */
+                    <<if _expectsGeneral and _generalMovActive>>
                         <<set _validFailure to true>>
                     <</if>>
-                <</if>>
 
-                /* Execute Failure */
-                <<if _validFailure is true>>
-                    
-                    <<if _partMovActive>>
-                        <<set $avatar_movement to $avatar_part_mov + " " + $avatar_part_dir>>
+                    /* Case B: Part Move Fail */
+                    <<if _expectsPart and _partMovActive>>
+                        <<if _listeningParts.includes($avatar_part_mov)>>
+                            <<set _validFailure to true>>
+                        <</if>>
                     <</if>>
 
-                    <<set $avatar_passage_id to _scene.baseId + $seq>>
-                    <<include "commentMovement_avatar">>
-                    <<set $avatar_passage to "">>
+                    /* Execute Failure */
+                    <<if _validFailure is true>>
+                        
+                        <<if _partMovActive>>
+                            <<set $avatar_movement to $avatar_part_mov + " " + $avatar_part_dir>>
+                        <</if>>
+
+                        <<set $avatar_passage_id to _scene.baseId + $seq + "_fail">>
+                        <<include "commentMovement_avatar">>
+                        <<set $avatar_failure_phase to "comment">>
+                        
+                    <</if>>
                     
                 <</if>>
-                
             <</if>>
-        <</if>>
 
-    <<else>>
-        /* MODE B: FINAL STEP */
-        <<set $avatar_backtext to _scene.beats[$seq].backtext>>
-        <<if _audioIsFinished>>
-            <<set _targetScene to _scene.nextScene>>
-            <<if _targetScene is "card_choice">>
-                <<set _targetScene to $current_engine.toLowerCase() + "_" + _targetScene>>
+        <<else>>
+            /* MODE B: FINAL STEP */
+            <<set $avatar_backtext to _scene.beats[$seq].backtext>>
+            <<if _audioIsFinished>>
+                <<set _targetScene to _scene.nextScene>>
+                <<if _targetScene is "card_choice">>
+                    <<set _targetScene to $current_engine.toLowerCase() + "_" + _targetScene>>
+                <</if>>
+                <<unset $avatar_engine_initialized>>
+                <<replace "#avatar_story">>
+                    <<include _targetScene>>
+                <</replace>>
             <</if>>
-            <<unset $avatar_engine_initialized>>
-            <<replace "#avatar_story">>
-                <<include _targetScene>>
-            <</replace>>
         <</if>>
     <</if>>
     
