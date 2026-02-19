@@ -13,7 +13,7 @@
             "trigger": [{"part": "right arm", "dir": "down"},{"part": "left arm", "dir": "down"}, {"part": "right arm", "dir": "up"},{"part": "left arm", "dir": "up"}]
         },
         {
-            "text": "‘Ohhh... yes. Yes! Lower. A little to the left. Harder! Don't be shy, put your back into it!’ |VS| whispered $hero_name, |VS| ‘That’s it! Grind that itch into dust. This is what the jagged edges of the world are for.’",
+            "text": "‘Ohhh... yes. Yes!’ |VS| whispered $hero_name, |VS| ‘That’s it! Grind that itch into dust. This is what the jagged edges of the world are for.’",
             "backtext": "▓▓▓▓▓ PAGE 14 ▓▓▓▓|Now try to help|$hero_name lift|its legs.",
             "trigger": [{"part": "right leg", "dir": "up"},{"part": "left leg", "dir": "up"},{"part": "right leg", "dir": "down"},{"part": "left leg", "dir": "down"}]
 

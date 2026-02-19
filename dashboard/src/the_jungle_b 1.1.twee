@@ -161,7 +161,7 @@ the_jungle_b 1.1
             
             /* Reset Prompt */
             <<set $avatar_passage_id to _scene.baseId + "retry">>
-            <<set $avatar_passage to $avatar_passage_id + "/|VS| " + "Try again." + "/">>
+            <<set $avatar_passage to $avatar_passage_id + "/|VS| " + "Try another movement again." + "/">>
 
 	    <<set _lastIdleTime to Date.now()>>
             
