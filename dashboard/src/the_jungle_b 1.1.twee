@@ -177,7 +177,7 @@ the_jungle_b 1.1
 :: Logic_AvatarEngine {"position":"1225,200","size":"200,100"}
 <<nobr>>
 
-    /* --- 0. INITIALIZATION --- */
+    /* --- 0. INITIALIZATION ---*/
     <<if not $avatar_engine_initialized>>
         <<set $seq to 0>>
         
