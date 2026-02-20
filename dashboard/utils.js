@@ -88,13 +88,14 @@ function generateFallbackComment(character, context = {}) {
  * Uses GPT API with fallback to generic comments on failure.
  */
 window.makeComments = async function(character) {
+
     const apiKey = window.avatar_GPT;
     const sVar = SugarCube.State.variables;
-    
+
     // Determine character prefix for variable names
     const isBaloo = (character.toLowerCase() === 'avatar' || character.toLowerCase() === 'baloo');
     const prefix = isBaloo ? 'avatar' : 'hachi';
-    
+
     // Build context from window variables
     const context = {
         char: character,
@@ -111,35 +112,56 @@ window.makeComments = async function(character) {
         heading: sVar[`${prefix}_t_heading`],
         type: sVar[`${prefix}_t_type`]
     };
-    
-    // Vary the sensory focus to ensure diverse outputs
-    const sensoryFocus = ['street sounds','parks and pets', 'street musicians', 'humidity and air quality','historical markers', 'urban smells', 'street lighting', 'crowd density', 'traffic noise', 'buildings', 'sidewalk activity','interesting architecture', 'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos', 'alleyway atmosphere', 'advertisement and signs', 'construction sites', 'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'];
-    const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
-    const uniqueID = Date.now();
-    
-    const userPrompt = `[Request ID: ${uniqueID}]
 
+    // Vary the sensory focus to ensure diverse outputs
+    const sensoryFocus = [
+        'street sounds', 'parks and pets', 'street musicians', 'humidity and air quality',
+        'historical markers', 'urban smells', 'street lighting', 'crowd density',
+        'traffic noise', 'buildings', 'sidewalk activity', 'interesting architecture',
+        'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos',
+        'alleyway atmosphere', 'advertisement and signs', 'construction sites',
+        'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'
+    ];
+    const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
+
+    // Build and shuffle examples
+    const examples = [
+        `"|VS| 'Smells like rain,' |VS| said ${context.char} while steam rises from the warm asphalt."`,
+        `"Neon signs flicker in puddles by ${context.char}'s feet."`,
+        `As the crowd surges, ${context.char} observes and says, "|VS| 'Too many people,' |VS|".`,
+        `Around ${context.char}, conversations blend with the distant hum of traffic.`,
+        `"|VS| 'Things look pretty nice around ${context.street} street'," |VS| said ${context.char} while walking ${context.neighborhood}.`,
+        `${context.char} hears ${context.type} number ${context.route} past ${context.stop} station.`,
+        `There is some construction going on ${context.street} street. That distracts ${context.char} a bit.`,
+        `"|VS| '${context.street} street looks good,'" |VS| ${context.char} notes, strolling through ${context.neighborhood}.`,
+        `"|VS| Even King Louie's ruins felt more alive than the quiet ${context.neighborhood} stone huts", |VS| noted ${context.char}.`,
+        `"|VS| Colonel Hathi makes a mess when he marches, but these ${context.city} humans keep their paths much cleaner."`,
+        `"|VS| The Law of Akela provided a family, but ${context.city} offers a feast every single ${context.time}."`,
+        `A hanging coiled rope makes ${context.char} jump, mistaking it for the treacherous Kaa.`,
+        `A man bringing home a heavy crate reminds ${context.char} of the strength of Rama.`,
+        `${context.char} watches children splash water, reminded of the Cubs tumbling in the summer rain.`,
+        `"|VS| This ground is far too stubborn for a proper nap." — ${context.char} prods a cobblestone.`,
+        `"|VS| That giant man-cub hasn't moved, Mowgli." — ${context.char} waved their paw at an advertisement.`
+    ];
+    const shuffledExamples = examples.slice().sort(() => Math.random() - 0.5);
+
+    const uniqueID = Date.now();
+    const userPrompt = `[Request ID: ${uniqueID}]
 STORY CONTEXT:
-${context.char} stands near ${context.stop} in ${context.neighborhood}, in the city of ${context.city} . 
-The ${context.weather} sky hangs over ${context.street}. 
+${context.char} stands near ${context.stop} in ${context.neighborhood}, in the city of ${context.city}.
+The ${context.weather} sky hangs over ${context.street}.
 It's ${context.time}, there is ${context.pollution}.
 There are some ${context.amenity} close.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
-
 Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
-Dont forget to use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
+Don't forget to use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
 You can include something, NOT ALL, from the **STORY CONTEXT.**
-
 You can write it in two possible ways:
 1. Just describe the scene around ${context.char}
 2. An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
-
-Consider these four examples and their lenght:
-1. "|VS| 'Smells like rain,' |VS| said ${context.char} whiel steam rises from the warm asphalt."
-2. "Neon signs flicker in puddles by ${context.char}'s feet."
-3. As the crowd surges, ${context.char} observes, "|VS| 'Too many people,' |VS|".
-4. Around ${context.char}, conversations blend with the distant hum of traffic.`
+Consider these examples and their length:
+${shuffledExamples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
