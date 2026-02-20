@@ -177,7 +177,7 @@ Give ONLY the JSON object, no extra text.`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
-
+        console.log(`[GPT] Generated comment:`, gptResponse);
         // Strip markdown fences if present, then parse JSON
         const clean = gptResponse.replace(/```json|```/g, '').trim();
         const parsed = JSON.parse(clean);
