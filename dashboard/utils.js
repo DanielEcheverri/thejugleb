@@ -150,7 +150,7 @@ It's ${context.time}, there is ${context.pollution}.
 There are some ${context.amenity} close.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
-Generate 5 possible atmospheric moments focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
+Generate 3 possible atmospheric moments focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
 Use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
 You can include something, NOT ALL, from the **STORY CONTEXT.**
 You can write each in two possible ways:
