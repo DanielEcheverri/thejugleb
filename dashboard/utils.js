@@ -22,7 +22,7 @@ async function callGPTApi(prompt, apiKey) {
             body: JSON.stringify({
                 model: GPT_MODEL_NAME,
                 messages: [
-                    { role: "system", content: "You are a concise, third-person narrator for a Twine game. Use simple, everyday language - not poetic or literary. Keep it casual and direct. Think like a regular person, not a writer" },
+                    { role: "system", content: "You generate atmospheric narrative moments for a Twine game. Your job is NOT to produce the most typical or expected observation — instead, sample freely from the full range of possible moments a character might experience. Avoid the first thing that comes to mind. Use simple, everyday language — not poetic or literary. Think like a regular person noticing something specific, not a writer crafting a scene." },
                     { role: "user", content: prompt }
                 ],
                 max_tokens: MAX_TOKENS,
