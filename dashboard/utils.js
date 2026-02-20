@@ -1,7 +1,7 @@
 // --- GPT API Constants ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 350;
+const MAX_TOKENS = 450;
 
 /**
  * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
@@ -160,6 +160,7 @@ You can include something, NOT ALL, from the **STORY CONTEXT.**
 You can write it in two possible ways:
 1. Just describe the scene around ${context.char}
 2. An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
+
 Consider these examples and their length:
 ${shuffledExamples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}`;
 
