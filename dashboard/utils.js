@@ -1,7 +1,7 @@
 // --- GPT API Constants ---
 const GPT_MODEL_ENDPOINT = 'https://llm.ai.e-infra.cz/v1/chat/completions';
 const GPT_MODEL_NAME = 'gpt-oss-120b';
-const MAX_TOKENS = 650;
+const MAX_TOKENS = 450;
 
 /**
  * Handles the GPT API call to the e-infra.cz.
@@ -92,9 +92,11 @@ window.makeComments = async function(character) {
     const apiKey = window.avatar_GPT;
     const sVar = SugarCube.State.variables;
 
+    // Determine character prefix for variable names
     const isBaloo = (character.toLowerCase() === 'avatar' || character.toLowerCase() === 'baloo');
     const prefix = isBaloo ? 'avatar' : 'hachi';
 
+    // Build context from window variables
     const context = {
         char: character,
         street: window[`${prefix}_street`] || "the current path",
@@ -111,16 +113,18 @@ window.makeComments = async function(character) {
         type: sVar[`${prefix}_t_type`]
     };
 
+    // Vary the sensory focus to ensure diverse outputs
     const sensoryFocus = [
-        'street sounds', 'parks and pets', 'street musicians', 'humidity and air quality',
+        'street sounds', 'parks and pets', 'street musicians', 'urban sights',
         'historical markers', 'urban smells', 'street lighting', 'crowd density',
-        'traffic noise', 'buildings', 'sidewalk activity', 'interesting architecture',
-        'storefront displays', 'street vendors', 'public transit sounds', 'intersection chaos',
-        'alleyway atmosphere', 'advertisement and signs', 'construction sites',
+        'buildings', 'sidewalk activity', 'interesting architecture',
+        'storefront displays', 'street vendors', 'intersection chaos',
+        'advertisement and signs', 'construction sites',
         'pedestrian flow', 'street weather', 'urban decay', 'city rhythm'
     ];
     const randomSFocus = sensoryFocus[Math.floor(Math.random() * sensoryFocus.length)];
 
+    // Build and shuffle examples
     const examples = [
         `"|VS| 'Smells like rain,' |VS| said ${context.char} while steam rises from the warm asphalt."`,
         `"Neon signs flicker in puddles by ${context.char}'s feet."`,
@@ -150,50 +154,24 @@ It's ${context.time}, there is ${context.pollution}.
 There are some ${context.amenity} close.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
-Generate 3 possible atmospheric moments focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
-Use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
+${context.char} observes, doesn't act.
+Don't forget to use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
 You can include something, NOT ALL, from the **STORY CONTEXT.**
-You can write each in two possible ways:
+You can write it in two possible ways:
 1. Just describe the scene around ${context.char}
 2. An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
+
 Consider these examples and their length:
 ${shuffledExamples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
-Return a JSON object with key "responses" (list of dicts). Each dict must include:
-- "text": the narrative moment string only, no extra explanation.
-- "probability": estimated probability from 0.0 to 1.0 relative to the full distribution. Do NOT assign equal probabilities — vary them to reflect how likely each response is.
-Give ONLY the JSON object, no extra text.`;
-
-    // VS probability-weighted sampling
-    function sampleFromCandidates(candidates) {
-        const total = candidates.reduce((sum, c) => sum + (c.probability || 0), 0);
-        if (total <= 0) return candidates[Math.floor(Math.random() * candidates.length)].text;
-        let r = Math.random() * total;
-        for (const candidate of candidates) {
-            r -= (candidate.probability || 0);
-            if (r <= 0) return candidate.text;
-        }
-        return candidates[candidates.length - 1].text;
-    }
+Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. .
+`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
-        console.log(`[GPT] Generated comment:`, gptResponse);
-        // Strip markdown fences if present, then parse JSON
-        const clean = gptResponse.replace(/```json|```/g, '').trim();
-        const parsed = JSON.parse(clean);
-        const candidates = parsed.responses;
-
-        if (!candidates || candidates.length === 0) {
-            throw new Error("VS response had no candidates.");
-        }
-
-        const selected = sampleFromCandidates(candidates);
-        window.avatar_comment = selected;
-        console.log(`[VS Comment] ${character} (Focus: ${randomSFocus}) — Candidates: ${candidates.length}`, candidates);
-        console.log(`[VS Selected]`, selected);
-
+        window.avatar_comment = gptResponse;
+        console.log(`[Realism Update] ${character} (Focus: ${randomSFocus}):`, gptResponse);
     } catch (error) {
-        console.error(`GPT/VS Error for ${character}:`, error);
+        console.error(`GPT Error for ${character}:`, error);
         const fallback = generateFallbackComment(character, context);
         window.avatar_comment = fallback;
         console.log(`[Fallback Comment] ${character}:`, fallback);
