@@ -4,7 +4,7 @@ const GPT_MODEL_NAME = 'gpt-oss-120b';
 const MAX_TOKENS = 450;
 
 /**
- * Handles the GPT API call to the e-infra.cz endpoint with robust error handling.
+ * Handles the GPT API call to the e-infra.cz.
  * Now includes API key validation.
  */
 async function callGPTApi(prompt, apiKey) {
@@ -154,7 +154,7 @@ It's ${context.time}, there is ${context.pollution}.
 There are some ${context.amenity} close.
 The ${context.type} Route ${context.route} heads toward ${context.heading}.
 ${context.char} is walking ${context.speed}.
-Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. ${context.char} observes, doesn't act.
+${context.char} observes, doesn't act.
 Don't forget to use simple, almost third grade, everyday language - not poetic or literary. Keep it casual and direct.
 You can include something, NOT ALL, from the **STORY CONTEXT.**
 You can write it in two possible ways:
@@ -162,7 +162,9 @@ You can write it in two possible ways:
 2. An inner thought plus observation: |VS| 'Brief thought' |VS| what ${context.char} notices
 
 Consider these examples and their length:
-${shuffledExamples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}`;
+${shuffledExamples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}
+Write one **VERY, VERY SHORT** atmospheric moment focusing only on **${randomSFocus}**. .
+`;
 
     try {
         const gptResponse = await callGPTApi(userPrompt, apiKey);
