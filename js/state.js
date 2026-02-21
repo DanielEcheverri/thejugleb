@@ -68,7 +68,7 @@ let sentenceSource = null;
 let tagSource = 'data/tags.json';
 let checkpointsSource = 'data/points.json';
 let interactionMode = "_load";
-var noNarrative = false;
+var noNarrative = true;
 var speakFancy = true;
 
 // Tag State
