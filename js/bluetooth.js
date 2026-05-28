@@ -48,7 +48,7 @@ async function connectToDevice() {
                 sentenceSource = 'data/hachi_sentences.json';
                 tagSource = 'data/tags.json';
                 initializeSounds();
-                document.getElementById("hachiCheckbox").click();
+                //document.getElementById("hachiCheckbox").click();
                 characterName = "Bageera";
                 window[characterName + "_Sound"].play();
                 notification_Sound.play();
