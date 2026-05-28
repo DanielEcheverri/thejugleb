@@ -10,21 +10,31 @@ async function connectToDevice() {
         if (!isConnected) {
             device = await navigator.bluetooth.requestDevice({
                 filters: [
-                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] }, //Baloo
-                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] }, //Bagheerani
+                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] },
+                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] },
                 ],
             });
 
             const server = await device.gatt.connect();
 
-            // Find which service UUID this device uses
-            const serviceUUID = Object.keys(DEVICE_CONFIG).find(uuid =>
-                device.uuids?.includes(uuid)
-            );
+            // Try each service UUID until one works
+            let service = null;
+            let serviceUUID = null;
+            for (const uuid of Object.keys(DEVICE_CONFIG)) {
+                try {
+                    service = await server.getPrimaryService(uuid);
+                    serviceUUID = uuid;
+                    break; // Found it, stop trying
+                } catch (e) {
+                    continue; // Try the next one
+                }
+            }
 
-            const service = await server.getPrimaryService(serviceUUID);
+            if (!service) {
+                throw new Error("No matching service UUID found on this device.");
+            }
+
             characteristic = await service.getCharacteristic(DEVICE_CONFIG[serviceUUID]);
-
             await characteristic.startNotifications();
 
             deviceName = device.name;
