@@ -11,7 +11,7 @@ async function connectToDevice() {
             device = await navigator.bluetooth.requestDevice({
                 filters: [
                     { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] }, //Baloo
-                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] }, //Bagheera
+                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] }, //Bagheerani
                 ],
             });
 
