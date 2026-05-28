@@ -80,7 +80,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 async function checkCheckpoints() {
 	const radius = 12; // 12 meters radius
-	let checkpointsKey = deviceName === "hachi_BT" ? "hachi_checkpoints" : "avatar_checkpoints";
+	let checkpointsKey = deviceName === "bagheerani_BT" ? "hachi_checkpoints" : "avatar_checkpoints";
 
 	const locations = await fetchJSONFile(checkpointsSource, cachedCheckpoints); // from main.js
 

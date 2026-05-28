@@ -64,21 +64,21 @@ function writeToDatabase() {
             prevSpeed = speed;
             prevSpeaking = speaking;
             
-            const databaseName = (deviceName === 'hachi_BT') ? 'hachi_data' : 'avatar_data';
-            const latitudeVar = (deviceName === 'hachi_BT') ? 'hachi_latitude' : 'avatar_latitude';
-            const longitudeVar = (deviceName === 'hachi_BT') ? 'hachi_longitude' : 'avatar_longitude';
-            const headingVar = (deviceName === 'hachi_BT') ? 'hachi_heading' : 'avatar_heading';
-            const checkpointVar = (deviceName === 'hachi_BT') ? 'hachi_checkpoint' : 'avatar_checkpoint';
-            const checkDistVar = (deviceName === 'hachi_BT') ? 'hachi_checkpoint_dist' : 'avatar_checkpoint_dist';
-            const movementVar = (deviceName === 'hachi_BT') ? 'hachi_movement' : 'avatar_movement';
-            const partMovementVar = (deviceName === 'hachi_BT') ? 'hachi_part_mov' : 'avatar_part_mov';
-            const dirMovementVar = (deviceName === 'hachi_BT') ? 'hachi_part_dir' : 'avatar_part_dir';
-            const tagInteractionVar = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
-            const statusVar = (deviceName === 'hachi_BT') ? 'hachi_status' : 'avatar_status';
-            const speedVar = (deviceName === 'hachi_BT') ? 'hachi_speed' : 'avatar_speed';
-            const speakingVar = (deviceName === 'hachi_BT') ? 'hachi_narrating' : 'avatar_narrating';
-            const currentPsgVar = (deviceName === 'hachi_BT') ? 'hachi_current_passage' : 'avatar_current_passage';
-            const nameVar = (deviceName === 'hachi_BT') ? 'hachi_name' : 'avatar_name';
+            const databaseName = (deviceName === 'bageerani_BT') ? 'hachi_data' : 'avatar_data';
+            const latitudeVar = (deviceName === 'bageerani_BT') ? 'hachi_latitude' : 'avatar_latitude';
+            const longitudeVar = (deviceName === 'bageerani_BT') ? 'hachi_longitude' : 'avatar_longitude';
+            const headingVar = (deviceName === 'bageerani_BT') ? 'hachi_heading' : 'avatar_heading';
+            const checkpointVar = (deviceName === 'bageerani_BT') ? 'hachi_checkpoint' : 'avatar_checkpoint';
+            const checkDistVar = (deviceName === 'bageerani_BT') ? 'hachi_checkpoint_dist' : 'avatar_checkpoint_dist';
+            const movementVar = (deviceName === 'bageerani_BT') ? 'hachi_movement' : 'avatar_movement';
+            const partMovementVar = (deviceName === 'bageerani_BT') ? 'hachi_part_mov' : 'avatar_part_mov';
+            const dirMovementVar = (deviceName === 'bageerani_BT') ? 'hachi_part_dir' : 'avatar_part_dir';
+            const tagInteractionVar = (deviceName === 'bageerani_BT') ? 'hachi_tag' : 'avatar_tag';
+            const statusVar = (deviceName === 'bageerani_BT') ? 'hachi_status' : 'avatar_status';
+            const speedVar = (deviceName === 'bageerani_BT') ? 'hachi_speed' : 'avatar_speed';
+            const speakingVar = (deviceName === 'bageerani_BT') ? 'hachi_narrating' : 'avatar_narrating';
+            const currentPsgVar = (deviceName === 'bageerani_BT') ? 'hachi_current_passage' : 'avatar_current_passage';
+            const nameVar = (deviceName === 'bageerani_BT') ? 'hachi_name' : 'avatar_name';
 
             update(ref(database, databaseName), {
                 [latitudeVar]: latitude,
@@ -109,16 +109,16 @@ let previousBackText = '';
 let previousTagID_fb = ''; // Renamed to avoid conflict with global previousTagID
 
 function readFromDatabase(deviceName) {
-    const otherDatabaseName = (deviceName === 'hachi_BT') ? 'avatar_data' : 'hachi_data';
-    const otherLatitudeVar = (deviceName === 'hachi_BT') ? 'avatar_latitude' : 'hachi_latitude';
-    const otherLongitudeVar = (deviceName === 'hachi_BT') ? 'avatar_longitude' : 'hachi_longitude';
-    const databaseName = (deviceName === 'hachi_BT') ? 'hachi_data' : 'avatar_data';
-    const myPassage = (deviceName === 'hachi_BT') ? 'hachi_passage' : 'avatar_passage';
-    const myStreet = (deviceName === 'hachi_BT') ? 'hachi_street' : 'avatar_street';
-    const myTag = (deviceName === 'hachi_BT') ? 'hachi_tag' : 'avatar_tag';
-    const myAzure = (deviceName === 'hachi_BT') ? 'hachi_tts' : 'avatar_tts';
-    const myOSS = (deviceName === 'hachi_BT') ? 'hachi_GPT' : 'avatar_GPT';
-    const myBackText = (deviceName === 'hachi_BT') ? 'hachi_backtext' : 'avatar_backtext';
+    const otherDatabaseName = (deviceName === 'bageerani_BT') ? 'avatar_data' : 'hachi_data';
+    const otherLatitudeVar = (deviceName === 'bageerani_BT') ? 'avatar_latitude' : 'hachi_latitude';
+    const otherLongitudeVar = (deviceName === 'bageerani_BT') ? 'avatar_longitude' : 'hachi_longitude';
+    const databaseName = (deviceName === 'bageerani_BT') ? 'hachi_data' : 'avatar_data';
+    const myPassage = (deviceName === 'bageerani_BT') ? 'hachi_passage' : 'avatar_passage';
+    const myStreet = (deviceName === 'bageerani_BT') ? 'hachi_street' : 'avatar_street';
+    const myTag = (deviceName === 'bageerani_BT') ? 'hachi_tag' : 'avatar_tag';
+    const myAzure = (deviceName === 'bageerani_BT') ? 'hachi_tts' : 'avatar_tts';
+    const myOSS = (deviceName === 'bageerani_BT') ? 'hachi_GPT' : 'avatar_GPT';
+    const myBackText = (deviceName === 'bageerani_BT') ? 'hachi_backtext' : 'avatar_backtext';
 
 
     //This looks at the data of opposite character to measure distance
@@ -175,9 +175,9 @@ let hideTimeout;
 
 function toggleListening() {
     const toggleSwitch = document.getElementById('toggleSwitch');
-    deviceName = toggleSwitch.checked ? "hachi_BT" : "avatar_BT"; // global
-    const databaseName = deviceName === 'hachi_BT' ? 'avatar_data' : 'hachi_data';
-    const deviceToCharacter = { 'hachi_BT': 'Bageera', 'avatar_BT': 'Baloo' };
+    deviceName = toggleSwitch.checked ? "bageerani_BT" : "avatar_BT"; // global
+    const databaseName = deviceName === 'bageerani_BT' ? 'avatar_data' : 'hachi_data';
+    const deviceToCharacter = { 'bageerani_BT': 'Bageerani', 'avatar_BT': 'Baloo' };
     const charName = deviceToCharacter[deviceName] || 'Unknown'; // Use local var
     let toggleState = toggleSwitch.checked;
     

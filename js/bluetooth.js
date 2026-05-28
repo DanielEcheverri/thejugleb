@@ -39,8 +39,8 @@ async function connectToDevice() {
 
             deviceName = device.name;
 
-            if (deviceName === "hachi_BT") {
-                console.log("Loading settings for Hachi_BT");
+            if (deviceName === "bageerani_BT") {
+                console.log("Loading settings for Bageerani_BT");
                 interactionMode = "_int";
                 labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
                 moveSource = 'data/hachi_moves.json';
