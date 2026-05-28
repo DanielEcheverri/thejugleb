@@ -1,69 +1,84 @@
 // js/bluetooth.js
 
+const DEVICE_CONFIG = {
+    "4fafc201-1fb5-459e-8fcc-c5c9c331914b": "beb5483e-36e1-4688-b7f5-ea07361b26a8",
+    "4fafc201-1fb5-459e-8fcc-c5c9c331914c": "beb5483e-36e1-4688-b7f5-ea07361b26a9",
+};
+
 async function connectToDevice() {
-	try {
-		if (!isConnected) {
-			device = await navigator.bluetooth.requestDevice({
-				filters: [{ services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] }],
-			});
-			const server = await device.gatt.connect();
-			const service = await server.getPrimaryService("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
-			characteristic = await service.getCharacteristic("beb5483e-36e1-4688-b7f5-ea07361b26a8");
-			await characteristic.startNotifications();
-			
-			deviceName = device.name; // Get name from device
-			
-			if (deviceName === "hachi_BT") {
-				console.log("Loading settings for Hachi_BT");
-				interactionMode = "_int";
-				labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
-				moveSource = 'data/hachi_moves.json';
-				movePatterns = 'data/hachi_patterns.json';
-				sentenceSource = 'data/hachi_sentences.json';
-				tagSource = 'data/tags.json';
-				initializeSounds(); // from audio.js
-				document.getElementById("hachiCheckbox").click();
-				characterName = "Bageera";
-				window[characterName + "_Sound"].play();
-				notification_Sound.play();
-			} else {
-				console.log("Loading settings for Avatar_BT");
-				interactionMode = "_int";
-				labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
-				moveSource = 'data/avatar_moves.json';
-				movePatterns = 'data/avatar_patterns.json';
-				sentenceSource = 'data/avatar_sentences.json';
-				tagSource = 'data/tags.json';
-				initializeSounds(); // from audio.js
-				characterName = "Baloo";
-				window[characterName + "_Sound"].play();
-				notification_Sound.play();
-			}
-			
-			characteristic.addEventListener("characteristicvaluechanged", handleCharacteristicValueChanged);
-			
-			document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_connected</span> Disconnect Avatar';
-			isConnected = true;
-			startDetectMovement = true;
-			blueToothStatus = "Online";
-		} else {
-			await characteristic.stopNotifications();
-			await device.gatt.disconnect();
-			isConnected = false;
-			document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_searching </span> Connect to Avatar';
-			
-			setTimeout(function () {
-				startDetectMovement = false;
-				if (window.resetPotValues) {
-					window.resetPotValues();
-				}
-				blueToothStatus = "Offline";
-				bgm_Sound.stop();
-			}, 4000);
-		}
-	} catch (error) {
-		console.error("Error connecting/disconnecting to device: " + error);
-	}
+    try {
+        if (!isConnected) {
+            device = await navigator.bluetooth.requestDevice({
+                filters: [
+                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] }, //Baloo
+                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] }, //Bagheera
+                ],
+            });
+
+            const server = await device.gatt.connect();
+
+            // Find which service UUID this device uses
+            const serviceUUID = Object.keys(DEVICE_CONFIG).find(uuid =>
+                device.uuids?.includes(uuid)
+            );
+
+            const service = await server.getPrimaryService(serviceUUID);
+            characteristic = await service.getCharacteristic(DEVICE_CONFIG[serviceUUID]);
+
+            await characteristic.startNotifications();
+
+            deviceName = device.name;
+
+            if (deviceName === "hachi_BT") {
+                console.log("Loading settings for Hachi_BT");
+                interactionMode = "_int";
+                labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
+                moveSource = 'data/hachi_moves.json';
+                movePatterns = 'data/hachi_patterns.json';
+                sentenceSource = 'data/hachi_sentences.json';
+                tagSource = 'data/tags.json';
+                initializeSounds();
+                document.getElementById("hachiCheckbox").click();
+                characterName = "Bageera";
+                window[characterName + "_Sound"].play();
+                notification_Sound.play();
+            } else {
+                console.log("Loading settings for Avatar_BT");
+                interactionMode = "_int";
+                labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
+                moveSource = 'data/avatar_moves.json';
+                movePatterns = 'data/avatar_patterns.json';
+                sentenceSource = 'data/avatar_sentences.json';
+                tagSource = 'data/tags.json';
+                initializeSounds();
+                characterName = "Baloo";
+                window[characterName + "_Sound"].play();
+                notification_Sound.play();
+            }
+
+            characteristic.addEventListener("characteristicvaluechanged", handleCharacteristicValueChanged);
+            document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_connected</span> Disconnect Avatar';
+            isConnected = true;
+            startDetectMovement = true;
+            blueToothStatus = "Online";
+
+        } else {
+            await characteristic.stopNotifications();
+            await device.gatt.disconnect();
+            isConnected = false;
+            document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_searching </span> Connect to Avatar';
+            setTimeout(function () {
+                startDetectMovement = false;
+                if (window.resetPotValues) {
+                    window.resetPotValues();
+                }
+                blueToothStatus = "Offline";
+                bgm_Sound.stop();
+            }, 4000);
+        }
+    } catch (error) {
+        console.error("Error connecting/disconnecting to device: " + error);
+    }
 }
 
 function handleCharacteristicValueChanged(event) {
