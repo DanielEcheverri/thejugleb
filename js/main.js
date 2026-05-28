@@ -87,7 +87,7 @@ async function storeUserIP() {
 function toggleDeviceName() {
 	var checkbox = document.getElementById("hachiCheckbox");
 	if (checkbox.checked) {
-		deviceName = "bagheerani_BT";
+		deviceName = "bageerani_BT";
 		console.log("Loading settings for " + deviceName);
 		interactionMode = "_int";
 		moveSource = 'data/hachi_moves.json';
