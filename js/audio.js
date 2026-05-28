@@ -142,6 +142,7 @@ async function speakMessage_azure(fullMessage) {
             "Content-Type": "application/ssml+xml",
             "X-Microsoft-OutputFormat": outputFormat,
             "User-Agent": "Azure-TTS-JS",
+			"Origin": "https://danielecheverri.github.io", // Add this
         };
 
         async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
