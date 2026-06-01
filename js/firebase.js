@@ -177,7 +177,7 @@ function toggleListening() {
     const toggleSwitch = document.getElementById('toggleSwitch');
     deviceName = toggleSwitch.checked ? "bageerani_BT" : "avatar_BT"; // global
     const databaseName = deviceName === 'bageerani_BT' ? 'avatar_data' : 'hachi_data';
-    const deviceToCharacter = { 'bageerani_BT': 'Bageerani', 'avatar_BT': 'Baloo' };
+    const deviceToCharacter = { 'bageerani_BT': 'Bagheerani', 'avatar_BT': 'Baloo' };
     const charName = deviceToCharacter[deviceName] || 'Unknown'; // Use local var
     let toggleState = toggleSwitch.checked;
     
