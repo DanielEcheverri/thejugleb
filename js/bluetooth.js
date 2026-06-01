@@ -89,8 +89,6 @@ async function connectToDevice() {
             } catch (e) {
                 console.warn("Could not disconnect GATT:", e);
             }
-            //await characteristic.stopNotifications();
-            //await device.gatt.disconnect();
             isConnected = false;
             document.getElementById("connectButton").innerHTML = '<span class="material-icons" style="vertical-align: middle;">bluetooth_searching </span> Connect to Avatar';
             setTimeout(function () {
