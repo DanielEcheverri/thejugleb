@@ -42,7 +42,7 @@ async function connectToDevice() {
             if (deviceName === "bageerani_BT") {
                 console.log("Loading settings for Bageerani_BT");
                 interactionMode = "_int";
-                labels = ["EMPTY", "EMPTY", "EMPTY", "EMPTY", "HEAD", "FRONT LEG", "TAIL", "BACK LEG", "EMPTY", "EMPTY"];
+                labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
                 moveSource = 'data/hachi_moves.json';
                 movePatterns = 'data/hachi_patterns.json';
                 sentenceSource = 'data/hachi_sentences.json';
