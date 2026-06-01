@@ -50,7 +50,7 @@ async function connectToDevice() {
                 initializeSounds();
                 //document.getElementById("hachiCheckbox").click();
                 characterName = "Bagheerani";
-                window[characterName + "_Sound"].play();
+                //window[characterName + "_Sound"].play();
                 notification_Sound.play();
             } else {
                 console.log("Loading settings for Avatar_BT");
@@ -62,7 +62,7 @@ async function connectToDevice() {
                 tagSource = 'data/tags.json';
                 initializeSounds();
                 characterName = "Baloo";
-                window[characterName + "_Sound"].play();
+                //window[characterName + "_Sound"].play();
                 notification_Sound.play();
             }
 
