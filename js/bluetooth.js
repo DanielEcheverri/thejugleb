@@ -84,6 +84,7 @@ async function connectToDevice() {
             try {
                 if (device.gatt.connected) {
                     await device.gatt.disconnect();
+                    console.log("Successfully disconnected from device: " + device.name);
                 }
             } catch (e) {
                 console.warn("Could not disconnect GATT:", e);
