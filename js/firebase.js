@@ -207,7 +207,7 @@ function toggleListening() {
                 avatarCanvas.innerHTML = `
                     <div class="center-wrapper">
                         <span class="material-symbols-outlined hearing-icon">hearing</span>
-                        <span id="loading-text"> Listening ${charName}'s Story</span>
+                        <span id="loading-text"> Listening to ${charName}'s Story</span>
                     </div>
                 `;
                 const hearingIcon = document.querySelector('.hearing-icon');
