@@ -49,7 +49,7 @@ async function connectToDevice() {
                 tagSource = 'data/tags.json';
                 initializeSounds();
                 //document.getElementById("hachiCheckbox").click();
-                characterName = "Bageera";
+                characterName = "Bagheerani";
                 window[characterName + "_Sound"].play();
                 notification_Sound.play();
             } else {
