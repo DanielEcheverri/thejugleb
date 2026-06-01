@@ -183,7 +183,7 @@ function toggleListening() {
     
     toggleSwitch.addEventListener('change', () => {
         off(ref(database, databaseName));
-        //readFromDatabase(deviceName);
+        readFromDatabase(deviceName);
         toggleState = toggleSwitch.checked;
     });
 
@@ -197,8 +197,7 @@ function toggleListening() {
             interactionMode = "_lst"; // global
             topSection.style.display = 'none';
             document.getElementById('currentLocation').style.display = 'none';
-            readFromDatabase(deviceName);
-            
+
             const avatarCanvas = document.getElementById('avatarCanvas');
             if (avatarCanvas) {
                 const avatarBTdiv = document.getElementById('avatarBTdiv');
