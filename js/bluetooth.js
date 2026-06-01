@@ -2,7 +2,7 @@
 
 const DEVICE_CONFIG = {
     "4fafc201-1fb5-459e-8fcc-c5c9c331914b": "beb5483e-36e1-4688-b7f5-ea07361b26a8",
-    "4fafc201-1fb5-459e-8fcc-c5c9c331914c": "beb5483e-36e1-4688-b7f5-ea07361b26a9",
+    "708cc42d-b782-4dec-beb3-cc7dc6e1428d": "e281987c-ffe5-4eac-87d6-dacd24e4fee2",
 };
 
 async function connectToDevice() {
@@ -11,7 +11,7 @@ async function connectToDevice() {
             device = await navigator.bluetooth.requestDevice({
                 filters: [
                     { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914b"] },
-                    { services: ["4fafc201-1fb5-459e-8fcc-c5c9c331914c"] },
+                    { services: ["708cc42d-b782-4dec-beb3-cc7dc6e1428d"] },
                 ],
             });
 
