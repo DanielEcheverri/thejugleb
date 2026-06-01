@@ -103,8 +103,8 @@ async function speakMessage_azure(fullMessage) {
         return;
     }
 
-	//const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
-	const endpoint = "https://danielecheverri.cognitiveservices.azure.com/";
+	const endpoint = "https://germanywestcentral.tts.speech.microsoft.com/cognitiveservices/v1";
+	//const endpoint = "https://danielecheverri.cognitiveservices.azure.com/";
     const subscriptionKey = azureKey;
 
 	const outputFormat = "audio-16khz-128kbitrate-mono-mp3";
