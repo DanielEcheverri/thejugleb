@@ -53,7 +53,7 @@ async function connectToDevice() {
                 //window[characterName + "_Sound"].play();
                 notification_Sound.play();
             } else {
-                console.log("Loading settings for Avatar_BT");
+                console.log("Loading settings for Baloo_BT");
                 interactionMode = "_int";
                 labels = ["LEFT ARM", "RIGHT ARM", "HEAD", "LEFT LEG", "RIGHT LEG", "LEFT FOOT", "RIGHT FOOT", "RIGHT HAND", "LEFT HAND", "EYES", "MOUTH"];
                 moveSource = 'data/avatar_moves.json';
@@ -98,7 +98,7 @@ async function connectToDevice() {
                 }
                 blueToothStatus = "Offline";
                 bgm_Sound.stop();
-            }, 4000);
+            }, 1000);
         }
     } catch (error) {
         console.error("Error connecting/disconnecting to device: " + error);
