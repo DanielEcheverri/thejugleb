@@ -1,108 +1,99 @@
 [
 	{
-		"patternName": "Jumping",
+		"patternName": "guiding the left hand up",
 		"pattern": [
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "back leg", "directionMoving": "up" }
+			{ "partMoving": "left arm", "directionMoving": "up" },
+			{ "partMoving": "left hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Jumping",
+		"patternName": "guiding the right hand up",
 		"pattern": [
-			{ "partMoving": "back leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "up" }
+			{ "partMoving": "right arm", "directionMoving": "up" },
+			{ "partMoving": "right hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Landing",
+		"patternName": "guiding the left hand down",
 		"pattern": [
-			{ "partMoving": "front leg", "directionMoving": "down" },
-			{ "partMoving": "back leg", "directionMoving": "down" }
+			{ "partMoving": "left arm", "directionMoving": "down" },
+			{ "partMoving": "left hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Landing",
+		"patternName": "guiding the right hand down",
 		"pattern": [
-			{ "partMoving": "back leg", "directionMoving": "down" },
-			{ "partMoving": "front leg", "directionMoving": "down" }
+			{ "partMoving": "right arm", "directionMoving": "down" },
+			{ "partMoving": "right hand", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Grabbing something",
+		"patternName": "walking",
 		"pattern": [
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "down" }
+			{ "partMoving": "left leg", "directionMoving": "up" },
+			{ "partMoving": "right leg", "directionMoving": "down" },
+			{ "partMoving": "left leg", "directionMoving": "down" }
+		]
+	},
+		{
+		"patternName": "walking",
+		"pattern": [
+			{ "partMoving": "right leg", "directionMoving": "up" },
+			{ "partMoving": "left leg", "directionMoving": "down" },
+			{ "partMoving": "right leg", "directionMoving": "down" }
 		]
 	},
 	{
-		"patternName": "Grabbing something",
+		"patternName": "standing right leg",
 		"pattern": [
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "down" }
+			{ "partMoving": "left leg", "directionMoving": "up" },
+			{ "partMoving": "right foot", "directionMoving": "pressed" }
+		]
+	},
+		{
+		"patternName": "pressing right heel",
+		"pattern": [
+			{ "partMoving": "right foot", "directionMoving": "pressed" },
+			{ "partMoving": "right foot", "directionMoving": "released" },
+			{ "partMoving": "right foot", "directionMoving": "pressed" }
+		]
+	},
+			{
+		"patternName": "pressing left heel",
+		"pattern": [
+			{ "partMoving": "left foot", "directionMoving": "pressed" },
+			{ "partMoving": "left foot", "directionMoving": "released" },
+			{ "partMoving": "left foot", "directionMoving": "pressed" }
 		]
 	},
 	{
-		"patternName": "Grabbing something",
+		"patternName": "standing left leg",
 		"pattern": [
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "down" }
+			{ "partMoving": "right leg", "directionMoving": "up" },
+			{ "partMoving": "left foot", "directionMoving": "pressed" }
 		]
 	},
 	{
-		"patternName": "Grabbing something",
+		"patternName": "looking left",
 		"pattern": [
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "up" }
+			{ "partMoving": "head", "directionMoving": "left" },
+			{ "partMoving": "eyes", "directionMoving": "touched" }
+		]
+	},
+		{
+		"patternName": "looking right",
+		"pattern": [
+			{ "partMoving": "head", "directionMoving": "right" },
+			{ "partMoving": "eyes", "directionMoving": "touched" }
 		]
 	},
 	{
-		"patternName": "Sniffing",
+		"patternName": "talking",
 		"pattern": [
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Barking",
-		"pattern": [
-			{ "partMoving": "head", "directionMoving": "up" },
-			{ "partMoving": "head", "directionMoving": "down" },
-			{ "partMoving": "head", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Wagging its tail",
-		"pattern": [
-			{ "partMoving": "tail", "directionMoving": "down" },
-			{ "partMoving": "tail", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Wagging its tail",
-		"pattern": [
-			{ "partMoving": "tail", "directionMoving": "up" },
-			{ "partMoving": "tail", "directionMoving": "down" }
-		]
-	},
-	{
-		"patternName": "Standing on its back leg",
-		"pattern": [
-			{ "partMoving": "front leg", "directionMoving": "up" },
-			{ "partMoving": "front leg", "directionMoving": "down" },
-			{ "partMoving": "front leg", "directionMoving": "up" }
-		]
-	},
-	{
-		"patternName": "Standing on its front leg",
-		"pattern": [
-			{ "partMoving": "back leg", "directionMoving": "up" },
-			{ "partMoving": "back leg", "directionMoving": "down" },
-			{ "partMoving": "back leg", "directionMoving": "up" }
+			{ "partMoving": "mouth", "directionMoving": "touched" },
+			{ "partMoving": "mouth", "directionMoving": "released" },
+			{ "partMoving": "mouth", "directionMoving": "touched" },
+			{ "partMoving": "mouth", "directionMoving": "released" }
 		]
 	}
 ]
