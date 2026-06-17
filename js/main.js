@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	storeUserIP().then(() => {
 		if (user_ip) {
 			console.log('User IP:', user_ip);
+			getCurrentLocation(); // from location.js
 		}
 	});
 	generateSessionId();
-	getCurrentLocation(); // from location.js
+	//getCurrentLocation(); // from location.js
 	redirectConsoleToDiv();
 	
 
